@@ -6,18 +6,20 @@
   <!-- Inherit the default GWT style sheet.  You can change       -->
   <!-- the theme of your GWT application by uncommenting          -->
   <!-- any one of the following lines.                            -->
-  <inherits name='com.google.gwt.user.theme.clean.Clean'/>
-  <!-- <inherits name='com.google.gwt.user.theme.standard.Standard'/> -->
+  <!-- <inherits name='com.google.gwt.user.theme.clean.Clean'/> -->
+  <inherits name='com.google.gwt.user.theme.standard.Standard'/>
   <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
   <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
 
   <!-- Other module inherits                                      -->
-
+  <inherits name="com.google.gwt.http.HTTP" />
+  <inherits name="com.google.api.gwt.oauth2.OAuth2" />
+  
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.retro.rapplz.client.Rapplz'/>
 
   <!-- Specify the paths for translatable code                    -->
-  <source path='client'/>
+  <source path='client'/>  
   <source path='shared'/>
 
 </module>

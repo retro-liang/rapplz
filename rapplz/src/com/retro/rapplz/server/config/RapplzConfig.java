@@ -2,10 +2,11 @@ package com.retro.rapplz.server.config;
 
 import java.util.logging.Logger;
 
+import javax.servlet.ServletContext;
+
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
-import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
 
 public class RapplzConfig extends XMLConfiguration
 {
@@ -15,6 +16,8 @@ public class RapplzConfig extends XMLConfiguration
  	
 	private static RapplzConfig instance;
     private static String configFile = "config.xml";
+    
+    private ServletContext servletContext;
 
     static
     {
@@ -64,6 +67,14 @@ public class RapplzConfig extends XMLConfiguration
     	String attribute = getAppSearchAPIParameter(os, "attribute");
     	String limit = getAppSearchAPIParameter(os, "limit");
     	return api + "country=" + country + "&entity=" + entity + "&attribute=" + attribute + "&limit=" + limit + "&term=";
+	}
+	
+	public ServletContext getServletContext() {
+		return servletContext;
+	}
+
+	public void setServletContext(ServletContext servletContext) {
+		this.servletContext = servletContext;
 	}
 	
 	public static void main(String args[])

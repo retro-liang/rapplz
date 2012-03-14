@@ -14,6 +14,7 @@ public class JerseyResource extends Application
 		Set<Class<?>> s = new HashSet<Class<?>>();
 		s.add(FeedProcessor.class);
 		s.add(AppService.class);
+		s.add(UserService.class);
 		return s;
 	}
 }

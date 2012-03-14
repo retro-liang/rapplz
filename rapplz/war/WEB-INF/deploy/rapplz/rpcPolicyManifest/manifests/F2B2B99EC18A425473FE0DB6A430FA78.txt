@@ -1,2 +1,0 @@
-serviceClass: com.retro.rapplz.client.GreetingService
-path: E9FFBE61646344A90ACEDBB7500788E7.gwt.rpc

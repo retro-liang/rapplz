@@ -1,13 +1,27 @@
 package com.retro.rapplz.server.datastore.entity;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Id;
+import javax.ws.rs.ext.ContextResolver;
+import javax.ws.rs.ext.Provider;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Unindexed;
+import com.sun.jersey.api.json.JSONConfiguration;
+import com.sun.jersey.api.json.JSONJAXBContext;
 
 @Cached
 @Entity
+@XmlRootElement
 public class App
 {
 	@Id
@@ -18,6 +32,8 @@ public class App
 	@Unindexed
 	private String link;
 	
+	private String contentType;
+
 	private String category;
 	
 	private String artist;
@@ -30,10 +46,13 @@ public class App
 	@Unindexed
 	private String releaseDate;
 	
+	@Unindexed
+	private String updateDate;
+	
 	public App()
 	{
 		
-	}
+	}	
 
 	public Long getId() {
 		return id;
@@ -97,5 +116,21 @@ public class App
 
 	public void setReleaseDate(String releaseDate) {
 		this.releaseDate = releaseDate;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+
+	public String getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
 	}
 }

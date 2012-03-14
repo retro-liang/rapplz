@@ -1,8 +1,8 @@
 package com.retro.rapplz.server;
 
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.retro.rapplz.client.GreetingService;
 import com.retro.rapplz.shared.FieldVerifier;
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
  * The server side implementation of the RPC service.
