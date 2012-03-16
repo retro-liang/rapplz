@@ -40,17 +40,23 @@ public class Rapplz implements EntryPoint
 {
 	private static final int REFRESH_DELAY = 1000 * 5;
 	private static final int REFRESH_INTERVAL = 1000 * 60 * 60 *24; // ms
-	private static final String JSON_URL = "http://127.0.0.1:8888/rest/appService/getAll";
+	private static final String JSON_URL = "/rest/appService/getAll";
 	
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private FlexTable stocksFlexTable = new FlexTable();
 	private HorizontalPanel addPanel = new HorizontalPanel();
 	private TextBox newSymbolTextBox = new TextBox();
-	private Image googleLoginIcon = new Image("/images/signin_providers_icon/google.gif");
+	
 	private Button addStockButton = new Button("");
 	private Label lastUpdatedLabel = new Label();
 	private ArrayList<String> apps = new ArrayList<String>();
-	private Label errorMsgLabel = new Label();	
+	private Label errorMsgLabel = new Label();
+	
+	private Image googleLoginIcon = new Image("/images/signin_providers_icon/google.gif");
+	private Image yahooLoginIcon = new Image("/images/signin_providers_icon/yahoo.gif");
+	private Image liveLoginIcon = new Image("/images/signin_providers_icon/live.gif");
+	private Image facebookLoginIcon = new Image("/images/signin_providers_icon/facebook.gif");
+	private Image twitterLoginIcon = new Image("/images/signin_providers_icon/twitter.gif");
 	
 	/**
 	 * This is the entry point method.
@@ -217,8 +223,7 @@ public class Rapplz implements EntryPoint
 	        	  //displayError("OK: " + sb.substring(sb.indexOf("["), sb.lastIndexOf("}")));	        	  
 	        	  updateTable(asArrayOfApp(sb.substring(sb.indexOf("["), sb.lastIndexOf("}"))));
 	          } else {
-	            displayError("Couldn't retrieve JSON (" + response.getStatusText()
-	                + ")");
+	            displayError("Couldn't retrieve JSON (" + response.getStatusCode() + ")");
 	          }
 	        }
 	      });

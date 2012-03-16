@@ -43,19 +43,124 @@
         in order for this application to display correctly.
       </div>
     </noscript>
-	
-    <h1></h1>
     
-    <table align="center">
-      <tr>
-        <div id="appList"></div>
-      </tr>
-      <tr>
-        <td colspan="2" style="color:red;" id="errorLabelContainer"></td>
-      </tr>
-      <tr>
-      	<td><img src="images/appengine-silver-120x30.gif" /></td>
-      </tr>
-    </table>
+    <div role="banner" id="header">
+      <div class="bar">
+        <h1 class="logo"><a class="alternate-context" href="http://twitter.com/home">Twitter</a></h1>
+
+        
+        <div id="not-logged-in">
+            <span class="blurb">Not a member?</span>
+            <a class="register alternate-context" href="http://twitter.com/signup?context=webintent">Sign up</a>
+            <hr class="vr">
+            <a class="register" href="http://api.twitter.com/intent/session?return_to=%2Foauth%2Fauthenticate%3Foauth_token%3DIPGkaCsrluqeHtdknFwcA6o4sdaSkzGw1D0zXQhOj8">Sign in</a>
+        </div>
+        
+      </div>
+    </div>
+    
+    
+    
+    
+    <div role="main" id="bd">
+    	<div id="appList"></div>
+		<div class="concerned notice">
+  <h2>You can use your Twitter account to sign in to other sites and services.</h2>
+  <p>By signing in here, you can use Pinterest without sharing your Twitter password.</p>
+</div>
+
+
+
+
+
+
+<div class="auth">
+  <h2>Authorize Pinterest to use your account?</h2>
+
+  
+<div class="app-info" role="content-info" tabindex="0">
+  <h3>
+    <img alt="" class="app-icon" src="http://a0.twimg.com/a/1331656155/images/oauth_application.png" title="Pinterest by Cold Brew Labs" />
+    Pinterest
+  </h3>
+  <dl>
+    <dt class="dev">Developer</dt>
+    <dd class="dev">By Cold Brew Labs</dd>
+    <dt class="url">Application URL</dt>
+    <dd class="url">pinterest.com</dd>
+    <dt class="notes">About this app</dt>
+    <dd class="notes"><p>A visual bookmarking utility.</p></dd>
+  </dl>
+  <p><a href="http://pinterest.com/twitter/?denied=IPGkaCsrluqeHtdknFwcA6o4sdaSkzGw1D0zXQhOj8" class="deny maintain-context">Cancel, and return to app</a></p>
+</div>
+
+
+
+  <div class="permissions allow">
+  <p>This application <strong>will be able to</strong>:</p>
+  <ul>
+    <li>Read Tweets from your timeline.</li>
+    
+    <li>See who you follow, and follow new people.</li>
+    <li>Update your profile.</li>
+    <li>Post Tweets for you.</li>
+
+
+    
+    
+  </ul>
+</div>
+
+
+  <form action="https://api.twitter.com/oauth/authenticate" id="oauth_form" method="post"><div style="margin:0;padding:0"><input name="authenticity_token" type="hidden" value="e531d0d08cc31e4bed2b7760961f2d62e535d2c9" /></div>
+    <input id="oauth_token" name="oauth_token" type="hidden" value="IPGkaCsrluqeHtdknFwcA6o4sdaSkzGw1D0zXQhOj8" />        
+
+
+<fieldset class="sign-in">
+  <legend>Sign in to Twitter</legend>
+  <div class="row user">
+    <label for="username_or_email" tabindex="-1">Username or email</label>
+    <input aria-required="true" autocapitalize="off" autocorrect="off" autofocus="autofocus" class="text" id="username_or_email" name="session[username_or_email]" required="required" type="text" />
+  </div>
+  <div class="row password">
+  <label for="password" tabindex="-1">Password</label>
+    <input aria-required="true" class="password" id="password" name="session[password]" required="required" type="password" value="" />
+  </div>
+  <p class="forgot"><a class="alternate-context" href="/account/resend_password">Forgot your password?</a></p>
+</fieldset>
+
+
+
+    <fieldset class="buttons">
+      <legend>Sign in to Pinterest using your account?</legend>
+      <input type="submit" value="Sign In" class="submit button selected" id="allow">
+      <input type="submit" value="Cancel" class="submit button" name="cancel" id="deny">
+    </fieldset>
+</form>
+  <div class="permissions deny">
+  <p>This application <strong>will not be able to</strong>:</p>
+  <ul>
+
+    
+    
+    <li>Access your direct messages.</li>
+    
+
+    <li>See your Twitter password.</li>
+  </ul>
+</div>
+
+</div>    
+    </div>
+    
+    
+    
+    
+    <div role="navigation" class="footer"><div id="ft">
+      
+<p class="tip">You can revoke access to any application at any time from the <a href="http://twitter.com/settings/applications">Applications tab</a> of your Settings page.</p>
+<p><small>By authorizing an application you continue to operate under <a href="http://twitter.com/tos">Twitter's Terms of Service</a>. In particular, some usage information will be shared back with Twitter. For more, see our <a href="http://twitter.com/privacy">Privacy Policy</a>.</small></p>
+<img src="images/appengine-silver-120x30.gif" />
+    </div></div>    
   </body>
 </html>
