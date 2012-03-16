@@ -10,26 +10,23 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -38,25 +35,33 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class Rapplz implements EntryPoint
 {
-	private static final int REFRESH_DELAY = 1000 * 5;
+	private static final int REFRESH_DELAY = 1000 * 3;
 	private static final int REFRESH_INTERVAL = 1000 * 60 * 60 *24; // ms
 	private static final String JSON_URL = "/rest/appService/getAll";
 	
 	private VerticalPanel mainPanel = new VerticalPanel();
-	private FlexTable stocksFlexTable = new FlexTable();
-	private HorizontalPanel addPanel = new HorizontalPanel();
-	private TextBox newSymbolTextBox = new TextBox();
+	private FlexTable mainAppFlexTable = new FlexTable();
 	
-	private Button addStockButton = new Button("");
+	private VerticalPanel loginPanel = new VerticalPanel();
+	
+	private Label recommandAppLabel = new Label("I want to recommand an app: ");
+	private TextBox recommandAppTextBox = new TextBox();
+	private Button recommandAppButton = new Button("Recommand");
+	private HorizontalPanel commandBarPanel = new HorizontalPanel();	
+	
+	
 	private Label lastUpdatedLabel = new Label();
 	private ArrayList<String> apps = new ArrayList<String>();
 	private Label errorMsgLabel = new Label();
 	
-	private Image googleLoginIcon = new Image("/images/signin_providers_icon/google.gif");
-	private Image yahooLoginIcon = new Image("/images/signin_providers_icon/yahoo.gif");
-	private Image liveLoginIcon = new Image("/images/signin_providers_icon/live.gif");
 	private Image facebookLoginIcon = new Image("/images/signin_providers_icon/facebook.gif");
 	private Image twitterLoginIcon = new Image("/images/signin_providers_icon/twitter.gif");
+	private Image googleLoginIcon = new Image("/images/signin_providers_icon/google.gif");
+	private Image liveLoginIcon = new Image("/images/signin_providers_icon/live.gif");
+	private Image yahooLoginIcon = new Image("/images/signin_providers_icon/yahoo.gif");
+	private Image aolLoginIcon = new Image("/images/signin_providers_icon/aol.gif");
+	private Image myspaceLoginIcon = new Image("/images/signin_providers_icon/myspace.gif");
+	private Image openidLoginIcon = new Image("/images/signin_providers_icon/openid.gif");
 	
 	/**
 	 * This is the entry point method.
@@ -64,33 +69,51 @@ public class Rapplz implements EntryPoint
 	public void onModuleLoad() {
 		
 	    // Add styles to elements in the stock list table.
-	    stocksFlexTable.setCellPadding(6);
-	    stocksFlexTable.getRowFormatter().addStyleName(0, "watchListHeader");
-	    stocksFlexTable.addStyleName("watchList");
-	    stocksFlexTable.getCellFormatter().addStyleName(0, 1, "watchListNumericColumn");
-	    stocksFlexTable.getCellFormatter().addStyleName(0, 2, "watchListNumericColumn");
-	    stocksFlexTable.getCellFormatter().addStyleName(0, 3, "watchListRemoveColumn");
+	    mainAppFlexTable.setCellPadding(6);
+	    mainAppFlexTable.getRowFormatter().addStyleName(0, "watchListHeader");
+	    mainAppFlexTable.addStyleName("watchList");
+	    mainAppFlexTable.getCellFormatter().addStyleName(0, 1, "watchListNumericColumn");
+	    mainAppFlexTable.getCellFormatter().addStyleName(0, 2, "watchListNumericColumn");
+	    mainAppFlexTable.getCellFormatter().addStyleName(0, 3, "watchListRemoveColumn");
 
 	    // Assemble Add Stock panel.
-	    addPanel.add(googleLoginIcon);
-	    addStockButton.setHTML("<img src='/images/signin_providers_icon/google.gif'");
+	    //addPanel.add(googleLoginIcon);
+	    //addStockButton.setHTML("<img src='/images/signin_providers_icon/google.gif'");
 	    //addPanel.add(addStockButton);
-	    addPanel.addStyleName("addPanel");
+	    //addPanel.addStyleName("addPanel");
 
 	    // Assemble Main panel.
 	    errorMsgLabel.setStyleName("errorMessage");
 	    errorMsgLabel.setVisible(false);
 
-	    mainPanel.add(addPanel);
+	    //mainPanel.add(addPanel);
 	    mainPanel.add(errorMsgLabel);
-	    mainPanel.add(stocksFlexTable);	    
+	    mainPanel.add(mainAppFlexTable);	    
 	    mainPanel.add(lastUpdatedLabel);
+	    
+	    loginPanel.add(facebookLoginIcon);
+	    loginPanel.add(twitterLoginIcon);
+	    loginPanel.add(googleLoginIcon);
+	    //loginPanel.add(liveLoginIcon);
+	    //loginPanel.add(yahooLoginIcon);
+	    //loginPanel.add(aolLoginIcon);
+	    //loginPanel.add(myspaceLoginIcon);
+	    //loginPanel.add(openidLoginIcon);
+	    
+	    commandBarPanel.add(recommandAppLabel);
+	    commandBarPanel.add(recommandAppTextBox);
+	    commandBarPanel.add(recommandAppButton);
 
 	    // Associate the Main panel with the HTML host page.
 	    RootPanel.get("appList").add(mainPanel);
+	    RootPanel.get("commandBar").add(commandBarPanel);
+	    RootPanel.get("login-box").add(loginPanel);
+	    
+	    
+	    
 
 	    // Move cursor focus to the input box.
-	    newSymbolTextBox.setFocus(true);
+	    //newSymbolTextBox.setFocus(true);
 
 	    // Setup timer to refresh list automatically.
 	    Timer refreshTimer = new Timer() {
@@ -144,22 +167,82 @@ public class Rapplz implements EntryPoint
 	  			});
 	      }
 	    });
+	    
+	    
+	    recommandAppButton.addClickHandler(new ClickHandler()
+	    {
+			@Override
+			public void onClick(ClickEvent event)
+			{
+				String searchURL = "http://itunes.apple.com/search?country=CA&entity=software&limit=10&term=pinterest";
+				
+				RequestBuilder requestbuilder = new RequestBuilder(RequestBuilder.GET, URL.encode(searchURL));
+
+			    try
+			    {
+			      requestbuilder.sendRequest(null, new RequestCallback() {
+			        public void onError(Request request, Throwable exception) {
+			          displayError("Couldn't retrieve JSON: " + exception);
+			        }
+
+			        public void onResponseReceived(Request request, Response response) {
+			          if (200 == response.getStatusCode())
+			          {
+			        	  StringBuilder sb = new StringBuilder(response.getText().trim());
+			        	  Window.alert(sb.toString());
+			        	  AppSearchResult appSearchResult = asAppSearchResult(sb.toString());
+			        	  
+			        	  if(appSearchResult != null)
+			        	  {
+			        		  PopupPanel popup = new PopupPanel(false);
+							    popup.setStyleName("demo-PopUpPanel");
+							    VerticalPanel PopUpPanelContents = new VerticalPanel();
+							    popup.setTitle("Search count: " + appSearchResult.getResultCount());
+							    HTML message = new HTML("Click 'Close' to close");
+							    message.setStyleName("demo-PopUpPanel-message");
+							    
+							    Button button = new Button("Close");
+							    SimplePanel holder = new SimplePanel();
+							    holder.add(button);
+							    holder.setStyleName("demo-PopUpPanel-footer");
+							    PopUpPanelContents.add(message);
+							    PopUpPanelContents.add(holder);
+							    popup.setWidget(PopUpPanelContents);
+								
+								
+							    popup.setAnimationEnabled(true);
+								
+							    popup.center();
+			        	  }
+			          } else {
+			            displayError("Couldn't retrieve JSON (" + response.getStatusCode() + ")");
+			          }
+			        }
+			      });
+			    } catch (RequestException e) {
+			      displayError("Couldn't retrieve JSON");
+			    }
+				
+				
+				
+			}	    	
+	    });
 
 	    // Listen for keyboard events in the input box.
-	    newSymbolTextBox.addKeyPressHandler(new KeyPressHandler() {
+	    /*newSymbolTextBox.addKeyPressHandler(new KeyPressHandler() {
 	      public void onKeyPress(KeyPressEvent event) {
 	        if (event.getCharCode() == KeyCodes.KEY_ENTER) {
 	          addStock();
 	        }
 	      }
-	    });
+	    });*/
 	}
 	
 	/**
 	   * Add stock to FlexTable. Executed when the user clicks the addStockButton or
 	   * presses enter in the newSymbolTextBox.
 	   */
-	  private void addStock() {
+	  /*private void addStock() {
 	    final String symbol = newSymbolTextBox.getText().toUpperCase().trim();
 	    newSymbolTextBox.setFocus(true);
 
@@ -177,13 +260,13 @@ public class Rapplz implements EntryPoint
 	      return;
 
 	    // Add the stock to the table.
-	    int row = stocksFlexTable.getRowCount();
+	    int row = mainAppFlexTable.getRowCount();
 	    apps.add(symbol);
-	    stocksFlexTable.setText(row, 0, symbol);
-	    stocksFlexTable.setWidget(row, 2, new Label());
-	    stocksFlexTable.getCellFormatter().addStyleName(row, 1, "watchListNumericColumn");
-	    stocksFlexTable.getCellFormatter().addStyleName(row, 2, "watchListNumericColumn");
-	    stocksFlexTable.getCellFormatter().addStyleName(row, 3, "watchListRemoveColumn");
+	    mainAppFlexTable.setText(row, 0, symbol);
+	    mainAppFlexTable.setWidget(row, 2, new Label());
+	    mainAppFlexTable.getCellFormatter().addStyleName(row, 1, "watchListNumericColumn");
+	    mainAppFlexTable.getCellFormatter().addStyleName(row, 2, "watchListNumericColumn");
+	    mainAppFlexTable.getCellFormatter().addStyleName(row, 3, "watchListRemoveColumn");
 
 	    // Add a button to remove this stock from the table.
 	    Button removeStockButton = new Button("x");
@@ -192,15 +275,15 @@ public class Rapplz implements EntryPoint
 	      public void onClick(ClickEvent event) {
 	        int removedIndex = apps.indexOf(symbol);
 	        apps.remove(removedIndex);
-	        stocksFlexTable.removeRow(removedIndex + 1);
+	        mainAppFlexTable.removeRow(removedIndex + 1);
 	      }
 	    });
-	    stocksFlexTable.setWidget(row, 3, removeStockButton);
+	    mainAppFlexTable.setWidget(row, 3, removeStockButton);
 
 	    // Get the stock price.
 	    refreshAppList();
 
-	  }
+	  }*/
 	
 	/**
 	   * Generate random stock prices.
@@ -252,7 +335,7 @@ public class Rapplz implements EntryPoint
 			dialogBox.setWidget(dialogVPanel);
 	    	dialogBox.setAnimationEnabled(true);*/
 	    	
-	    	stocksFlexTable.setHTML((i / 10), (i % 10), "<img src='" + apps.get(i).getImage().trim() + "' />");	    	
+	    	mainAppFlexTable.setHTML((i / 12), (i % 12), "<img src='" + apps.get(i).getImage().trim() + "' />");	    	
 	    }
 
 	    // Display timestamp showing last refresh.
@@ -284,7 +367,8 @@ public class Rapplz implements EntryPoint
 				//closeButton.setFocus(true);
     	  }
 	  }
-	
+	  
+	private final native AppSearchResult asAppSearchResult(String json) /*-{return eval(json);}-*/;
 	private final native JsArray<App> asArrayOfApp(String json) /*-{return eval(json);}-*/;
 	private final native User asUser(String json) /*-{return eval(json);}-*/;
 	
