@@ -846,7 +846,7 @@ html {
 	padding: 0 10px;
 	color: transparent;
 	text-indent: -999em;
-	background: transparent url(twitter_.png) no-repeat 10px 9px;
+	/*background: transparent url(twitter_.png) no-repeat 10px 9px;*/
 	_background-image:
 		url(http://a0.twimg.com/a/1331743990/phoenix/img/twitter_logo_right.gif);
 }
@@ -1295,7 +1295,7 @@ line-height
 	-moz-border-radius: 4px;
 	-khtml-border-radius: 4px;
 	-webkit-border-radius: 4px;
-	background: #ddd url(bg-btn00.gif) repeat-x 0 0;
+	/*background: #ddd url(bg-btn00.gif) repeat-x 0 0;*/
 	border-color: #bbb #bbb #999;
 	border-radius: 4px;
 	border-style: solid;
@@ -1346,7 +1346,7 @@ line-height
 
 .button.selected {
 	background-color: #39d;
-	background-image: url(bg-btn-b.gif);
+	/*background-image: url(bg-btn-b.gif);*/
 	background-position: 0 0;
 	border-color: #39d #39d #28c;
 	color: #fff !important;
@@ -1576,7 +1576,7 @@ a.promotional:active,input.promotional:active {
 }
 
 .button.disabled,.button.disabled:hover,.button.disabled:focus {
-	background: #ddd url(bg-btn00.gif) repeat-x 0 0;
+	/*background: #ddd url(bg-btn00.gif) repeat-x 0 0;*/
 	border-color: #ccc;
 	cursor: default;
 	color: #aaa !important;

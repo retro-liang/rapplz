@@ -2,6 +2,7 @@ package com.retro.rapplz.client;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Logger;
 
 import com.google.api.gwt.oauth2.client.Auth;
 import com.google.api.gwt.oauth2.client.AuthRequest;
@@ -31,15 +32,24 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.retro.rapplz.server.service.AppService;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class Rapplz implements EntryPoint
 {
+	private static final Logger logger = Logger.getLogger(Rapplz.class.getName());
+	
 	private static final int REFRESH_DELAY = 1000 * 3;
 	private static final int REFRESH_INTERVAL = 1000 * 60 * 60 *24; // ms
-	private static final String JSON_URL = "/rest/appService/getAll";
+	
+	private static final String ALL_APPS_JSON_URL = "/rest/appService/all";
+	private static final String ALL_APPS_SIZE_URL = "/rest/appService/allAppsSize";
+	private static final String SEARCH_APP_URL = "http://itunes.apple.com/search?country=CA&entity=software&limit=10&term=pinterest";
+	
+	private static final String ADD_RECOMMAND_APP_URL = "/rest/appService/recommand";
+	
 	
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private FlexTable mainAppFlexTable = new FlexTable();
@@ -48,7 +58,7 @@ public class Rapplz implements EntryPoint
 	
 	private Label recommandAppLabel = new Label("I want to recommand an app: ");
 	private TextBox recommandAppTextBox = new TextBox();
-	private Button recommandAppButton = new Button("Recommand");
+	private Button searchAppButton = new Button("Recommand");
 	private HorizontalPanel commandBarPanel = new HorizontalPanel();	
 	
 	
@@ -104,7 +114,7 @@ public class Rapplz implements EntryPoint
 	    
 	    commandBarPanel.add(recommandAppLabel);
 	    commandBarPanel.add(recommandAppTextBox);
-	    commandBarPanel.add(recommandAppButton);
+	    commandBarPanel.add(searchAppButton);
 
 	    // Associate the Main panel with the HTML host page.
 	    RootPanel.get("appList").add(mainPanel);
@@ -118,10 +128,13 @@ public class Rapplz implements EntryPoint
 	    //newSymbolTextBox.setFocus(true);
 
 	    // Setup timer to refresh list automatically.
-	    Timer refreshTimer = new Timer() {
+	    Timer refreshTimer = new Timer()
+	    {
 	      @Override
-	      public void run() {
-	        refreshAppList();
+	      public void run()
+	      {
+	    	  retrieveAppsInfo();
+	    	  retrieveFeaturedApps();	    	  
 	      }
 	    };
 	    
@@ -171,18 +184,16 @@ public class Rapplz implements EntryPoint
 	    });
 	    
 	    
-	    recommandAppButton.addClickHandler(new ClickHandler()
+	    searchAppButton.addClickHandler(new ClickHandler()
 	    {
 			@Override
 			public void onClick(ClickEvent event)
 			{
-				String searchURL = "http://itunes.apple.com/search?country=CA&entity=software&limit=10&term=pinterest";
-				
-				JsonpRequestBuilder requestbuilder = new JsonpRequestBuilder();
+				JsonpRequestBuilder jsonpRequestbuilder = new JsonpRequestBuilder();
 
 			    try
 			    {
-			    	requestbuilder.requestObject(searchURL, new AsyncCallback<AppSearchResult>()
+			    	jsonpRequestbuilder.requestObject(SEARCH_APP_URL, new AsyncCallback<AppSearchResult>()
 	    			{
 	    				public void onFailure(Throwable throwable)
 	    				{
@@ -200,9 +211,50 @@ public class Rapplz implements EntryPoint
 	 							    {
 	 							    	for(int i = 0; i < appSearchResult.getResults().length(); i++)
 	 							    	{
+	 							    		final ResultApp resultApp = appSearchResult.getResults().get(i);
 	 							    		HorizontalPanel horizontalPanel = new HorizontalPanel();
-	 							    		Image image = new Image(appSearchResult.getResults().get(i).getImage());
+	 							    		Image image = new Image(resultApp.getArtworkUrl60());
 	 							    		Button button = new Button("Recommand");
+	 							    		button.addClickHandler(new ClickHandler()
+	 							    		{
+												@Override
+												public void onClick(ClickEvent event)
+												{
+													RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(ADD_RECOMMAND_APP_URL));
+													try
+													{
+														StringBuffer postData = new StringBuffer();
+														// note param pairs are separated by a '&' 
+														// and each key-value pair is separated by a '='
+														postData.append(URL.encode("id")).append("=").append(URL.encode(String.valueOf(resultApp.getTrackId())));
+														postData.append("&");
+														postData.append(URL.encode("YourParameterName2")).append("=").append(URL.encode("YourParameterValue2"));
+														builder.setHeader("Content-type", "application/x-www-form-urlencoded");
+														builder.sendRequest(postData.toString(), new RequestCallback()
+														{
+															public void onResponseReceived(Request request, Response response)
+															{
+																if(200 == response.getStatusCode())
+																{
+																	lastUpdatedLabel.setText("App added successfully: " + response.getText());
+																}
+																else
+																{
+																	logger.warning("Couldn't add recommand app, response code: " + response.getStatusCode());
+																}
+															}
+															public void onError(Request request, Throwable exception)
+															{
+																logger.warning("Couldn't add recommand app: " + exception);
+													        }
+														});
+													}
+													catch(RequestException e)
+													{
+														logger.warning("Request exception happened during adding recommand app: " + e);
+													}
+												}
+	 							    		});
 	 							    		horizontalPanel.add(image);
 	 							    		horizontalPanel.add(button);
 	 							    		PopUpPanelContents.add(horizontalPanel);
@@ -218,7 +270,9 @@ public class Rapplz implements EntryPoint
 	 							    holder.setStyleName("demo-PopUpPanel-footer");
 	 							    PopUpPanelContents.add(message);
 	 							    PopUpPanelContents.add(holder);
-	 							    popup.setWidget(PopUpPanelContents);
+	 							    
+	 							    
+	 							   popup.setWidget(PopUpPanelContents );
 	 								
 	 								
 	 							    popup.setAnimationEnabled(true);
@@ -293,47 +347,71 @@ public class Rapplz implements EntryPoint
 
 	  }*/
 	
-	/**
-	   * Generate random stock prices.
-	   */
-	private void refreshAppList()
+	private void retrieveAppsInfo()
 	{
-		// Send request to server and catch any errors.
-	    RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode(JSON_URL));
+		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode(ALL_APPS_SIZE_URL));
+		try
+		{
+			builder.sendRequest(null, new RequestCallback()
+			{
+				public void onResponseReceived(Request request, Response response)
+				{
+					if(200 == response.getStatusCode())
+					{
+						lastUpdatedLabel.setText("Total apps number: " + response.getText());
+					}
+					else
+					{
+						logger.warning("Couldn't retrieve apps info, response code: " + response.getStatusCode());
+					}
+				}
+				public void onError(Request request, Throwable exception)
+				{
+					logger.warning("Couldn't retrieve apps info: " + exception);
+		        }
+			});
+		}
+		catch(RequestException e)
+		{
+			logger.warning("Request exception happened during retrieving apps info: " + e);
+		}
+	}
 
-	    try {
-	      Request request = builder.sendRequest(null, new RequestCallback() {
-	        public void onError(Request request, Throwable exception) {
-	          displayError("Couldn't retrieve JSON: " + exception);
-	        }
-
-	        public void onResponseReceived(Request request, Response response) {
-	          if (200 == response.getStatusCode())
-	          {
-	        	  StringBuilder sb = new StringBuilder(response.getText().trim());
-	        	  //displayError("OK: " + sb.substring(sb.indexOf("["), sb.lastIndexOf("}")));	        	  
-	        	  updateTable(asArrayOfApp(sb.substring(sb.indexOf("["), sb.lastIndexOf("}"))));
-	          } else {
-	            displayError("Couldn't retrieve JSON (" + response.getStatusCode() + ")");
-	          }
-	        }
-	      });
-	    } catch (RequestException e) {
-	      displayError("Couldn't retrieve JSON");
-	    }
-	}	
+	private void retrieveFeaturedApps()
+	{
+		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode(ALL_APPS_JSON_URL));
+		try
+		{
+			builder.sendRequest(null, new RequestCallback()
+			{
+				public void onResponseReceived(Request request, Response response)
+				{
+					if(200 == response.getStatusCode())
+					{
+						StringBuilder sb = new StringBuilder(response.getText().trim());
+						updateTable(asArrayOfApp(sb.substring(sb.indexOf("["), sb.lastIndexOf("}"))));
+					}
+					else
+					{
+						logger.warning("Couldn't retrieve featured apps, response code: " + response.getStatusCode());
+					}
+				}
+				public void onError(Request request, Throwable exception)
+				{
+					logger.warning("Couldn't retrieve featured apps: " + exception);
+		        }
+			});
+		}
+		catch(RequestException e)
+		{
+			logger.warning("Request exception happened during retrieving featured apps: " + e);
+		}
+	}
 	
-	
-	  
-	  /**
-	   * Update the Price and Change fields all the rows in the stock table.
-	   *
-	   * @param prices Stock data for all rows.
-	   */
-	  private void updateTable(JsArray<App> apps)
-	  {
-		  
-	    for (int i = 0; i < apps.length(); i++) {
+	private void updateTable(JsArray<App> apps)
+	{
+		for(int i = 0; i < apps.length(); i++)
+		{
 	    	/*DialogBox dialogBox = new DialogBox();
 	    	dialogBox.setText(apps.get(i).getName());
 	    	VerticalPanel dialogVPanel = new VerticalPanel();
@@ -344,48 +422,18 @@ public class Rapplz implements EntryPoint
 	    	dialogBox.setAnimationEnabled(true);*/
 	    	
 	    	mainAppFlexTable.setHTML((i / 12), (i % 12), "<img src='" + apps.get(i).getImage().trim() + "' />");	    	
-	    }
-
-	    // Display timestamp showing last refresh.
-	    lastUpdatedLabel.setText("Last update : " + new Date());
-
+		}
 	    // Clear any errors.
 	    errorMsgLabel.setVisible(false);
-	  }
-
-	  /**
-	   * Update a single row in the stock table.
-	   *
-	   * @param price Stock data for a single row.
-	   */
-	  private void updateTable(App app)
-	  {
-		  int row = apps.indexOf(app) + 1;
-		  
-	  }
+	}
 	  
-	  public void displayApps(JsArray<App> apps)
-	  {
-		  for (int i = 0; i < apps.length(); i++)
-    	  {
-    		  	//dialogBox.setText(apps.get(i).getName());
-				//serverResponseLabel.addStyleName("serverResponseLabelError");
-				//serverResponseLabel.setHTML("<img src='" + apps.get(i).getImage() + "' />");
-				//dialogBox.center();
-				//closeButton.setFocus(true);
-    	  }
-	  }
-	  
+	private void displayError(String error)
+	{
+		errorMsgLabel.setText("Error: " + error);
+		errorMsgLabel.setVisible(true);
+	}
+	
 	private final native AppSearchResult asAppSearchResult(String json) /*-{return eval(json);}-*/;
 	private final native JsArray<App> asArrayOfApp(String json) /*-{return eval(json);}-*/;
 	private final native User asUser(String json) /*-{return eval(json);}-*/;
-	
-	/**
-	   * If can't get JSON, display error message.
-	   * @param error
-	   */
-	  private void displayError(String error) {
-	    errorMsgLabel.setText("Error: " + error);
-	    errorMsgLabel.setVisible(true);
-	  }
 }

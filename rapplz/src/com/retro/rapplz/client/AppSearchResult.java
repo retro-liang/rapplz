@@ -12,5 +12,5 @@ public class AppSearchResult extends JavaScriptObject
 
 	// JSNI methods to get app data.
 	public final native int getResultCount() /*-{return this.resultCount;}-*/;
-	public final native JsArray<App> getResults() /*-{return this.results}-*/;
+	public final native JsArray<ResultApp> getResults() /*-{return this.results}-*/;
 }
