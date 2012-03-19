@@ -16,8 +16,10 @@ import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
+import com.google.gwt.jsonp.client.JsonpRequestBuilder;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -107,7 +109,7 @@ public class Rapplz implements EntryPoint
 	    // Associate the Main panel with the HTML host page.
 	    RootPanel.get("appList").add(mainPanel);
 	    RootPanel.get("commandBar").add(commandBarPanel);
-	    RootPanel.get("login-box").add(loginPanel);
+	    //RootPanel.get("login-box").add(loginPanel);
 	    
 	    
 	    
@@ -176,50 +178,56 @@ public class Rapplz implements EntryPoint
 			{
 				String searchURL = "http://itunes.apple.com/search?country=CA&entity=software&limit=10&term=pinterest";
 				
-				RequestBuilder requestbuilder = new RequestBuilder(RequestBuilder.GET, URL.encode(searchURL));
+				JsonpRequestBuilder requestbuilder = new JsonpRequestBuilder();
 
 			    try
 			    {
-			      requestbuilder.sendRequest(null, new RequestCallback() {
-			        public void onError(Request request, Throwable exception) {
-			          displayError("Couldn't retrieve JSON: " + exception);
-			        }
+			    	requestbuilder.requestObject(searchURL, new AsyncCallback<AppSearchResult>()
+	    			{
+	    				public void onFailure(Throwable throwable)
+	    				{
+	    					displayError("Couldn't retrieve JSON: " + throwable);
+	    			    }
 
-			        public void onResponseReceived(Request request, Response response) {
-			          if (200 == response.getStatusCode())
-			          {
-			        	  StringBuilder sb = new StringBuilder(response.getText().trim());
-			        	  Window.alert(sb.toString());
-			        	  AppSearchResult appSearchResult = asAppSearchResult(sb.toString());
-			        	  
-			        	  if(appSearchResult != null)
-			        	  {
-			        		  PopupPanel popup = new PopupPanel(false);
-							    popup.setStyleName("demo-PopUpPanel");
-							    VerticalPanel PopUpPanelContents = new VerticalPanel();
-							    popup.setTitle("Search count: " + appSearchResult.getResultCount());
-							    HTML message = new HTML("Click 'Close' to close");
-							    message.setStyleName("demo-PopUpPanel-message");
-							    
-							    Button button = new Button("Close");
-							    SimplePanel holder = new SimplePanel();
-							    holder.add(button);
-							    holder.setStyleName("demo-PopUpPanel-footer");
-							    PopUpPanelContents.add(message);
-							    PopUpPanelContents.add(holder);
-							    popup.setWidget(PopUpPanelContents);
-								
-								
-							    popup.setAnimationEnabled(true);
-								
-							    popup.center();
-			        	  }
-			          } else {
-			            displayError("Couldn't retrieve JSON (" + response.getStatusCode() + ")");
-			          }
-			        }
-			      });
-			    } catch (RequestException e) {
+	    			       public void onSuccess(AppSearchResult appSearchResult)
+	    			       {
+	    			    	  if(appSearchResult != null)
+	 			        	  {
+	    			    		  	PopupPanel popup = new PopupPanel(false);
+	 							    popup.setStyleName("demo-PopUpPanel");
+	 							    VerticalPanel PopUpPanelContents = new VerticalPanel();
+	 							    if(appSearchResult.getResultCount() > 0)
+	 							    {
+	 							    	for(int i = 0; i < appSearchResult.getResults().length(); i++)
+	 							    	{
+	 							    		HorizontalPanel horizontalPanel = new HorizontalPanel();
+	 							    		Image image = new Image(appSearchResult.getResults().get(i).getImage());
+	 							    		Button button = new Button("Recommand");
+	 							    		horizontalPanel.add(image);
+	 							    		horizontalPanel.add(button);
+	 							    		PopUpPanelContents.add(horizontalPanel);
+	 							    	}
+	 							    }
+	 							    popup.setTitle("Search count: " + appSearchResult.getResultCount());
+	 							    HTML message = new HTML("Search count: " + appSearchResult.getResultCount());
+	 							    message.setStyleName("demo-PopUpPanel-message");
+	 							    
+	 							    Button button = new Button("Close");
+	 							    SimplePanel holder = new SimplePanel();
+	 							    holder.add(button);
+	 							    holder.setStyleName("demo-PopUpPanel-footer");
+	 							    PopUpPanelContents.add(message);
+	 							    PopUpPanelContents.add(holder);
+	 							    popup.setWidget(PopUpPanelContents);
+	 								
+	 								
+	 							    popup.setAnimationEnabled(true);
+	 								
+	 							    popup.center();
+	 			        	  }
+	    			       }
+	    			});			      
+			    } catch (Exception e) {
 			      displayError("Couldn't retrieve JSON");
 			    }
 				

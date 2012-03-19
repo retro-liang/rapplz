@@ -1,8 +1,7 @@
 package com.retro.rapplz.client;
 
-import java.util.List;
-
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArray;
 
 public class AppSearchResult extends JavaScriptObject
 {
@@ -13,5 +12,5 @@ public class AppSearchResult extends JavaScriptObject
 
 	// JSNI methods to get app data.
 	public final native int getResultCount() /*-{return this.resultCount;}-*/;
-	public final native List<App> getResults() /*-{return this.results}-*/;
+	public final native JsArray<App> getResults() /*-{return this.results}-*/;
 }

@@ -29,6 +29,16 @@
 	<!-- to create a completely dynamic UI.        -->
 	<!--                                           -->
 	<body>
+		<div id="fb-root"></div>
+		<script>
+			(function(d, s, id) {
+			  var js, fjs = d.getElementsByTagName(s)[0];
+			  if (d.getElementById(id)) return;
+			  js = d.createElement(s); js.id = id;
+			  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+			  fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk'));
+		</script>
 
 	    <!-- OPTIONAL: include this if you want history support -->
 	    <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
@@ -64,28 +74,13 @@
 				<div id="appList"></div>
 				<div id="commandBar"></div>
 				<div class="app-info" role="content-info" tabindex="0">
-					<div id="login-box"></div>					
-					<h3>
-						<img alt="" class="app-icon" src="http://a0.twimg.com/a/1331656155/images/oauth_application.png" title="Pinterest by Cold Brew Labs" />
-							Pinterest
-					</h3>
-					<dl>
-						<dt class="dev">Developer</dt>
-						<dd class="dev">By Cold Brew Labs</dd>
-						<dt class="url">Application URL</dt>
-						<dd class="url">pinterest.com</dd>
-						<dt class="notes">About this app</dt>
-						<dd class="notes"><p>A visual bookmarking utility.</p></dd>
-					</dl>
-					<p><a href="http://pinterest.com/twitter/?denied=IPGkaCsrluqeHtdknFwcA6o4sdaSkzGw1D0zXQhOj8" class="deny maintain-context">Cancel, and return to app</a></p>
-
+					<!-- <div id="login-box"></div> -->					
+					<!-- <h3><img alt="" class="app-icon" src="http://a0.twimg.com/a/1331656155/images/oauth_application.png" title="Pinterest by Cold Brew Labs" />Pinterest</h3> -->
+					
 					<div class="permissions allow">
 						<p>This application <strong>will be able to</strong>:</p>
 						<ul>
-							<li>Read Tweets from your timeline.</li>
-							<li>See who you follow, and follow new people.</li>
-							<li>Update your profile.</li>
-							<li>Post Tweets for you.</li>
+							<li>Read Tweets from your timeline.</li>														
 						</ul>
 					</div>
 			
@@ -113,10 +108,27 @@
 					<div class="permissions deny">
 						<p>This application <strong>will not be able to</strong>:</p>
 						<ul>
-							<li>Access your direct messages.</li>
-							<li>See your Twitter password.</li>
+							<li>Access your direct messages.</li>							
 						</ul>
 					</div>
+					
+					<p><a href="http://pinterest.com/twitter/?denied=IPGkaCsrluqeHtdknFwcA6o4sdaSkzGw1D0zXQhOj8" class="deny maintain-context">Cancel, and return to app</a></p>
+					
+					<div class="fb-like" data-href="http://www.rapplz.com/" data-send="false" data-width="300" data-show-faces="true"></div>
+					
+					<p><a href="http://pinterest.com/pin/create/button/?url=http%3A%2F%2Fwww.rapplz.com%2F" class="pin-it-button" count-layout="horizontal">Pin It</a></p>
+					<script type="text/javascript" src="http://assets.pinterest.com/js/pinit.js"></script>
+					
+					<script type="text/javascript">
+						<!--
+							google_ad_client = "ca-pub-3748265501907091";
+							/* rapplz */
+							google_ad_slot = "8283218969";
+							google_ad_width = 300;
+							google_ad_height = 250;
+						//-->
+					</script>
+					<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
 				</div>
 			</div>
 		</div>
