@@ -5,6 +5,8 @@ import com.googlecode.objectify.util.DAOBase;
 import com.retro.rapplz.server.datastore.entity.Account;
 import com.retro.rapplz.server.datastore.entity.App;
 import com.retro.rapplz.server.datastore.entity.AppIndex;
+import com.retro.rapplz.server.datastore.entity.AppTag;
+import com.retro.rapplz.server.datastore.entity.AppTagIndex;
 import com.retro.rapplz.server.datastore.entity.Profile;
 import com.retro.rapplz.server.datastore.entity.Role;
 import com.retro.rapplz.server.datastore.entity.Status;
@@ -21,5 +23,7 @@ public class DAO extends DAOBase
 		ObjectifyService.register(Status.class);
 		ObjectifyService.register(App.class);
 		ObjectifyService.register(AppIndex.class);
+		ObjectifyService.register(AppTag.class);
+		ObjectifyService.register(AppTagIndex.class);
 	}
 }

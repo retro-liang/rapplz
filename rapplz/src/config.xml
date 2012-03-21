@@ -4,7 +4,7 @@
 		<ios>
 			<api>http://itunes.apple.com/search?</api>
 			<parameters>
-				<country>ca</country>
+				<country>us</country>
 				<entity>software</entity>
 				<attribute>softwareDeveloper</attribute>
 				<limit>10</limit>
@@ -16,10 +16,10 @@
 		<ios>
 			<all>
 				<new>http://itunes.apple.com/us/rss/newapplications/limit=5/xml</new>
-				<top25-paid>http://gdata.youtube.com/feeds/api/users/kitconews/uploads?orderby=updated</top25-paid>			
+				<top25-paid>http://itunes.apple.com/us/rss/newapplications/limit=5/xml</top25-paid>			
 			</all>
 			<iphone>
-				<top25-paid>http://gdata.youtube.com/feeds/api/users/kitconews/uploads?orderby=updated</top25-paid>
+				<top25-paid>http://itunes.apple.com/us/rss/newapplications/limit=5/xml</top25-paid>
 			</iphone>
 		</ios>
 	</app-feed>

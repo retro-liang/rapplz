@@ -1,5 +1,6 @@
 package com.retro.rapplz.server.datastore.entity;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Id;
@@ -19,7 +20,7 @@ public class AppIndex
 	@Parent
 	private Key<User> user;
 	
-	private Set<Key<App>> apps;
+	private Set<Key<App>> apps = new HashSet<Key<App>>();
 	
 	public AppIndex()
 	{

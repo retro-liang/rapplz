@@ -45,8 +45,10 @@ public class Rapplz implements EntryPoint
 	private static final int REFRESH_INTERVAL = 1000 * 60 * 60 *24; // ms
 	
 	private static final String ALL_APPS_JSON_URL = "/rest/appService/all";
+	private static final String ALL_FEATURED_APPS_JSON_URL = "/rest/appService/tag/featured";
+	private static final String ALL_RECOMMANDED_APPS_JSON_URL = "/rest/appService/tag/recommanded";
 	private static final String ALL_APPS_SIZE_URL = "/rest/appService/allAppsSize";
-	private static final String SEARCH_APP_URL = "http://itunes.apple.com/search?country=CA&entity=software&limit=10&term=pinterest";
+	private static final String SEARCH_APP_URL = "http://itunes.apple.com/search?country=US&entity=software&limit=10&term=pinterest";
 	
 	private static final String ADD_RECOMMAND_APP_URL = "/rest/appService/recommand";
 	
@@ -134,7 +136,8 @@ public class Rapplz implements EntryPoint
 	      public void run()
 	      {
 	    	  retrieveAppsInfo();
-	    	  retrieveFeaturedApps();	    	  
+	    	  retrieveApps(ALL_RECOMMANDED_APPS_JSON_URL);
+	    	  //retrieveApps(ALL_APPS_JSON_URL);
 	      }
 	    };
 	    
@@ -204,8 +207,8 @@ public class Rapplz implements EntryPoint
 	    			       {
 	    			    	  if(appSearchResult != null)
 	 			        	  {
-	    			    		  	PopupPanel popup = new PopupPanel(false);
-	 							    popup.setStyleName("demo-PopUpPanel");
+	    			    		  	PopupPanel popupPanel = new PopupPanel(false);
+	 							    popupPanel.setStyleName("demo-PopUpPanel");
 	 							    VerticalPanel PopUpPanelContents = new VerticalPanel();
 	 							    if(appSearchResult.getResultCount() > 0)
 	 							    {
@@ -214,6 +217,7 @@ public class Rapplz implements EntryPoint
 	 							    		final ResultApp resultApp = appSearchResult.getResults().get(i);
 	 							    		HorizontalPanel horizontalPanel = new HorizontalPanel();
 	 							    		Image image = new Image(resultApp.getArtworkUrl60());
+	 							    		Label label = new Label(resultApp.getTrackName());
 	 							    		Button button = new Button("Recommand");
 	 							    		button.addClickHandler(new ClickHandler()
 	 							    		{
@@ -224,11 +228,15 @@ public class Rapplz implements EntryPoint
 													try
 													{
 														StringBuffer postData = new StringBuffer();
-														// note param pairs are separated by a '&' 
-														// and each key-value pair is separated by a '='
 														postData.append(URL.encode("id")).append("=").append(URL.encode(String.valueOf(resultApp.getTrackId())));
 														postData.append("&");
-														postData.append(URL.encode("YourParameterName2")).append("=").append(URL.encode("YourParameterValue2"));
+														postData.append(URL.encode("name")).append("=").append(URL.encode(resultApp.getTrackName()));
+														postData.append("&");
+														postData.append(URL.encode("icon")).append("=").append(URL.encode(resultApp.getArtworkUrl60()));
+														postData.append("&");
+														postData.append(URL.encode("link")).append("=").append(URL.encode(resultApp.getTrackViewUrl()));
+														postData.append("&");
+														postData.append(URL.encode("price")).append("=").append(URL.encode(String.valueOf(resultApp.getPrice())));
 														builder.setHeader("Content-type", "application/x-www-form-urlencoded");
 														builder.sendRequest(postData.toString(), new RequestCallback()
 														{
@@ -256,11 +264,12 @@ public class Rapplz implements EntryPoint
 												}
 	 							    		});
 	 							    		horizontalPanel.add(image);
+	 							    		horizontalPanel.add(label);
 	 							    		horizontalPanel.add(button);
 	 							    		PopUpPanelContents.add(horizontalPanel);
 	 							    	}
 	 							    }
-	 							    popup.setTitle("Search count: " + appSearchResult.getResultCount());
+	 							    popupPanel.setTitle("Search count: " + appSearchResult.getResultCount());
 	 							    HTML message = new HTML("Search count: " + appSearchResult.getResultCount());
 	 							    message.setStyleName("demo-PopUpPanel-message");
 	 							    
@@ -270,14 +279,10 @@ public class Rapplz implements EntryPoint
 	 							    holder.setStyleName("demo-PopUpPanel-footer");
 	 							    PopUpPanelContents.add(message);
 	 							    PopUpPanelContents.add(holder);
-	 							    
-	 							    
-	 							   popup.setWidget(PopUpPanelContents );
-	 								
-	 								
-	 							    popup.setAnimationEnabled(true);
-	 								
-	 							    popup.center();
+	 							    popupPanel.setWidget(PopUpPanelContents );
+	 								popupPanel.setAnimationEnabled(true);
+	 								popupPanel.setGlassEnabled(true);
+	 							    popupPanel.center();
 	 			        	  }
 	    			       }
 	    			});			      
@@ -299,53 +304,6 @@ public class Rapplz implements EntryPoint
 	      }
 	    });*/
 	}
-	
-	/**
-	   * Add stock to FlexTable. Executed when the user clicks the addStockButton or
-	   * presses enter in the newSymbolTextBox.
-	   */
-	  /*private void addStock() {
-	    final String symbol = newSymbolTextBox.getText().toUpperCase().trim();
-	    newSymbolTextBox.setFocus(true);
-
-	    // Stock code must be between 1 and 10 chars that are numbers, letters, or dots.
-	    if (!symbol.matches("^[0-9a-zA-Z\\.]{1,10}$")) {
-	      Window.alert("'" + symbol + "' is not a valid symbol.");
-	      newSymbolTextBox.selectAll();
-	      return;
-	    }
-
-	    newSymbolTextBox.setText("");
-
-	    // Don't add the stock if it's already in the table.
-	    if (apps.contains(symbol))
-	      return;
-
-	    // Add the stock to the table.
-	    int row = mainAppFlexTable.getRowCount();
-	    apps.add(symbol);
-	    mainAppFlexTable.setText(row, 0, symbol);
-	    mainAppFlexTable.setWidget(row, 2, new Label());
-	    mainAppFlexTable.getCellFormatter().addStyleName(row, 1, "watchListNumericColumn");
-	    mainAppFlexTable.getCellFormatter().addStyleName(row, 2, "watchListNumericColumn");
-	    mainAppFlexTable.getCellFormatter().addStyleName(row, 3, "watchListRemoveColumn");
-
-	    // Add a button to remove this stock from the table.
-	    Button removeStockButton = new Button("x");
-	    removeStockButton.addStyleDependentName("remove");
-	    removeStockButton.addClickHandler(new ClickHandler() {
-	      public void onClick(ClickEvent event) {
-	        int removedIndex = apps.indexOf(symbol);
-	        apps.remove(removedIndex);
-	        mainAppFlexTable.removeRow(removedIndex + 1);
-	      }
-	    });
-	    mainAppFlexTable.setWidget(row, 3, removeStockButton);
-
-	    // Get the stock price.
-	    refreshAppList();
-
-	  }*/
 	
 	private void retrieveAppsInfo()
 	{
@@ -377,9 +335,9 @@ public class Rapplz implements EntryPoint
 		}
 	}
 
-	private void retrieveFeaturedApps()
+	private void retrieveApps(String requestURL)
 	{
-		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode(ALL_APPS_JSON_URL));
+		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode(requestURL));
 		try
 		{
 			builder.sendRequest(null, new RequestCallback()
@@ -389,22 +347,32 @@ public class Rapplz implements EntryPoint
 					if(200 == response.getStatusCode())
 					{
 						StringBuilder sb = new StringBuilder(response.getText().trim());
-						updateTable(asArrayOfApp(sb.substring(sb.indexOf("["), sb.lastIndexOf("}"))));
+						if(sb.length() > 0)
+						{
+							if(sb.toString().contains("["))
+							{
+								updateTable(asArrayOfApp(sb.substring(sb.indexOf("["), sb.lastIndexOf("}"))));
+							}
+							else
+							{
+								updateTable(asArrayOfApp("[" + sb.substring((sb.indexOf(":") + 1), sb.lastIndexOf("}")) + "]"));
+							}														
+						}						
 					}
 					else
 					{
-						logger.warning("Couldn't retrieve featured apps, response code: " + response.getStatusCode());
+						logger.warning("Couldn't retrieve apps, response code: " + response.getStatusCode());
 					}
 				}
 				public void onError(Request request, Throwable exception)
 				{
-					logger.warning("Couldn't retrieve featured apps: " + exception);
+					logger.warning("Couldn't retrieve apps: " + exception);
 		        }
 			});
 		}
 		catch(RequestException e)
 		{
-			logger.warning("Request exception happened during retrieving featured apps: " + e);
+			logger.warning("Request exception happened during retrieving apps: " + e);
 		}
 	}
 	

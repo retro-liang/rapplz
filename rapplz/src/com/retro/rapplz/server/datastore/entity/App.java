@@ -30,24 +30,24 @@ public class App
 	private String name;
 	
 	@Unindexed
-	private String link;
+	private String link = "";
 	
-	private String contentType;
+	private String contentType = "";
 
-	private String category;
+	private String category = "";
 	
-	private String artist;
+	private String artist = "";
 	
-	private String price;
-	
-	@Unindexed
-	private String image;
+	private String price = "";
 	
 	@Unindexed
-	private String releaseDate;
+	private String image = "";
 	
 	@Unindexed
-	private String updateDate;
+	private String releaseDate = "";
+	
+	@Unindexed
+	private String updateDate = "";
 	
 	public App()
 	{

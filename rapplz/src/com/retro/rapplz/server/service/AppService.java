@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -15,8 +17,10 @@ import javax.ws.rs.core.MediaType;
 import com.googlecode.objectify.Key;
 import com.retro.rapplz.server.datastore.entity.App;
 import com.retro.rapplz.server.datastore.entity.AppTag;
+import com.retro.rapplz.server.datastore.entity.AppTagIndex;
 import com.retro.rapplz.server.datastore.service.AppDBService;
 import com.retro.rapplz.server.datastore.service.AppTagDBService;
+import com.retro.rapplz.server.datastore.service.AppTagIndexDBService;
 import com.sun.jersey.spi.resource.Singleton;
 
 @Singleton
@@ -27,6 +31,7 @@ public class AppService
 	
 	private AppDBService appDBService = new AppDBService();
 	private AppTagDBService appTagDBService = new AppTagDBService();
+	private AppTagIndexDBService appTagIndexDBService = new AppTagIndexDBService();
 	
 	@GET
 	@Path("{id}")
@@ -48,13 +53,13 @@ public class AppService
 	@GET
 	@Path("tag/{tagName}")
 	@Produces({MediaType.APPLICATION_JSON})
-	public List<App> getFeaturedApps(@PathParam("tagName") String tagName)
+	public List<App> getTaggedApps(@PathParam("tagName") String tagName)
 	{
 		logger.info("getFeaturedApps get invoked");
-		Key<AppTag> appTagKey = appTagDBService.getAppTagKey(tagName);
-		if(appTagKey != null)
+		AppTag appTag = appTagDBService.getAppTag(tagName);
+		if(appTag != null)
 		{
-			return appDBService.getAppsByTag(appTagKey);
+			return appTagIndexDBService.getAppsByAppTag(appTag);
 		}
 		else
 		{
@@ -73,9 +78,35 @@ public class AppService
 	
 	@POST
 	@Path("recommand")
-	public App recommand(@Context HttpServletRequest request)
+	@Consumes("application/x-www-form-urlencoded")
+	public App recommand(@Context HttpServletRequest request, @FormParam("id") Long id, @FormParam("name") String name, @FormParam("icon") String icon, @FormParam("link") String link, @FormParam("price") String price)
 	{
-		logger.info(request.getParameter("id"));
+		logger.info("id=" + id + " name=" + name + " link=" + link + " price=" + price);
+		App app = new App();
+		app.setId(id);
+		app.setName(name);
+		app.setImage(icon);
+		app.setLink(link);
+		app.setPrice(price);
+		Key<App> appKey = appDBService.saveApp(app);
+		Key<AppTag> appTagKey = appTagDBService.getAppTagKey("recommanded");
+		if(appTagKey == null)
+		{
+			appTagKey = appTagDBService.saveAppTag("recommanded");
+		}
+		
+		Key<AppTagIndex> appTagIndexKey = appTagIndexDBService.getAppTagIndexKey(appTagKey);
+		if(appTagIndexKey == null)
+		{			
+			appTagIndexKey = appTagIndexDBService.saveAppTagIndex(appTagKey, appKey);
+		}
+		else
+		{
+			AppTagIndex appTagIndex = appTagIndexDBService.getAppTagIndex(appTagIndexKey);
+			appTagIndex.getApps().add(appKey);
+			appTagIndexDBService.saveAppTagIndex(appTagIndex);
+		}		
+		
 		return null;
 	}
 	

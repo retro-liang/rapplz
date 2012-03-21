@@ -24,9 +24,9 @@ public class AppDBService
 		return dao.ofy().get(App.class, id);
 	}
 	
-	public void saveApp(App app)
+	public Key<App> saveApp(App app)
 	{
-		dao.ofy().put(app);
+		return dao.ofy().put(app);
 	}
 	
 	public void saveApps(List<App> apps)
@@ -37,19 +37,6 @@ public class AppDBService
 	public int getAllAppsSize()
 	{
 		return dao.ofy().query(App.class).count();
-	}
-	
-	public List<App> getAppsByTag(Key<AppTag> appTag)
-	{
-		AppTagIndex appTagIndex = dao.ofy().query(AppTagIndex.class).filter("appTag", appTag).get();
-		if(appTagIndex != null && appTagIndex.getApps() != null && appTagIndex.getApps().size() > 0)
-		{
-			return (List<App>) dao.ofy().get(App.class, appTagIndex.getApps()).values();
-		}
-		else
-		{
-			return null;
-		}
 	}
 	
 	public List<App> getAllApps()
