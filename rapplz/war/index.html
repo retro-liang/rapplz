@@ -70,11 +70,11 @@
 			</div>
 	
 			<div class="auth">
-				<h2>Authorize Pinterest to use your account?</h2>
+				<h2>Authorize Kitco to use your account?</h2>
 				<div id="appList"></div>
 				<div id="commandBar"></div>
 				<div class="app-info" role="content-info" tabindex="0">
-					<!-- <div id="login-box"></div> -->					
+					<div id="login-box"></div>					
 					<!-- <h3><img alt="" class="app-icon" src="http://a0.twimg.com/a/1331656155/images/oauth_application.png" title="Pinterest by Cold Brew Labs" />Pinterest</h3> -->
 					
 					<div class="permissions allow">
@@ -84,8 +84,9 @@
 						</ul>
 					</div>
 			
-					<form action="https://api.twitter.com/oauth/authenticate" id="oauth_form" method="post"><div style="margin:0;padding:0"><input name="authenticity_token" type="hidden" value="e531d0d08cc31e4bed2b7760961f2d62e535d2c9" /></div>
-						<input id="oauth_token" name="oauth_token" type="hidden" value="IPGkaCsrluqeHtdknFwcA6o4sdaSkzGw1D0zXQhOj8" />        
+					<form action="#" id="oauth_form" method="post"><div style="margin:0;padding:0">
+						<input name="authenticity_token" type="hidden" value="" /></div>
+						<input id="oauth_token" name="oauth_token" type="hidden" value="" />        
 						<fieldset class="sign-in">
 							<legend>Sign in to Twitter</legend>
 							<div class="row user">
@@ -140,5 +141,18 @@
 				<img src="images/appengine-silver-120x30.gif" />
 			</div>
 		</div>
+		
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-30210796-1']);
+			_gaq.push(['_setDomainName', 'rapplz.com']);
+			_gaq.push(['_trackPageview']);
+			
+			(function() {
+			  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();		
+		</script>
 	</body>
 </html>

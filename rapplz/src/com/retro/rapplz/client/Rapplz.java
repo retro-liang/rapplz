@@ -18,12 +18,14 @@ import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.jsonp.client.JsonpRequestBuilder;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -32,7 +34,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.retro.rapplz.server.service.AppService;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -41,9 +42,15 @@ public class Rapplz implements EntryPoint
 {
 	private static final Logger logger = Logger.getLogger(Rapplz.class.getName());
 	
+	private final long DURATION = 1000 * 60 * 60 * 24 * 14; //duration remembering login. 2 weeks
+    private Date expires = new Date(System.currentTimeMillis() + DURATION);
+    
+	
 	private static final int REFRESH_DELAY = 1000 * 3;
 	private static final int REFRESH_INTERVAL = 1000 * 60 * 60 *24; // ms
 	
+	private static final String SEARCH_USER_URL = "/rest/userService/search";
+	private static final String SAVE_USER_URL = "/rest/userService/save";
 	private static final String ALL_APPS_JSON_URL = "/rest/appService/all";
 	private static final String ALL_FEATURED_APPS_JSON_URL = "/rest/appService/tag/featured";
 	private static final String ALL_RECOMMANDED_APPS_JSON_URL = "/rest/appService/tag/recommanded";
@@ -71,17 +78,21 @@ public class Rapplz implements EntryPoint
 	private Image facebookLoginIcon = new Image("/images/signin_providers_icon/facebook.gif");
 	private Image twitterLoginIcon = new Image("/images/signin_providers_icon/twitter.gif");
 	private Image googleLoginIcon = new Image("/images/signin_providers_icon/google.gif");
+	//private Image googleLoginIcon = new Image("/images/signin_providers_icon/Google-G-Logo.png");
 	private Image liveLoginIcon = new Image("/images/signin_providers_icon/live.gif");
 	private Image yahooLoginIcon = new Image("/images/signin_providers_icon/yahoo.gif");
 	private Image aolLoginIcon = new Image("/images/signin_providers_icon/aol.gif");
 	private Image myspaceLoginIcon = new Image("/images/signin_providers_icon/myspace.gif");
 	private Image openidLoginIcon = new Image("/images/signin_providers_icon/openid.gif");
 	
+	private Label googleLoginLabel = new Label("Sign In with Google");
+	private HorizontalPanel googleLoginHorizontalPanel = new HorizontalPanel();
+	
 	/**
 	 * This is the entry point method.
 	 */
-	public void onModuleLoad() {
-		
+	public void onModuleLoad()
+	{
 	    // Add styles to elements in the stock list table.
 	    mainAppFlexTable.setCellPadding(6);
 	    mainAppFlexTable.getRowFormatter().addStyleName(0, "watchListHeader");
@@ -105,9 +116,17 @@ public class Rapplz implements EntryPoint
 	    mainPanel.add(mainAppFlexTable);	    
 	    mainPanel.add(lastUpdatedLabel);
 	    
-	    loginPanel.add(facebookLoginIcon);
-	    loginPanel.add(twitterLoginIcon);
-	    loginPanel.add(googleLoginIcon);
+	    Button googleSignInButton = new Button();
+	    googleLoginHorizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+	    googleLoginHorizontalPanel.add(googleLoginIcon);
+	    googleLoginHorizontalPanel.add(googleLoginLabel);
+	    googleSignInButton.getElement().appendChild(googleLoginHorizontalPanel.getElement());
+	    
+
+	    loginPanel.add(googleSignInButton);
+	    //loginPanel.add(facebookLoginIcon);
+	    //loginPanel.add(twitterLoginIcon);
+	    //loginPanel.add(googleLoginIcon);
 	    //loginPanel.add(liveLoginIcon);
 	    //loginPanel.add(yahooLoginIcon);
 	    //loginPanel.add(aolLoginIcon);
@@ -117,11 +136,11 @@ public class Rapplz implements EntryPoint
 	    commandBarPanel.add(recommandAppLabel);
 	    commandBarPanel.add(recommandAppTextBox);
 	    commandBarPanel.add(searchAppButton);
-
+	    
 	    // Associate the Main panel with the HTML host page.
 	    RootPanel.get("appList").add(mainPanel);
 	    RootPanel.get("commandBar").add(commandBarPanel);
-	    //RootPanel.get("login-box").add(loginPanel);
+	    RootPanel.get("login-box").add(loginPanel);
 	    
 	    
 	    
@@ -146,46 +165,120 @@ public class Rapplz implements EntryPoint
 	    
 
 	    // Listen for mouse events on the Add button.
-	    googleLoginIcon.addClickHandler(new ClickHandler() {
-	      public void onClick(ClickEvent event) {
-	    	  String AUTH_URL = "https://accounts.google.com/o/oauth2/auth";
-	  		String CLIENT_ID = "929855298687.apps.googleusercontent.com"; // available from the APIs console
-	  		String BUZZ_READONLY_SCOPE = "https://www.googleapis.com/auth/buzz.readonly";
-	  		String BUZZ_PHOTOS_SCOPE = "https://www.googleapis.com/auth/photos";
-	  		String USER_PROFILE_SCOPE = "https://www.googleapis.com/auth/userinfo.profile";
+	    googleSignInButton.addClickHandler(new ClickHandler()
+	    {
+	    	public void onClick(ClickEvent event)
+	    	{
+	    		String AUTH_URL = "https://accounts.google.com/o/oauth2/auth";
+	    		String CLIENT_ID = "929855298687.apps.googleusercontent.com";
+	    		String USER_PROFILE_EMAIL_SCOPE = "https://www.googleapis.com/auth/userinfo.email";
+	    		String USER_PROFILE_SCOPE = "https://www.googleapis.com/auth/userinfo.profile";
 
-	  		AuthRequest req = new AuthRequest(AUTH_URL, CLIENT_ID).withScopes(USER_PROFILE_SCOPE, BUZZ_READONLY_SCOPE, BUZZ_PHOTOS_SCOPE); // Can specify multiple scopes here
-	  		
-	  		Auth.get().login(req, new Callback<String, Throwable>() {
-	  			  @Override
-	  			  public void onSuccess(String token) {
-	  			    // You now have the OAuth2 token needed to sign authenticated requests.
-	  				  Window.alert("OK: " + token);
-	  				RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + token);
-	  				Window.alert("https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + token);
-	  			    try {
-	  			      Request request = builder.sendRequest(null, new RequestCallback() {
-	  			        public void onError(Request request, Throwable exception) {
-	  			          displayError("Couldn't retrieve JSON: " + exception);
-	  			        }
+	    		try
+	    		{
+	    			AuthRequest req = new AuthRequest(AUTH_URL, CLIENT_ID).withScopes(USER_PROFILE_SCOPE, USER_PROFILE_EMAIL_SCOPE);
+		    		Auth.get().login(req, new Callback<String, Throwable>()
+		    		{
+		    			@Override
+		    			public void onSuccess(String token)
+		    			{
+		    				JsonpRequestBuilder jsonpRequestbuilder = new JsonpRequestBuilder();
+		    				//RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + token);
+		    				jsonpRequestbuilder.requestObject("https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + token, new AsyncCallback<GoogleUser>()
+	    					//builder.sendRequest(null, new RequestCallback()
+	    					{
+		    					public void onFailure(Throwable throwable)
+	    						{
+	    							displayError("Couldn't retrieve JSON: " + throwable);
+	    						}
 
-	  			        public void onResponseReceived(Request request, Response response) {
-	  			        	displayError("User Profile: " + asUser(response.getText()).getId() + " | " + asUser(response.getText()).getName());
-	  			        }
-	  			      });
-	  			    } catch (RequestException e) {
-	  			      displayError("Couldn't retrieve JSON");
-	  			    }
-	  			  }
-	  			  @Override
-	  			  public void onFailure(Throwable caught) {
-	  			    // The authentication process failed for some reason, see caught.getMessage()
-	  				Window.alert("No: " + caught.toString());
-	  			  }
-	  			});
-	      }
+		    					public void onSuccess(final GoogleUser googleUser)
+	    						{
+	    							RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode(SEARCH_USER_URL + "/" + googleUser.getId()));
+	    							try
+	    							{
+	    								builder.sendRequest(null, new RequestCallback()
+	    								{
+	    									public void onError(Request request, Throwable exception)
+	    									{
+	    										displayError("Can't search user: " + exception);
+	    									}
+
+	    									public void onResponseReceived(Request request, Response response)
+	    									{
+	    										Window.alert("search: " + response.getStatusCode() + " | " + response.getText());
+	    										if(200 != response.getStatusCode())
+	    										{
+	    											RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(SAVE_USER_URL));
+	    			    							try
+	    			    							{
+	    			    								StringBuffer postData = new StringBuffer();
+														postData.append(URL.encode("id")).append("=").append(URL.encode(googleUser.getId()));
+														postData.append("&");
+														postData.append(URL.encode("firstName")).append("=").append(URL.encode(googleUser.getFirstName()));
+														postData.append("&");
+														postData.append(URL.encode("lastName")).append("=").append(URL.encode(googleUser.getLastName()));
+														postData.append("&");
+														postData.append(URL.encode("email")).append("=").append(URL.encode(googleUser.getEmail()));
+														if(googleUser.getPicture() != null)
+														{
+															postData.append("&");
+															postData.append(URL.encode("avatar")).append("=").append(URL.encode(googleUser.getPicture()));
+														}														
+														builder.setHeader("Content-type", "application/x-www-form-urlencoded");
+														builder.sendRequest(postData.toString(), new RequestCallback()
+	    			    								{
+	    			    									public void onError(Request request, Throwable exception)
+	    			    									{
+	    			    										displayError("Can't save user: " + exception);
+	    			    									}
+
+	    			    									public void onResponseReceived(Request request, Response response)
+	    			    									{
+	    			    										Window.alert("save: " + response.getStatusCode() + " | " + response.getText());
+	    			    										if(200 == response.getStatusCode())
+	    			    										{
+	    			    											Window.alert("User saved: " + response.getText());
+	    			    											
+	    			    											Cookies.setCookie("sid", response.getText(), expires, null, "/", false);
+	    			    										}
+	    			    									}
+	    			    								});
+	    			    							}
+	    			    							catch(RequestException e)
+	    			    							{
+	    			    								displayError("Save user exception: " + e);
+	    			    							}
+	    										}
+	    										else
+	    										{
+	    											displayError("url: " + SEARCH_USER_URL + "/" + googleUser.getId());
+	    											Cookies.setCookie("sid", googleUser.getId(), expires, null, "/", false);
+	    										}
+	    									}
+	    								});
+	    							}
+	    							catch(RequestException e)
+	    							{
+	    								displayError("Search user exception: " + e);
+	    							}    							
+	    						}
+	    					});
+		    			}
+
+		    			@Override
+		    			public void onFailure(Throwable caught)
+		    			{
+		    				Window.alert("Auth google failed: " + caught.toString());
+		    			}
+		    		});
+	    		}
+	    		catch(Exception e)
+	    		{
+	    			displayError("Exception: " + e);
+	    		}
+	    	}
 	    });
-	    
 	    
 	    searchAppButton.addClickHandler(new ClickHandler()
 	    {
@@ -403,5 +496,5 @@ public class Rapplz implements EntryPoint
 	
 	private final native AppSearchResult asAppSearchResult(String json) /*-{return eval(json);}-*/;
 	private final native JsArray<App> asArrayOfApp(String json) /*-{return eval(json);}-*/;
-	private final native User asUser(String json) /*-{return eval(json);}-*/;
+	private final native GoogleUser asGoogleUser(String json) /*-{return eval(json);}-*/;
 }

@@ -3,6 +3,6 @@
 	<cron>
 		<url>/feedprocessor/ios</url>
 		<description>Repopulate ios apps cache from itune every 30 minutes</description>
-		<schedule>every 30 minutes</schedule>
+		<schedule>every 24 hours</schedule>
 	</cron>	
 </cronentries>
