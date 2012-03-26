@@ -20,6 +20,18 @@ public class UserDBService
 		dao = new DAO();
 	}
 	
+	public Key<User> getUserKey(String id)
+	{
+		try
+		{
+			return dao.ofy().query(User.class).filter("id", id).getKey();
+		}
+		catch(NotFoundException e)
+		{
+			return null;
+		}
+	}
+	
 	public User getUser(String id)
 	{
 		try

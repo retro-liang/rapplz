@@ -18,9 +18,11 @@ import com.googlecode.objectify.Key;
 import com.retro.rapplz.server.datastore.entity.App;
 import com.retro.rapplz.server.datastore.entity.AppTag;
 import com.retro.rapplz.server.datastore.entity.AppTagIndex;
+import com.retro.rapplz.server.datastore.entity.User;
 import com.retro.rapplz.server.datastore.service.AppDBService;
 import com.retro.rapplz.server.datastore.service.AppTagDBService;
 import com.retro.rapplz.server.datastore.service.AppTagIndexDBService;
+import com.retro.rapplz.server.datastore.service.UserDBService;
 import com.sun.jersey.spi.resource.Singleton;
 
 @Singleton
@@ -32,6 +34,7 @@ public class AppService
 	private AppDBService appDBService = new AppDBService();
 	private AppTagDBService appTagDBService = new AppTagDBService();
 	private AppTagIndexDBService appTagIndexDBService = new AppTagIndexDBService();
+	private UserDBService userDBService = new UserDBService();
 	
 	@GET
 	@Path("{id}")
@@ -79,35 +82,46 @@ public class AppService
 	@POST
 	@Path("recommand")
 	@Consumes("application/x-www-form-urlencoded")
-	public App recommand(@Context HttpServletRequest request, @FormParam("id") Long id, @FormParam("name") String name, @FormParam("icon") String icon, @FormParam("link") String link, @FormParam("price") String price)
+	public String recommand(@Context HttpServletRequest request, @FormParam("userId") String userId, @FormParam("appId") Long appId, @FormParam("name") String name, @FormParam("icon") String icon, @FormParam("link") String link, @FormParam("price") String price)
 	{
-		logger.info("id=" + id + " name=" + name + " link=" + link + " price=" + price);
-		App app = new App();
-		app.setId(id);
-		app.setName(name);
-		app.setImage(icon);
-		app.setLink(link);
-		app.setPrice(price);
-		Key<App> appKey = appDBService.saveApp(app);
-		Key<AppTag> appTagKey = appTagDBService.getAppTagKey("recommanded");
-		if(appTagKey == null)
+		logger.info("id=" + appId + " name=" + name + " link=" + link + " price=" + price);
+		if(userId != null && !userId.equals("") && appId != null && appId != 0)
 		{
-			appTagKey = appTagDBService.saveAppTag("recommanded");
-		}
-		
-		Key<AppTagIndex> appTagIndexKey = appTagIndexDBService.getAppTagIndexKey(appTagKey);
-		if(appTagIndexKey == null)
-		{			
-			appTagIndexKey = appTagIndexDBService.saveAppTagIndex(appTagKey, appKey);
+			App app = new App();
+			app.setId(appId);
+			app.setName(name);
+			app.setImage(icon);
+			app.setLink(link);
+			app.setPrice(price);
+			Key<App> appKey = appDBService.saveApp(app);
+			
+			Key<AppTag> appTagKey = appTagDBService.getAppTagKey("recommanded");
+			if(appTagKey == null)
+			{
+				appTagKey = appTagDBService.saveAppTag("recommanded");
+			}
+			
+			Key<AppTagIndex> appTagIndexKey = appTagIndexDBService.getAppTagIndexKey(appTagKey);
+			if(appTagIndexKey == null)
+			{			
+				appTagIndexKey = appTagIndexDBService.saveAppTagIndex(appTagKey, appKey);
+			}
+			
+			Key<User> userKey = userDBService.getUserKey(userId);
+			
+			AppTagIndex appTagIndex = appTagIndexDBService.getAppTagIndex(appTagIndexKey);
+			appTagIndex.getApps().add(appKey);			
+			appTagIndex.getUsers().add(userKey);
+			logger.info("appKey: " + appKey + " | userKey: " + userKey);
+			appTagIndexDBService.saveAppTagIndex(appTagIndex);
+			
+			return appId.toString();
 		}
 		else
 		{
-			AppTagIndex appTagIndex = appTagIndexDBService.getAppTagIndex(appTagIndexKey);
-			appTagIndex.getApps().add(appKey);
-			appTagIndexDBService.saveAppTagIndex(appTagIndex);
-		}		
-		
-		return null;
+			logger.warning("User id: " + userId + " app id: " + appId);
+			return null;
+		}
 	}
 	
 	@GET
@@ -117,5 +131,4 @@ public class AppService
 		appDBService.deleteAllApps();
 		return "OK";
 	}
-
 }

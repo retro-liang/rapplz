@@ -1,5 +1,6 @@
 package com.retro.rapplz.client;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Logger;
@@ -11,6 +12,9 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
@@ -55,7 +59,7 @@ public class Rapplz implements EntryPoint
 	private static final String ALL_FEATURED_APPS_JSON_URL = "/rest/appService/tag/featured";
 	private static final String ALL_RECOMMANDED_APPS_JSON_URL = "/rest/appService/tag/recommanded";
 	private static final String ALL_APPS_SIZE_URL = "/rest/appService/allAppsSize";
-	private static final String SEARCH_APP_URL = "http://itunes.apple.com/search?country=US&entity=software&limit=10&term=pinterest";
+	private static final String SEARCH_APP_URL = "http://itunes.apple.com/search?country=US&entity=software&limit=10&term=";
 	
 	private static final String ADD_RECOMMAND_APP_URL = "/rest/appService/recommand";
 	
@@ -169,114 +173,7 @@ public class Rapplz implements EntryPoint
 	    {
 	    	public void onClick(ClickEvent event)
 	    	{
-	    		String AUTH_URL = "https://accounts.google.com/o/oauth2/auth";
-	    		String CLIENT_ID = "929855298687.apps.googleusercontent.com";
-	    		String USER_PROFILE_EMAIL_SCOPE = "https://www.googleapis.com/auth/userinfo.email";
-	    		String USER_PROFILE_SCOPE = "https://www.googleapis.com/auth/userinfo.profile";
-
-	    		try
-	    		{
-	    			AuthRequest req = new AuthRequest(AUTH_URL, CLIENT_ID).withScopes(USER_PROFILE_SCOPE, USER_PROFILE_EMAIL_SCOPE);
-		    		Auth.get().login(req, new Callback<String, Throwable>()
-		    		{
-		    			@Override
-		    			public void onSuccess(String token)
-		    			{
-		    				JsonpRequestBuilder jsonpRequestbuilder = new JsonpRequestBuilder();
-		    				//RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + token);
-		    				jsonpRequestbuilder.requestObject("https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + token, new AsyncCallback<GoogleUser>()
-	    					//builder.sendRequest(null, new RequestCallback()
-	    					{
-		    					public void onFailure(Throwable throwable)
-	    						{
-	    							displayError("Couldn't retrieve JSON: " + throwable);
-	    						}
-
-		    					public void onSuccess(final GoogleUser googleUser)
-	    						{
-	    							RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode(SEARCH_USER_URL + "/" + googleUser.getId()));
-	    							try
-	    							{
-	    								builder.sendRequest(null, new RequestCallback()
-	    								{
-	    									public void onError(Request request, Throwable exception)
-	    									{
-	    										displayError("Can't search user: " + exception);
-	    									}
-
-	    									public void onResponseReceived(Request request, Response response)
-	    									{
-	    										Window.alert("search: " + response.getStatusCode() + " | " + response.getText());
-	    										if(200 != response.getStatusCode())
-	    										{
-	    											RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(SAVE_USER_URL));
-	    			    							try
-	    			    							{
-	    			    								StringBuffer postData = new StringBuffer();
-														postData.append(URL.encode("id")).append("=").append(URL.encode(googleUser.getId()));
-														postData.append("&");
-														postData.append(URL.encode("firstName")).append("=").append(URL.encode(googleUser.getFirstName()));
-														postData.append("&");
-														postData.append(URL.encode("lastName")).append("=").append(URL.encode(googleUser.getLastName()));
-														postData.append("&");
-														postData.append(URL.encode("email")).append("=").append(URL.encode(googleUser.getEmail()));
-														if(googleUser.getPicture() != null)
-														{
-															postData.append("&");
-															postData.append(URL.encode("avatar")).append("=").append(URL.encode(googleUser.getPicture()));
-														}														
-														builder.setHeader("Content-type", "application/x-www-form-urlencoded");
-														builder.sendRequest(postData.toString(), new RequestCallback()
-	    			    								{
-	    			    									public void onError(Request request, Throwable exception)
-	    			    									{
-	    			    										displayError("Can't save user: " + exception);
-	    			    									}
-
-	    			    									public void onResponseReceived(Request request, Response response)
-	    			    									{
-	    			    										Window.alert("save: " + response.getStatusCode() + " | " + response.getText());
-	    			    										if(200 == response.getStatusCode())
-	    			    										{
-	    			    											Window.alert("User saved: " + response.getText());
-	    			    											
-	    			    											Cookies.setCookie("sid", response.getText(), expires, null, "/", false);
-	    			    										}
-	    			    									}
-	    			    								});
-	    			    							}
-	    			    							catch(RequestException e)
-	    			    							{
-	    			    								displayError("Save user exception: " + e);
-	    			    							}
-	    										}
-	    										else
-	    										{
-	    											displayError("url: " + SEARCH_USER_URL + "/" + googleUser.getId());
-	    											Cookies.setCookie("sid", googleUser.getId(), expires, null, "/", false);
-	    										}
-	    									}
-	    								});
-	    							}
-	    							catch(RequestException e)
-	    							{
-	    								displayError("Search user exception: " + e);
-	    							}    							
-	    						}
-	    					});
-		    			}
-
-		    			@Override
-		    			public void onFailure(Throwable caught)
-		    			{
-		    				Window.alert("Auth google failed: " + caught.toString());
-		    			}
-		    		});
-	    		}
-	    		catch(Exception e)
-	    		{
-	    			displayError("Exception: " + e);
-	    		}
+	    		googleSignIn();
 	    	}
 	    });
 	    
@@ -285,117 +182,242 @@ public class Rapplz implements EntryPoint
 			@Override
 			public void onClick(ClickEvent event)
 			{
-				JsonpRequestBuilder jsonpRequestbuilder = new JsonpRequestBuilder();
-
-			    try
-			    {
-			    	jsonpRequestbuilder.requestObject(SEARCH_APP_URL, new AsyncCallback<AppSearchResult>()
-	    			{
-	    				public void onFailure(Throwable throwable)
-	    				{
-	    					displayError("Couldn't retrieve JSON: " + throwable);
-	    			    }
-
-	    			       public void onSuccess(AppSearchResult appSearchResult)
-	    			       {
-	    			    	  if(appSearchResult != null)
-	 			        	  {
-	    			    		  	PopupPanel popupPanel = new PopupPanel(false);
-	 							    popupPanel.setStyleName("demo-PopUpPanel");
-	 							    VerticalPanel PopUpPanelContents = new VerticalPanel();
-	 							    if(appSearchResult.getResultCount() > 0)
-	 							    {
-	 							    	for(int i = 0; i < appSearchResult.getResults().length(); i++)
-	 							    	{
-	 							    		final ResultApp resultApp = appSearchResult.getResults().get(i);
-	 							    		HorizontalPanel horizontalPanel = new HorizontalPanel();
-	 							    		Image image = new Image(resultApp.getArtworkUrl60());
-	 							    		Label label = new Label(resultApp.getTrackName());
-	 							    		Button button = new Button("Recommand");
-	 							    		button.addClickHandler(new ClickHandler()
-	 							    		{
-												@Override
-												public void onClick(ClickEvent event)
-												{
-													RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(ADD_RECOMMAND_APP_URL));
-													try
-													{
-														StringBuffer postData = new StringBuffer();
-														postData.append(URL.encode("id")).append("=").append(URL.encode(String.valueOf(resultApp.getTrackId())));
-														postData.append("&");
-														postData.append(URL.encode("name")).append("=").append(URL.encode(resultApp.getTrackName()));
-														postData.append("&");
-														postData.append(URL.encode("icon")).append("=").append(URL.encode(resultApp.getArtworkUrl60()));
-														postData.append("&");
-														postData.append(URL.encode("link")).append("=").append(URL.encode(resultApp.getTrackViewUrl()));
-														postData.append("&");
-														postData.append(URL.encode("price")).append("=").append(URL.encode(String.valueOf(resultApp.getPrice())));
-														builder.setHeader("Content-type", "application/x-www-form-urlencoded");
-														builder.sendRequest(postData.toString(), new RequestCallback()
-														{
-															public void onResponseReceived(Request request, Response response)
-															{
-																if(200 == response.getStatusCode())
-																{
-																	lastUpdatedLabel.setText("App added successfully: " + response.getText());
-																}
-																else
-																{
-																	logger.warning("Couldn't add recommand app, response code: " + response.getStatusCode());
-																}
-															}
-															public void onError(Request request, Throwable exception)
-															{
-																logger.warning("Couldn't add recommand app: " + exception);
-													        }
-														});
-													}
-													catch(RequestException e)
-													{
-														logger.warning("Request exception happened during adding recommand app: " + e);
-													}
-												}
-	 							    		});
-	 							    		horizontalPanel.add(image);
-	 							    		horizontalPanel.add(label);
-	 							    		horizontalPanel.add(button);
-	 							    		PopUpPanelContents.add(horizontalPanel);
-	 							    	}
-	 							    }
-	 							    popupPanel.setTitle("Search count: " + appSearchResult.getResultCount());
-	 							    HTML message = new HTML("Search count: " + appSearchResult.getResultCount());
-	 							    message.setStyleName("demo-PopUpPanel-message");
-	 							    
-	 							    Button button = new Button("Close");
-	 							    SimplePanel holder = new SimplePanel();
-	 							    holder.add(button);
-	 							    holder.setStyleName("demo-PopUpPanel-footer");
-	 							    PopUpPanelContents.add(message);
-	 							    PopUpPanelContents.add(holder);
-	 							    popupPanel.setWidget(PopUpPanelContents );
-	 								popupPanel.setAnimationEnabled(true);
-	 								popupPanel.setGlassEnabled(true);
-	 							    popupPanel.center();
-	 			        	  }
-	    			       }
-	    			});			      
-			    } catch (Exception e) {
-			      displayError("Couldn't retrieve JSON");
-			    }
-				
-				
-				
+				searchApp();
 			}	    	
 	    });
 
-	    // Listen for keyboard events in the input box.
-	    /*newSymbolTextBox.addKeyPressHandler(new KeyPressHandler() {
-	      public void onKeyPress(KeyPressEvent event) {
-	        if (event.getCharCode() == KeyCodes.KEY_ENTER) {
-	          addStock();
-	        }
-	      }
-	    });*/
+	    recommandAppTextBox.addKeyPressHandler(new KeyPressHandler()
+	    {
+	    	public void onKeyPress(KeyPressEvent event)
+	    	{
+	    		if (event.getCharCode() == KeyCodes.KEY_ENTER)
+	    		{
+	    			searchApp();
+	    		}
+	    	}
+	    });
+	}
+	
+	private void googleSignIn()
+	{
+		String AUTH_URL = "https://accounts.google.com/o/oauth2/auth";
+		String CLIENT_ID = "929855298687.apps.googleusercontent.com";
+		String USER_PROFILE_EMAIL_SCOPE = "https://www.googleapis.com/auth/userinfo.email";
+		String USER_PROFILE_SCOPE = "https://www.googleapis.com/auth/userinfo.profile";
+
+		try
+		{
+			AuthRequest req = new AuthRequest(AUTH_URL, CLIENT_ID).withScopes(USER_PROFILE_SCOPE, USER_PROFILE_EMAIL_SCOPE);
+    		Auth.get().login(req, new Callback<String, Throwable>()
+    		{
+    			@Override
+    			public void onSuccess(String token)
+    			{
+    				JsonpRequestBuilder jsonpRequestbuilder = new JsonpRequestBuilder();
+    				//RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + token);
+    				jsonpRequestbuilder.requestObject("https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + token, new AsyncCallback<GoogleUser>()
+					//builder.sendRequest(null, new RequestCallback()
+					{
+    					public void onFailure(Throwable throwable)
+						{
+							displayError("Couldn't retrieve JSON: " + throwable);
+						}
+
+    					public void onSuccess(final GoogleUser googleUser)
+						{
+							RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode(SEARCH_USER_URL + "/" + googleUser.getId()));
+							try
+							{
+								builder.sendRequest(null, new RequestCallback()
+								{
+									public void onError(Request request, Throwable exception)
+									{
+										displayError("Can't search user: " + exception);
+									}
+
+									public void onResponseReceived(Request request, Response response)
+									{
+										Window.alert("search: " + response.getStatusCode() + " | " + response.getText());
+										if(200 != response.getStatusCode())
+										{
+											RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(SAVE_USER_URL));
+			    							try
+			    							{
+			    								StringBuffer postData = new StringBuffer();
+												postData.append(URL.encode("id")).append("=").append(URL.encode(googleUser.getId()));
+												postData.append("&");
+												postData.append(URL.encode("firstName")).append("=").append(URL.encode(googleUser.getFirstName()));
+												postData.append("&");
+												postData.append(URL.encode("lastName")).append("=").append(URL.encode(googleUser.getLastName()));
+												postData.append("&");
+												postData.append(URL.encode("email")).append("=").append(URL.encode(googleUser.getEmail()));
+												if(googleUser.getPicture() != null)
+												{
+													postData.append("&");
+													postData.append(URL.encode("avatar")).append("=").append(URL.encode(googleUser.getPicture()));
+												}
+												//Window.alert(postData.toString());
+												builder.setHeader("Content-type", "application/x-www-form-urlencoded");
+												builder.sendRequest(postData.toString(), new RequestCallback()
+			    								{
+			    									public void onError(Request request, Throwable exception)
+			    									{
+			    										displayError("Can't save user: " + exception);
+			    									}
+
+			    									public void onResponseReceived(Request request, Response response)
+			    									{
+			    										Window.alert("save: " + response.getStatusCode() + " | " + response.getText());
+			    										if(200 == response.getStatusCode())
+			    										{
+			    											Window.alert("User saved: " + response.getText());
+			    											
+			    											Cookies.setCookie("sid", response.getText(), expires, null, "/", false);
+			    										}
+			    									}
+			    								});
+			    							}
+			    							catch(RequestException e)
+			    							{
+			    								displayError("Save user exception: " + e);
+			    							}
+										}
+										else
+										{
+											displayError("url: " + SEARCH_USER_URL + "/" + googleUser.getId());
+											Cookies.setCookie("sid", googleUser.getId(), expires, null, "/", false);
+										}
+									}
+								});
+							}
+							catch(RequestException e)
+							{
+								displayError("Search user exception: " + e);
+							}    							
+						}
+					});
+    			}
+
+    			@Override
+    			public void onFailure(Throwable caught)
+    			{
+    				Window.alert("Auth google failed: " + caught.toString());
+    			}
+    		});
+		}
+		catch(Exception e)
+		{
+			displayError("Exception: " + e);
+		}
+	}
+	
+	private void searchApp()
+	{
+		try
+	    {
+	    	JsonpRequestBuilder jsonpRequestbuilder = new JsonpRequestBuilder();
+	    	jsonpRequestbuilder.requestObject((SEARCH_APP_URL + recommandAppTextBox.getValue()), new AsyncCallback<AppSearchResult>()
+			{
+				public void onFailure(Throwable throwable)
+				{
+					displayError("Couldn't retrieve JSON: " + throwable);
+			    }
+
+			       public void onSuccess(AppSearchResult appSearchResult)
+			       {
+			    	  if(appSearchResult != null)
+			        	  {
+			    		  	PopupPanel popupPanel = new PopupPanel(false);
+							    popupPanel.setStyleName("demo-PopUpPanel");
+							    VerticalPanel PopUpPanelContents = new VerticalPanel();
+							    if(appSearchResult.getResultCount() > 0)
+							    {
+							    	for(int i = 0; i < appSearchResult.getResults().length(); i++)
+							    	{
+							    		final ResultApp resultApp = appSearchResult.getResults().get(i);
+							    		HorizontalPanel horizontalPanel = new HorizontalPanel();
+							    		Image image = new Image(resultApp.getArtworkUrl60());
+							    		Label label = new Label(resultApp.getTrackName());
+							    		Button button = new Button("Recommand");
+							    		button.addClickHandler(new ClickHandler()
+							    		{
+										@Override
+										public void onClick(ClickEvent event)
+										{
+											try
+											{
+												RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(ADD_RECOMMAND_APP_URL));
+												StringBuffer postData = new StringBuffer();
+												postData.append(URL.encode("userId")).append("=").append(URL.encode(Cookies.getCookie("sid")));
+												postData.append("&");
+												postData.append(URL.encode("appId")).append("=").append(URL.encode(String.valueOf(resultApp.getTrackId())));
+												postData.append("&");
+												postData.append(URL.encode("name")).append("=").append(URL.encode(resultApp.getTrackName()));
+												postData.append("&");
+												postData.append(URL.encode("icon")).append("=").append(URL.encode(resultApp.getArtworkUrl60()));
+												postData.append("&");
+												postData.append(URL.encode("link")).append("=").append(URL.encode(resultApp.getTrackViewUrl()));
+												postData.append("&");
+												postData.append(URL.encode("price")).append("=").append(URL.encode(String.valueOf(resultApp.getPrice())));
+												builder.setHeader("Content-type", "application/x-www-form-urlencoded");
+												builder.sendRequest(postData.toString(), new RequestCallback()
+												{
+													public void onResponseReceived(Request request, Response response)
+													{
+														if(200 == response.getStatusCode())
+														{
+															lastUpdatedLabel.setText("App added successfully: " + response.getText());
+														}
+														else
+														{
+															logger.warning("Couldn't add recommand app, response code: " + response.getStatusCode());
+														}
+													}
+													public void onError(Request request, Throwable exception)
+													{
+														logger.warning("Couldn't add recommand app: " + exception);
+											        }
+												});
+											}
+											catch(Exception e)
+											{
+												logger.warning("Request exception happened during adding recommand app: " + e);
+											}
+										}
+							    		});
+							    		horizontalPanel.add(image);
+							    		horizontalPanel.add(label);
+							    		horizontalPanel.add(button);
+							    		PopUpPanelContents.add(horizontalPanel);
+							    	}
+							    }
+							    popupPanel.setTitle("Search count: " + appSearchResult.getResultCount());
+							    HTML message = new HTML("Search count: " + appSearchResult.getResultCount());
+							    message.setStyleName("demo-PopUpPanel-message");
+							    
+							    Button closeButton = new Button("Close");
+							    closeButton.addClickHandler(new ClickHandler()
+							    {
+							    	public void onClick(ClickEvent event)
+							    	{
+							    		//popupPanel.removeFromParent();
+							    	}
+							    });
+							    SimplePanel holder = new SimplePanel();
+							    holder.add(closeButton);
+							    holder.setStyleName("demo-PopUpPanel-footer");
+							    PopUpPanelContents.add(message);
+							    PopUpPanelContents.add(holder);
+							    popupPanel.setWidget(PopUpPanelContents );
+								popupPanel.setAnimationEnabled(true);
+								popupPanel.setGlassEnabled(true);
+							    popupPanel.center();
+			        	  }
+			       }
+			});			      
+	    } catch (Exception e) {
+	      displayError("Couldn't retrieve JSON");
+	    }
 	}
 	
 	private void retrieveAppsInfo()

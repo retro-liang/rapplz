@@ -1,9 +1,8 @@
 package com.retro.rapplz.server.datastore.entity;
 
-
-
 import javax.persistence.Id;
 
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Entity;
 
@@ -12,38 +11,38 @@ import com.googlecode.objectify.annotation.Entity;
 public class User
 {
 	@Id
-	private Long id;
+	private String id;
 	
-	private Account account = new Account();
+	private Key<Account> account;
 	
-	private Profile profile = new Profile();
+	private Key<Profile> profile;
 	
 	public User()
 	{
 		
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public Account getAccount() {
+	public Key<Account> getAccount() {
 		return account;
 	}
 
-	public void setAccount(Account account) {
+	public void setAccount(Key<Account> account) {
 		this.account = account;
 	}
 
-	public Profile getProfile() {
+	public Key<Profile> getProfile() {
 		return profile;
 	}
 
-	public void setProfile(Profile profile) {
+	public void setProfile(Key<Profile> profile) {
 		this.profile = profile;
-	}
+	}	
 }

@@ -2,6 +2,7 @@ package com.retro.rapplz.server.datastore.entity;
 
 import javax.persistence.Id;
 
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Entity;
 
@@ -16,9 +17,11 @@ public class Account
 	
 	private String password;
 	
-	private Role role = new Role();
+	private Key<Role> role;
 	
-	private Status status = new Status();
+	private Key<Status> status;
+	
+	private String federalType;
 	
 	public Account()
 	{
@@ -49,19 +52,27 @@ public class Account
 		this.password = password;
 	}
 
-	public Role getRole() {
+	public Key<Role> getRole() {
 		return role;
 	}
 
-	public void setRole(Role role) {
+	public void setRole(Key<Role> role) {
 		this.role = role;
 	}
 
-	public Status getStatus() {
+	public Key<Status> getStatus() {
 		return status;
 	}
 
-	public void setStatus(Status status) {
+	public void setStatus(Key<Status> status) {
 		this.status = status;
+	}
+
+	public String getFederalType() {
+		return federalType;
+	}
+
+	public void setFederalType(String federalType) {
+		this.federalType = federalType;
 	}
 }
