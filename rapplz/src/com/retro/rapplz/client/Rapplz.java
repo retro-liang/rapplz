@@ -15,6 +15,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
@@ -47,10 +48,9 @@ public class Rapplz implements EntryPoint
 	private static final Logger logger = Logger.getLogger(Rapplz.class.getName());
 	
 	private final long DURATION = 1000 * 60 * 60 * 24 * 14; //duration remembering login. 2 weeks
-    private Date expires = new Date(System.currentTimeMillis() + DURATION);
-    
+    private Date expires = new Date(System.currentTimeMillis() + DURATION);    
 	
-	private static final int REFRESH_DELAY = 1000 * 3;
+	private static final int REFRESH_DELAY = 1000;
 	private static final int REFRESH_INTERVAL = 1000 * 60 * 60 *24; // ms
 	
 	private static final String SEARCH_USER_URL = "/rest/userService/search";
@@ -60,37 +60,18 @@ public class Rapplz implements EntryPoint
 	private static final String ALL_RECOMMANDED_APPS_JSON_URL = "/rest/appService/tag/recommanded";
 	private static final String ALL_APPS_SIZE_URL = "/rest/appService/allAppsSize";
 	private static final String SEARCH_APP_URL = "http://itunes.apple.com/search?country=US&entity=software&limit=10&term=";
-	
 	private static final String ADD_RECOMMAND_APP_URL = "/rest/appService/recommand";
 	
+	private static final String AUTH_URL = "https://accounts.google.com/o/oauth2/auth";
+	private static final String CLIENT_ID = "929855298687.apps.googleusercontent.com";
+	private static final String USER_PROFILE_EMAIL_SCOPE = "https://www.googleapis.com/auth/userinfo.email";
+	private static final String USER_PROFILE_SCOPE = "https://www.googleapis.com/auth/userinfo.profile";
 	
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private FlexTable mainAppFlexTable = new FlexTable();
-	
-	private VerticalPanel loginPanel = new VerticalPanel();
-	
-	private Label recommandAppLabel = new Label("I want to recommand an app: ");
-	private TextBox recommandAppTextBox = new TextBox();
-	private Button searchAppButton = new Button("Recommand");
-	private HorizontalPanel commandBarPanel = new HorizontalPanel();	
-	
-	
 	private Label lastUpdatedLabel = new Label();
 	private ArrayList<String> apps = new ArrayList<String>();
 	private Label errorMsgLabel = new Label();
-	
-	private Image facebookLoginIcon = new Image("/images/signin_providers_icon/facebook.gif");
-	private Image twitterLoginIcon = new Image("/images/signin_providers_icon/twitter.gif");
-	private Image googleLoginIcon = new Image("/images/signin_providers_icon/google.gif");
-	//private Image googleLoginIcon = new Image("/images/signin_providers_icon/Google-G-Logo.png");
-	private Image liveLoginIcon = new Image("/images/signin_providers_icon/live.gif");
-	private Image yahooLoginIcon = new Image("/images/signin_providers_icon/yahoo.gif");
-	private Image aolLoginIcon = new Image("/images/signin_providers_icon/aol.gif");
-	private Image myspaceLoginIcon = new Image("/images/signin_providers_icon/myspace.gif");
-	private Image openidLoginIcon = new Image("/images/signin_providers_icon/openid.gif");
-	
-	private Label googleLoginLabel = new Label("Sign In with Google");
-	private HorizontalPanel googleLoginHorizontalPanel = new HorizontalPanel();
 	
 	/**
 	 * This is the entry point method.
@@ -105,12 +86,6 @@ public class Rapplz implements EntryPoint
 	    mainAppFlexTable.getCellFormatter().addStyleName(0, 2, "watchListNumericColumn");
 	    mainAppFlexTable.getCellFormatter().addStyleName(0, 3, "watchListRemoveColumn");
 
-	    // Assemble Add Stock panel.
-	    //addPanel.add(googleLoginIcon);
-	    //addStockButton.setHTML("<img src='/images/signin_providers_icon/google.gif'");
-	    //addPanel.add(addStockButton);
-	    //addPanel.addStyleName("addPanel");
-
 	    // Assemble Main panel.
 	    errorMsgLabel.setStyleName("errorMessage");
 	    errorMsgLabel.setVisible(false);
@@ -120,37 +95,40 @@ public class Rapplz implements EntryPoint
 	    mainPanel.add(mainAppFlexTable);	    
 	    mainPanel.add(lastUpdatedLabel);
 	    
-	    Button googleSignInButton = new Button();
-	    googleLoginHorizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-	    googleLoginHorizontalPanel.add(googleLoginIcon);
-	    googleLoginHorizontalPanel.add(googleLoginLabel);
-	    googleSignInButton.getElement().appendChild(googleLoginHorizontalPanel.getElement());
+	    RootPanel.get("appList").add(mainPanel);	    
 	    
-
-	    loginPanel.add(googleSignInButton);
-	    //loginPanel.add(facebookLoginIcon);
-	    //loginPanel.add(twitterLoginIcon);
-	    //loginPanel.add(googleLoginIcon);
-	    //loginPanel.add(liveLoginIcon);
-	    //loginPanel.add(yahooLoginIcon);
-	    //loginPanel.add(aolLoginIcon);
-	    //loginPanel.add(myspaceLoginIcon);
-	    //loginPanel.add(openidLoginIcon);
+	    ClickHandler googleSignInclickHandler = new ClickHandler()
+	    {
+	    	@Override
+			public void onClick(ClickEvent event)
+			{
+	    		googleSignIn();
+			}
+	    };	    
+	    RootPanel.get("google-sign-in-button").addDomHandler(googleSignInclickHandler, ClickEvent.getType());
 	    
-	    commandBarPanel.add(recommandAppLabel);
-	    commandBarPanel.add(recommandAppTextBox);
-	    commandBarPanel.add(searchAppButton);
+	    ClickHandler searchAppclickHandler = new ClickHandler()
+	    {
+	    	@Override
+			public void onClick(ClickEvent event)
+			{
+	    		searchApp();
+			}
+	    };
+	    RootPanel.get("search-app-button").addDomHandler(searchAppclickHandler, ClickEvent.getType());	
 	    
-	    // Associate the Main panel with the HTML host page.
-	    RootPanel.get("appList").add(mainPanel);
-	    RootPanel.get("commandBar").add(commandBarPanel);
-	    RootPanel.get("login-box").add(loginPanel);
+	    KeyPressHandler searchAppTextKeyPressHandler = new KeyPressHandler()
+	    {
+	    	public void onKeyPress(KeyPressEvent event)
+	    	{
+	    		if(event.getCharCode() == KeyCodes.KEY_ENTER)
+	    		{
+	    			searchApp();
+	    		}
+	    	}
+	    };
+	    RootPanel.get("search-app-text").addDomHandler(searchAppTextKeyPressHandler, KeyPressEvent.getType());
 	    
-	    
-	    
-
-	    // Move cursor focus to the input box.
-	    //newSymbolTextBox.setFocus(true);
 
 	    // Setup timer to refresh list automatically.
 	    Timer refreshTimer = new Timer()
@@ -166,45 +144,10 @@ public class Rapplz implements EntryPoint
 	    
 	    refreshTimer.schedule(REFRESH_DELAY);
 	    //refreshTimer.scheduleRepeating(REFRESH_INTERVAL);
-	    
-
-	    // Listen for mouse events on the Add button.
-	    googleSignInButton.addClickHandler(new ClickHandler()
-	    {
-	    	public void onClick(ClickEvent event)
-	    	{
-	    		googleSignIn();
-	    	}
-	    });
-	    
-	    searchAppButton.addClickHandler(new ClickHandler()
-	    {
-			@Override
-			public void onClick(ClickEvent event)
-			{
-				searchApp();
-			}	    	
-	    });
-
-	    recommandAppTextBox.addKeyPressHandler(new KeyPressHandler()
-	    {
-	    	public void onKeyPress(KeyPressEvent event)
-	    	{
-	    		if (event.getCharCode() == KeyCodes.KEY_ENTER)
-	    		{
-	    			searchApp();
-	    		}
-	    	}
-	    });
 	}
 	
 	private void googleSignIn()
 	{
-		String AUTH_URL = "https://accounts.google.com/o/oauth2/auth";
-		String CLIENT_ID = "929855298687.apps.googleusercontent.com";
-		String USER_PROFILE_EMAIL_SCOPE = "https://www.googleapis.com/auth/userinfo.email";
-		String USER_PROFILE_SCOPE = "https://www.googleapis.com/auth/userinfo.profile";
-
 		try
 		{
 			AuthRequest req = new AuthRequest(AUTH_URL, CLIENT_ID).withScopes(USER_PROFILE_SCOPE, USER_PROFILE_EMAIL_SCOPE);
@@ -214,9 +157,7 @@ public class Rapplz implements EntryPoint
     			public void onSuccess(String token)
     			{
     				JsonpRequestBuilder jsonpRequestbuilder = new JsonpRequestBuilder();
-    				//RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + token);
     				jsonpRequestbuilder.requestObject("https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + token, new AsyncCallback<GoogleUser>()
-					//builder.sendRequest(null, new RequestCallback()
 					{
     					public void onFailure(Throwable throwable)
 						{
@@ -313,111 +254,116 @@ public class Rapplz implements EntryPoint
 	
 	private void searchApp()
 	{
-		try
-	    {
-	    	JsonpRequestBuilder jsonpRequestbuilder = new JsonpRequestBuilder();
-	    	jsonpRequestbuilder.requestObject((SEARCH_APP_URL + recommandAppTextBox.getValue()), new AsyncCallback<AppSearchResult>()
-			{
-				public void onFailure(Throwable throwable)
+		if(RootPanel.get("search-app-text").getElement().getPropertyString("value") != null && !RootPanel.get("search-app-text").getElement().getPropertyString("value").trim().equals(""))
+		{
+			try
+		    {
+				JsonpRequestBuilder jsonpRequestbuilder = new JsonpRequestBuilder();
+		    	jsonpRequestbuilder.requestObject((SEARCH_APP_URL + RootPanel.get("search-app-text").getElement().getPropertyString("value")), new AsyncCallback<AppSearchResult>()
 				{
-					displayError("Couldn't retrieve JSON: " + throwable);
-			    }
+					public void onFailure(Throwable throwable)
+					{
+						displayError("Couldn't retrieve JSON: " + throwable);
+				    }
 
-			       public void onSuccess(AppSearchResult appSearchResult)
-			       {
-			    	  if(appSearchResult != null)
-			        	  {
-			    		  	PopupPanel popupPanel = new PopupPanel(false);
-							    popupPanel.setStyleName("demo-PopUpPanel");
-							    VerticalPanel PopUpPanelContents = new VerticalPanel();
-							    if(appSearchResult.getResultCount() > 0)
-							    {
-							    	for(int i = 0; i < appSearchResult.getResults().length(); i++)
-							    	{
-							    		final ResultApp resultApp = appSearchResult.getResults().get(i);
-							    		HorizontalPanel horizontalPanel = new HorizontalPanel();
-							    		Image image = new Image(resultApp.getArtworkUrl60());
-							    		Label label = new Label(resultApp.getTrackName());
-							    		Button button = new Button("Recommand");
-							    		button.addClickHandler(new ClickHandler()
-							    		{
-										@Override
-										public void onClick(ClickEvent event)
-										{
-											try
+				       public void onSuccess(AppSearchResult appSearchResult)
+				       {
+				    	  if(appSearchResult != null)
+				        	  {
+				    		  		final PopupPanel popupPanel = new PopupPanel(false);
+								    popupPanel.setStyleName("search-app-popup");
+								    VerticalPanel PopUpPanelContents = new VerticalPanel();
+								    if(appSearchResult.getResultCount() > 0)
+								    {
+								    	for(int i = 0; i < appSearchResult.getResults().length(); i++)
+								    	{
+								    		final ResultApp resultApp = appSearchResult.getResults().get(i);
+								    		HorizontalPanel horizontalPanel = new HorizontalPanel();
+								    		Image image = new Image(resultApp.getArtworkUrl60());
+								    		Label label = new Label(resultApp.getTrackName());
+								    		Button button = new Button("Recommand");
+								    		
+								    		
+								    		button.addClickHandler(new ClickHandler()
+								    		{
+											@Override
+											public void onClick(ClickEvent event)
 											{
-												RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(ADD_RECOMMAND_APP_URL));
-												StringBuffer postData = new StringBuffer();
-												postData.append(URL.encode("userId")).append("=").append(URL.encode(Cookies.getCookie("sid")));
-												postData.append("&");
-												postData.append(URL.encode("appId")).append("=").append(URL.encode(String.valueOf(resultApp.getTrackId())));
-												postData.append("&");
-												postData.append(URL.encode("name")).append("=").append(URL.encode(resultApp.getTrackName()));
-												postData.append("&");
-												postData.append(URL.encode("icon")).append("=").append(URL.encode(resultApp.getArtworkUrl60()));
-												postData.append("&");
-												postData.append(URL.encode("link")).append("=").append(URL.encode(resultApp.getTrackViewUrl()));
-												postData.append("&");
-												postData.append(URL.encode("price")).append("=").append(URL.encode(String.valueOf(resultApp.getPrice())));
-												builder.setHeader("Content-type", "application/x-www-form-urlencoded");
-												builder.sendRequest(postData.toString(), new RequestCallback()
+												try
 												{
-													public void onResponseReceived(Request request, Response response)
+													RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(ADD_RECOMMAND_APP_URL));
+													StringBuffer postData = new StringBuffer();
+													postData.append(URL.encode("userId")).append("=").append(URL.encode(Cookies.getCookie("sid")));
+													postData.append("&");
+													postData.append(URL.encode("appId")).append("=").append(URL.encode(String.valueOf(resultApp.getTrackId())));
+													postData.append("&");
+													postData.append(URL.encode("name")).append("=").append(URL.encode(resultApp.getTrackName()));
+													postData.append("&");
+													postData.append(URL.encode("icon")).append("=").append(URL.encode(resultApp.getArtworkUrl60()));
+													postData.append("&");
+													postData.append(URL.encode("link")).append("=").append(URL.encode(resultApp.getTrackViewUrl()));
+													postData.append("&");
+													postData.append(URL.encode("price")).append("=").append(URL.encode(String.valueOf(resultApp.getPrice())));
+													builder.setHeader("Content-type", "application/x-www-form-urlencoded");
+													builder.sendRequest(postData.toString(), new RequestCallback()
 													{
-														if(200 == response.getStatusCode())
+														public void onResponseReceived(Request request, Response response)
 														{
-															lastUpdatedLabel.setText("App added successfully: " + response.getText());
+															if(200 == response.getStatusCode())
+															{
+																lastUpdatedLabel.setText("App added successfully: " + response.getText());
+															}
+															else
+															{
+																logger.warning("Couldn't add recommand app, response code: " + response.getStatusCode());
+															}
 														}
-														else
+														public void onError(Request request, Throwable exception)
 														{
-															logger.warning("Couldn't add recommand app, response code: " + response.getStatusCode());
-														}
-													}
-													public void onError(Request request, Throwable exception)
-													{
-														logger.warning("Couldn't add recommand app: " + exception);
-											        }
-												});
+															logger.warning("Couldn't add recommand app: " + exception);
+												        }
+													});
+												}
+												catch(Exception e)
+												{
+													logger.warning("Request exception happened during adding recommand app: " + e);
+												}
 											}
-											catch(Exception e)
-											{
-												logger.warning("Request exception happened during adding recommand app: " + e);
-											}
-										}
-							    		});
-							    		horizontalPanel.add(image);
-							    		horizontalPanel.add(label);
-							    		horizontalPanel.add(button);
-							    		PopUpPanelContents.add(horizontalPanel);
-							    	}
-							    }
-							    popupPanel.setTitle("Search count: " + appSearchResult.getResultCount());
-							    HTML message = new HTML("Search count: " + appSearchResult.getResultCount());
-							    message.setStyleName("demo-PopUpPanel-message");
-							    
-							    Button closeButton = new Button("Close");
-							    closeButton.addClickHandler(new ClickHandler()
-							    {
-							    	public void onClick(ClickEvent event)
-							    	{
-							    		//popupPanel.removeFromParent();
-							    	}
-							    });
-							    SimplePanel holder = new SimplePanel();
-							    holder.add(closeButton);
-							    holder.setStyleName("demo-PopUpPanel-footer");
-							    PopUpPanelContents.add(message);
-							    PopUpPanelContents.add(holder);
-							    popupPanel.setWidget(PopUpPanelContents );
-								popupPanel.setAnimationEnabled(true);
-								popupPanel.setGlassEnabled(true);
-							    popupPanel.center();
-			        	  }
-			       }
-			});			      
-	    } catch (Exception e) {
-	      displayError("Couldn't retrieve JSON");
-	    }
+								    		});
+								    		horizontalPanel.add(image);
+								    		horizontalPanel.add(label);
+								    		horizontalPanel.add(button);
+								    		PopUpPanelContents.add(horizontalPanel);
+								    	}
+								    }
+								    popupPanel.setTitle("Search count: " + appSearchResult.getResultCount());
+								    HTML message = new HTML("Search count: " + appSearchResult.getResultCount());
+								    message.setStyleName("demo-PopUpPanel-message");
+								    
+								    Button closeButton = new Button("Close");
+								    closeButton.addClickHandler(new ClickHandler()
+								    {
+								    	public void onClick(ClickEvent event)
+								    	{
+								    		popupPanel.removeFromParent();
+								    	}
+								    });
+								    SimplePanel holder = new SimplePanel();
+								    holder.add(closeButton);
+								    holder.setStyleName("demo-PopUpPanel-footer");
+								    PopUpPanelContents.add(message);
+								    PopUpPanelContents.add(holder);
+								    popupPanel.setWidget(PopUpPanelContents );
+									popupPanel.setAnimationEnabled(true);
+									popupPanel.setGlassEnabled(true);
+								    popupPanel.center();
+				        	  }
+				       }
+				});			      
+		    } catch (Exception e) {
+		      displayError("Couldn't retrieve JSON");
+		    }
+		}
 	}
 	
 	private void retrieveAppsInfo()

@@ -42,7 +42,14 @@ public class UserService
 	public String getUserById(@PathParam("id") String id)
 	{
 		logger.info("getUserById get invoked: " + id);
-		return userDBService.getUser(id).getId();
+		if(userDBService.getUser(id) != null)
+		{
+			return userDBService.getUser(id).getId();
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	@POST
