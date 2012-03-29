@@ -56,24 +56,32 @@
 				<div id="logo-bar">
 					<a class="alternate-context" href="http://www.rapplz.com/" title="www.rapplz.com">rapplz</a>
 				</div>
-				<div id="recommand-bar">
+				<div id="recommend-bar">
 					<input id="search-app-text" aria-required="true" autocapitalize="off" autocorrect="off" autofocus="autofocus" class="text" name="session[username_or_email]" required="required" type="text" />
-					<span id="search-app-button" class="submit button selected">Recommand an App</span>
+					<span id="search-app-button" class="submit button selected">Recommend an App</span>
 				</div>
 				<div id="action-bar">
+					<!-- 
 					<span class="blurb">Not a member?</span>
 					<a class="register alternate-context" href="#">Sign up</a>
 					<hr class="vr">
-					<a class="register" href="#">Sign in</a>
-				</div>				
+					 -->
+					<a id="user-link"><span id="user-text" class="blurb"></span></a>
+					<hr class="vr">
+					<a id="sign-link" class="register" href="#"><span id="sign-text"></span></a>
+				</div>
 			</div>
 		</div>
 	
 		<div role="main" id="bd">
+			<div id="activity-notice"></div>
+			
+			<!-- 
 			<div class="concerned notice">
-				<h2>You can use your Google account to sign in to other sites and services.</h2>
-				<p>By signing in here, you can use Rapplz without sharing your Google password.</p>
+				<h2>New Activity:</h2>
+				<p><img id="activity-user-avarta" /><b><span id="activity-user-name"></span></b> has just recommended an app: <img id="activity-app-icon" /><b><span id="activity-app-name"></span></b></p>
 			</div>
+			 -->
 	
 			<div class="auth">
 				<!-- <h2>Authorize Kitco to use your account?</h2> -->
@@ -81,7 +89,7 @@
 				<div id="commandBar"></div>
 				<div class="app-info" role="content-info" tabindex="0">
 					<div class="permissions allow">
-						<p>We support federal sign in with various popular website account.<strong></strong>:</p>						
+						<p>We support federal sign in with various popular website account<strong></strong>:</p>						
 					</div>
 					<br />
 					<ul style="line-height: 30px;">
@@ -92,10 +100,11 @@
 					</ul>
 					<!-- <h3><img alt="" class="app-icon" src="http://a0.twimg.com/a/1331656155/images/oauth_application.png" title="Pinterest by Cold Brew Labs" />Pinterest</h3> -->
 					
+					<!--
 					<div class="permissions allow">
-						<p>Want to use <strong>your own rapplz account</strong> to sign in?</p>						
+						<p>Want to use <strong>your own rapplz account</strong> to sign in?</p>
 					</div>
-			
+					 			
 					<form action="#" id="oauth_form" method="post"><div style="margin:0;padding:0">
 						<input name="authenticity_token" type="hidden" value="" /></div>
 						<input id="oauth_token" name="oauth_token" type="hidden" value="" />        
@@ -118,7 +127,7 @@
 						</fieldset>
 					</form>
 
-					<!-- 				
+									
 					<div class="permissions deny">
 						<p>This application <strong>will not be able to</strong>:</p>
 						<ul>
@@ -127,10 +136,9 @@
 					</div>
 					
 					<p><a href="http://pinterest.com/twitter/?denied=IPGkaCsrluqeHtdknFwcA6o4sdaSkzGw1D0zXQhOj8" class="deny maintain-context">Cancel, and return to app</a></p>
-					
-					<div class="fb-like" data-href="http://www.rapplz.com/" data-send="false" data-width="300" data-show-faces="true"></div>
 					 -->
-					
+					 
+					<div class="fb-like" data-href="http://www.rapplz.com/" data-send="false" data-width="300" data-show-faces="true"></div>
 					<p><a href="http://pinterest.com/pin/create/button/?url=http%3A%2F%2Fwww.rapplz.com%2F" class="pin-it-button" count-layout="horizontal">Pin It</a></p>
 					<script type="text/javascript" src="http://assets.pinterest.com/js/pinit.js"></script>
 					
@@ -171,5 +179,8 @@
 			  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			})();		
 		</script>
+		
+		
+			
 	</body>
 </html>

@@ -21,4 +21,5 @@ public class App extends JavaScriptObject
 	public final native String getImage() /*-{return this.image;}-*/;
 	public final native String getReleaseDate() /*-{return this.releaseDate;}-*/;
 	public final native String getUpdateDate() /*-{return this.updateDate;}-*/;
+	public final native String getRecommendedCount() /*-{return this.recommendedCount;}-*/;
 }

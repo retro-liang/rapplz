@@ -4,6 +4,10 @@ body {
 	font: x-small;
 }
 
+a, a:visited, a:hover {
+    color: #FFFFFF;
+}
+
 select,input,button,textarea {
 	font: 99% arial, helvetica, clean, sans-serif;
 }
@@ -839,7 +843,7 @@ html {
 	width: 300px;
 }
 
-#header #recommand-bar {
+#header #recommend-bar {
 	margin: 10px;	
 	width: auto;
 	float: left;
@@ -1052,7 +1056,7 @@ hr.vr {
 }
 
 #action-bar a.register::after,#action-bar a.sign-in::after {
-	content: ' ›';
+	/*content: ' ›';*/
 	font-family: Arial;
 }
 
@@ -2550,4 +2554,65 @@ p.cancel-callback {
 .search-app-popup {
 	background-color: #FFFFFF;
 	min-width: 200px;
+	max-width: 600px;
+}
+
+.search-app-image {
+	float: left;
+}
+
+.search-app-name {
+	float: left;
+}
+
+.search-app-button {
+	float: right;
+}
+
+.jn {
+    background-position: 0 -363px !important;
+    height: 24px;
+    width: 6px;
+}
+
+.hn {
+    max-width: 57px;
+    min-width: 12px;
+    border-style: solid none;
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-color: #CCCCCC;
+    border-style: solid none;
+    border-width: 1px;
+    float: left;
+}
+
+.in {
+    font-size: 12px;
+    height: 20px;
+    line-height: 21px;
+    margin: 1px 6px;
+    color: #666666;
+    font-family: arial,sans-serif;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 12px;
+    height: 20px;
+    line-height: 21px;
+    margin: 1px 6px;
+}
+
+.kn {
+    background-position: -55px -363px !important;
+    height: 24px;
+    width: 2px;
+}
+
+.jn, .kn {
+    background: url("/images/google-elements.png") no-repeat scroll 0 0 transparent;
+    float: left;
 }

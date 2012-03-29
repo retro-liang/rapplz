@@ -13,6 +13,11 @@ public class ProfileDBService
 		dao = new DAO();
 	}
 	
+	public Profile getProfileByKey(Key<Profile> profileKey)
+	{
+		return dao.ofy().get(profileKey);
+	}
+	
 	public Key<Profile> save(Profile profile)
 	{
 		return dao.ofy().put(profile);

@@ -16,6 +16,7 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/modules-0.3.2.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-oauth2-0.2-alpha.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/opensocial-1.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-gae-channel-0.4-alpha.jar"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

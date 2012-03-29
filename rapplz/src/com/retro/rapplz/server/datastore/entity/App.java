@@ -49,6 +49,8 @@ public class App
 	@Unindexed
 	private String updateDate = "";
 	
+	private int recommendedCount;
+	
 	public App()
 	{
 		
@@ -132,5 +134,13 @@ public class App
 
 	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
+	}
+
+	public int getRecommendedCount() {
+		return recommendedCount;
+	}
+
+	public void setRecommendedCount(int recommendedCount) {
+		this.recommendedCount = recommendedCount;
 	}
 }

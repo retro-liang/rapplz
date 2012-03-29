@@ -29,15 +29,34 @@
 	</servlet>
 	
 	<servlet>
-		<servlet-name>greetServlet</servlet-name>
-		<servlet-class>com.retro.rapplz.server.GreetingServiceImpl</servlet-class>
+		<servlet-name>channelServlet</servlet-name>
+		<servlet-class>com.retro.rapplz.server.ChannelServlet</servlet-class>
 	</servlet>
 	
 	<servlet-mapping>
-		<servlet-name>greetServlet</servlet-name>
-		<url-pattern>/rapplz/greet</url-pattern>
+		<servlet-name>channelServlet</servlet-name>
+		<url-pattern>/channel/</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>channelConnectedServlet</servlet-name>
+		<servlet-class>com.retro.rapplz.server.ChannelConnectedServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>channelConnectedServlet</servlet-name>
+		<url-pattern>/_ah/channel/connected/</url-pattern>
 	</servlet-mapping>	
 	
+	<servlet>
+		<servlet-name>channelDisconnectedServlet</servlet-name>
+		<servlet-class>com.retro.rapplz.server.ChannelDisconnectedServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>channelDisconnectedServlet</servlet-name>
+		<url-pattern>/_ah/channel/disconnected/</url-pattern>
+	</servlet-mapping>
 	<!-- Default page to serve -->
 	<welcome-file-list>		
 		<welcome-file>index.html</welcome-file>		

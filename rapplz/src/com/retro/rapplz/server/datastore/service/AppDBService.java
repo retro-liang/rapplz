@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.NotFoundException;
 import com.retro.rapplz.server.datastore.dao.DAO;
 import com.retro.rapplz.server.datastore.entity.App;
 import com.retro.rapplz.server.datastore.entity.AppTag;
@@ -19,9 +20,16 @@ public class AppDBService
 		dao = new DAO();
 	}
 	
-	public App searchAppById(Long id)
+	public App getAppById(Long id)
 	{
-		return dao.ofy().get(App.class, id);
+		try
+		{
+			return dao.ofy().get(App.class, id);
+		}
+		catch(NotFoundException e)
+		{
+			return null;
+		}
 	}
 	
 	public Key<App> saveApp(App app)

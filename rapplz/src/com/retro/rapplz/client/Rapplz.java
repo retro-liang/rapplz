@@ -1,6 +1,5 @@
 package com.retro.rapplz.client;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Logger;
@@ -8,6 +7,11 @@ import java.util.logging.Logger;
 import com.google.api.gwt.oauth2.client.Auth;
 import com.google.api.gwt.oauth2.client.AuthRequest;
 import com.google.api.gwt.oauth2.client.Callback;
+import com.google.gwt.appengine.channel.client.Channel;
+import com.google.gwt.appengine.channel.client.ChannelFactory;
+import com.google.gwt.appengine.channel.client.ChannelFactory.ChannelCreatedCallback;
+import com.google.gwt.appengine.channel.client.SocketError;
+import com.google.gwt.appengine.channel.client.SocketListener;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -15,7 +19,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
@@ -28,6 +31,7 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -37,12 +41,12 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
+@SuppressWarnings("deprecation")
 public class Rapplz implements EntryPoint
 {
 	private static final Logger logger = Logger.getLogger(Rapplz.class.getName());
@@ -57,17 +61,18 @@ public class Rapplz implements EntryPoint
 	private static final String SAVE_USER_URL = "/rest/userService/save";
 	private static final String ALL_APPS_JSON_URL = "/rest/appService/all";
 	private static final String ALL_FEATURED_APPS_JSON_URL = "/rest/appService/tag/featured";
-	private static final String ALL_RECOMMANDED_APPS_JSON_URL = "/rest/appService/tag/recommanded";
+	private static final String ALL_RECOMMENDED_APPS_JSON_URL = "/rest/appService/tag/recommended";
 	private static final String ALL_APPS_SIZE_URL = "/rest/appService/allAppsSize";
 	private static final String SEARCH_APP_URL = "http://itunes.apple.com/search?country=US&entity=software&limit=10&term=";
-	private static final String ADD_RECOMMAND_APP_URL = "/rest/appService/recommand";
+	private static final String ADD_RECOMMEND_APP_URL = "/rest/appService/recommend";
+	private static final String REQUEST_CHANNEL_TOKEN_URL = "/channel/";	
 	
 	private static final String AUTH_URL = "https://accounts.google.com/o/oauth2/auth";
 	private static final String CLIENT_ID = "929855298687.apps.googleusercontent.com";
 	private static final String USER_PROFILE_EMAIL_SCOPE = "https://www.googleapis.com/auth/userinfo.email";
-	private static final String USER_PROFILE_SCOPE = "https://www.googleapis.com/auth/userinfo.profile";
+	private static final String USER_PROFILE_SCOPE = "https://www.googleapis.com/auth/userinfo.profile";	
 	
-	private VerticalPanel mainPanel = new VerticalPanel();
+	private VerticalPanel mainPanel = new VerticalPanel();	
 	private FlexTable mainAppFlexTable = new FlexTable();
 	private Label lastUpdatedLabel = new Label();
 	private ArrayList<String> apps = new ArrayList<String>();
@@ -78,6 +83,8 @@ public class Rapplz implements EntryPoint
 	 */
 	public void onModuleLoad()
 	{
+		refreshStatus();
+		
 	    // Add styles to elements in the stock list table.
 	    mainAppFlexTable.setCellPadding(6);
 	    mainAppFlexTable.getRowFormatter().addStyleName(0, "watchListHeader");
@@ -97,7 +104,7 @@ public class Rapplz implements EntryPoint
 	    
 	    RootPanel.get("appList").add(mainPanel);	    
 	    
-	    ClickHandler googleSignInclickHandler = new ClickHandler()
+	    ClickHandler googleSignInClickHandler = new ClickHandler()
 	    {
 	    	@Override
 			public void onClick(ClickEvent event)
@@ -105,9 +112,9 @@ public class Rapplz implements EntryPoint
 	    		googleSignIn();
 			}
 	    };	    
-	    RootPanel.get("google-sign-in-button").addDomHandler(googleSignInclickHandler, ClickEvent.getType());
+	    RootPanel.get("google-sign-in-button").addDomHandler(googleSignInClickHandler, ClickEvent.getType());
 	    
-	    ClickHandler searchAppclickHandler = new ClickHandler()
+	    ClickHandler searchAppClickHandler = new ClickHandler()
 	    {
 	    	@Override
 			public void onClick(ClickEvent event)
@@ -115,7 +122,7 @@ public class Rapplz implements EntryPoint
 	    		searchApp();
 			}
 	    };
-	    RootPanel.get("search-app-button").addDomHandler(searchAppclickHandler, ClickEvent.getType());	
+	    RootPanel.get("search-app-button").addDomHandler(searchAppClickHandler, ClickEvent.getType());	
 	    
 	    KeyPressHandler searchAppTextKeyPressHandler = new KeyPressHandler()
 	    {
@@ -137,13 +144,155 @@ public class Rapplz implements EntryPoint
 	      public void run()
 	      {
 	    	  retrieveAppsInfo();
-	    	  retrieveApps(ALL_RECOMMANDED_APPS_JSON_URL);
+	    	  retrieveApps(ALL_RECOMMENDED_APPS_JSON_URL);
 	    	  //retrieveApps(ALL_APPS_JSON_URL);
 	      }
 	    };
 	    
 	    refreshTimer.schedule(REFRESH_DELAY);
 	    //refreshTimer.scheduleRepeating(REFRESH_INTERVAL);
+	    
+	    setupChannel();
+	}
+	
+	private void setupChannel()
+	{
+		try
+		{
+			RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode(REQUEST_CHANNEL_TOKEN_URL));
+			builder.sendRequest(null, new RequestCallback()
+			{
+				@Override
+				public void onResponseReceived(Request request,	Response response)
+				{
+					String token = response.getText();
+					createChannel(token);
+				}
+
+				@Override
+				public void onError(Request request, Throwable exception)
+				{
+					displayError("Retrieve token failed: " + exception);
+				}				
+			});			
+		}
+		catch(Exception e)
+		{
+			displayError("Couldn't retrieve token: " + e);			
+		}		
+	}
+	
+	private void createChannel(String token)
+	{
+		ChannelFactory.createChannel(token, new ChannelCreatedCallback()
+	    {
+	    	@Override
+	    	public void onChannelCreated(Channel channel)
+	    	{
+	    		channel.open(new SocketListener()
+	    		{
+	    			@Override
+	    			public void onOpen()
+	    			{
+	    				//Window.alert("Channel opened!");
+	    			}
+	    			@Override
+	    			public void onMessage(String message)
+	    			{
+	    				Window.alert("Received: " + message);
+	    				if(message != null && !message.equals("") && message.split("|").length == 6)
+	    				{
+	    					createActivityPopup(message.split("|"));	    					    					
+	    				}
+	    			}
+	    			@Override
+	    			public void onError(SocketError error)
+	    			{
+	    				Window.alert("Error: " + error.getDescription());
+	    			}
+	    			@Override
+	    			public void onClose()
+	    			{
+	    				Window.alert("Channel closed!");	    				
+	    			}
+		    	});
+		    }
+		});
+	}
+	
+	private void createActivityPopup(String[] attributes)
+	{
+		final DialogBox dialogBox = new DialogBox();
+		dialogBox.setText("New Activity");
+		dialogBox.setAnimationEnabled(true);
+		dialogBox.addStyleName("concerned");
+		dialogBox.addStyleName("notice");
+		HorizontalPanel activityHorizontalPanel = new HorizontalPanel();
+		activityHorizontalPanel.addStyleName("concerned");
+		activityHorizontalPanel.addStyleName("notice");
+		activityHorizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		Image userAvarta = new Image(attributes[1]);
+		Label userName = new Label(attributes[2]);
+		Label staticLabel = new Label(" has just recommended an app: ");
+		Image appIcon = new Image(attributes[4]);
+		Label appName = new Label(attributes[5]);
+		activityHorizontalPanel.add(userAvarta);
+		activityHorizontalPanel.add(userName);
+		activityHorizontalPanel.add(staticLabel);
+		activityHorizontalPanel.add(appIcon);
+		activityHorizontalPanel.add(appName);
+		dialogBox.setWidget(activityHorizontalPanel);		
+		dialogBox.setPopupPosition(100, 50);
+		dialogBox.show();
+		
+		new Timer()
+	    {
+			@Override
+			public void run()
+			{
+				dialogBox.removeFromParent();
+			}
+	    };
+	}
+	
+	private void refreshStatus()
+	{
+		if(Cookies.getCookie("sid") != null)
+		{
+			RootPanel.get("user-text").getElement().setInnerText(Cookies.getCookie("fn") + " " + Cookies.getCookie("ln"));
+			RootPanel.get("sign-text").getElement().setInnerText("Sign out");
+			
+			ClickHandler userClickHandler = new ClickHandler()
+		    {
+		    	@Override
+				public void onClick(ClickEvent event)
+				{
+		    		openUserAccount();
+				}
+		    };
+		    RootPanel.get("user-link").addDomHandler(userClickHandler, ClickEvent.getType());
+		    RootPanel.get("user-text").addDomHandler(userClickHandler, ClickEvent.getType());
+			
+			ClickHandler signOutClickHandler = new ClickHandler()
+		    {
+		    	@Override
+				public void onClick(ClickEvent event)
+				{
+		    		Cookies.removeCookie("sid");
+		    		Cookies.removeCookie("fn");
+		    		Cookies.removeCookie("ln");
+		    		RootPanel.get("user-text").getElement().setInnerText("");
+		    		RootPanel.get("sign-text").getElement().setInnerText("");
+				}
+		    };
+		    RootPanel.get("sign-link").addDomHandler(signOutClickHandler, ClickEvent.getType());
+		    RootPanel.get("sign-text").addDomHandler(signOutClickHandler, ClickEvent.getType());
+		}
+	}
+	
+	private void openUserAccount()
+	{
+		Window.alert("open user account popup");
 	}
 	
 	private void googleSignIn()
@@ -166,7 +315,12 @@ public class Rapplz implements EntryPoint
 
     					public void onSuccess(final GoogleUser googleUser)
 						{
-							RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode(SEARCH_USER_URL + "/" + googleUser.getId()));
+    						Cookies.setCookie("sid", googleUser.getId(), expires, null, "/", false);
+    						Cookies.setCookie("fn", googleUser.getFirstName(), expires, null, "/", false);
+    						Cookies.setCookie("ln", googleUser.getLastName(), expires, null, "/", false);
+    						refreshStatus();
+    						
+    						RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode(SEARCH_USER_URL + "/" + googleUser.getId()));
 							try
 							{
 								builder.sendRequest(null, new RequestCallback()
@@ -178,7 +332,6 @@ public class Rapplz implements EntryPoint
 
 									public void onResponseReceived(Request request, Response response)
 									{
-										Window.alert("search: " + response.getStatusCode() + " | " + response.getText());
 										if(200 != response.getStatusCode())
 										{
 											RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(SAVE_USER_URL));
@@ -208,11 +361,8 @@ public class Rapplz implements EntryPoint
 
 			    									public void onResponseReceived(Request request, Response response)
 			    									{
-			    										Window.alert("save: " + response.getStatusCode() + " | " + response.getText());
 			    										if(200 == response.getStatusCode())
 			    										{
-			    											Window.alert("User saved: " + response.getText());
-			    											
 			    											Cookies.setCookie("sid", response.getText(), expires, null, "/", false);
 			    										}
 			    									}
@@ -242,7 +392,7 @@ public class Rapplz implements EntryPoint
     			@Override
     			public void onFailure(Throwable caught)
     			{
-    				Window.alert("Auth google failed: " + caught.toString());
+    				displayError("Auth google failed: " + caught.toString());
     			}
     		});
 		}
@@ -279,10 +429,16 @@ public class Rapplz implements EntryPoint
 								    	{
 								    		final ResultApp resultApp = appSearchResult.getResults().get(i);
 								    		HorizontalPanel horizontalPanel = new HorizontalPanel();
+								    		horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 								    		Image image = new Image(resultApp.getArtworkUrl60());
+								    		image.addStyleName("search-app-image");
 								    		Label label = new Label(resultApp.getTrackName());
-								    		Button button = new Button("Recommand");
-								    		
+								    		label.addStyleName("search-app-name");
+								    		Button button = new Button("Recommend");
+								    		button.addStyleName("submit");
+								    		button.addStyleName("button");
+								    		button.addStyleName("selected");
+								    		button.addStyleName("search-app-button");								    		
 								    		
 								    		button.addClickHandler(new ClickHandler()
 								    		{
@@ -291,7 +447,7 @@ public class Rapplz implements EntryPoint
 											{
 												try
 												{
-													RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(ADD_RECOMMAND_APP_URL));
+													RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(ADD_RECOMMEND_APP_URL));
 													StringBuffer postData = new StringBuffer();
 													postData.append(URL.encode("userId")).append("=").append(URL.encode(Cookies.getCookie("sid")));
 													postData.append("&");
@@ -315,19 +471,20 @@ public class Rapplz implements EntryPoint
 															}
 															else
 															{
-																logger.warning("Couldn't add recommand app, response code: " + response.getStatusCode());
+																logger.warning("Couldn't add recommend app, response code: " + response.getStatusCode());
 															}
 														}
 														public void onError(Request request, Throwable exception)
 														{
-															logger.warning("Couldn't add recommand app: " + exception);
+															logger.warning("Couldn't add recommend app: " + exception);
 												        }
 													});
 												}
 												catch(Exception e)
 												{
-													logger.warning("Request exception happened during adding recommand app: " + e);
+													logger.warning("Request exception happened during adding recommend app: " + e);
 												}
+												popupPanel.removeFromParent();
 											}
 								    		});
 								    		horizontalPanel.add(image);
@@ -341,6 +498,8 @@ public class Rapplz implements EntryPoint
 								    message.setStyleName("demo-PopUpPanel-message");
 								    
 								    Button closeButton = new Button("Close");
+								    closeButton.addStyleName("submit");
+								    closeButton.addStyleName("button");								    
 								    closeButton.addClickHandler(new ClickHandler()
 								    {
 								    	public void onClick(ClickEvent event)
@@ -406,7 +565,7 @@ public class Rapplz implements EntryPoint
 				public void onResponseReceived(Request request, Response response)
 				{
 					if(200 == response.getStatusCode())
-					{
+					{Window.alert(response.getText());
 						StringBuilder sb = new StringBuilder(response.getText().trim());
 						if(sb.length() > 0)
 						{
@@ -450,7 +609,7 @@ public class Rapplz implements EntryPoint
 			dialogBox.setWidget(dialogVPanel);
 	    	dialogBox.setAnimationEnabled(true);*/
 	    	
-	    	mainAppFlexTable.setHTML((i / 12), (i % 12), "<img src='" + apps.get(i).getImage().trim() + "' />");	    	
+	    	mainAppFlexTable.setHTML((i / 5), (i % 5), "<img src='" + apps.get(i).getImage().trim() + "' width='50%' style='float:left;' /><span class='jn'></span><span class='hn'><span class='in'></span></span><span class='kn'></span><div>");	    	
 		}
 	    // Clear any errors.
 	    errorMsgLabel.setVisible(false);
