@@ -4,10 +4,6 @@ body {
 	font: x-small;
 }
 
-a, a:visited, a:hover {
-    color: #FFFFFF;
-}
-
 select,input,button,textarea {
 	font: 99% arial, helvetica, clean, sans-serif;
 }

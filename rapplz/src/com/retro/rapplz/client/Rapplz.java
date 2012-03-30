@@ -199,10 +199,11 @@ public class Rapplz implements EntryPoint
 	    			@Override
 	    			public void onMessage(String message)
 	    			{
-	    				Window.alert("Received: " + message);
-	    				if(message != null && !message.equals("") && message.split("|").length == 6)
+	    				//Window.alert("Received: " + message + " length: " + message.trim().split("|").length);
+	    				if(message != null && !message.trim().equals("") && message.trim().split("|").length == 6)
 	    				{
-	    					createActivityPopup(message.split("|"));	    					    					
+	    					//Window.alert("creating popup");
+	    					createActivityPopup(message.split("|"));
 	    				}
 	    			}
 	    			@Override
@@ -404,124 +405,131 @@ public class Rapplz implements EntryPoint
 	
 	private void searchApp()
 	{
-		if(RootPanel.get("search-app-text").getElement().getPropertyString("value") != null && !RootPanel.get("search-app-text").getElement().getPropertyString("value").trim().equals(""))
+		if(Cookies.getCookie("sid") != null && !Cookies.getCookie("sid").trim().equals(""))
 		{
-			try
-		    {
-				JsonpRequestBuilder jsonpRequestbuilder = new JsonpRequestBuilder();
-		    	jsonpRequestbuilder.requestObject((SEARCH_APP_URL + RootPanel.get("search-app-text").getElement().getPropertyString("value")), new AsyncCallback<AppSearchResult>()
-				{
-					public void onFailure(Throwable throwable)
+			if(RootPanel.get("search-app-text").getElement().getPropertyString("value") != null && !RootPanel.get("search-app-text").getElement().getPropertyString("value").trim().equals(""))
+			{
+				try
+			    {
+					JsonpRequestBuilder jsonpRequestbuilder = new JsonpRequestBuilder();
+			    	jsonpRequestbuilder.requestObject((SEARCH_APP_URL + RootPanel.get("search-app-text").getElement().getPropertyString("value")), new AsyncCallback<AppSearchResult>()
 					{
-						displayError("Couldn't retrieve JSON: " + throwable);
-				    }
+						public void onFailure(Throwable throwable)
+						{
+							displayError("Couldn't retrieve JSON: " + throwable);
+					    }
 
-				       public void onSuccess(AppSearchResult appSearchResult)
-				       {
-				    	  if(appSearchResult != null)
-				        	  {
-				    		  		final PopupPanel popupPanel = new PopupPanel(false);
-								    popupPanel.setStyleName("search-app-popup");
-								    VerticalPanel PopUpPanelContents = new VerticalPanel();
-								    if(appSearchResult.getResultCount() > 0)
-								    {
-								    	for(int i = 0; i < appSearchResult.getResults().length(); i++)
-								    	{
-								    		final ResultApp resultApp = appSearchResult.getResults().get(i);
-								    		HorizontalPanel horizontalPanel = new HorizontalPanel();
-								    		horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-								    		Image image = new Image(resultApp.getArtworkUrl60());
-								    		image.addStyleName("search-app-image");
-								    		Label label = new Label(resultApp.getTrackName());
-								    		label.addStyleName("search-app-name");
-								    		Button button = new Button("Recommend");
-								    		button.addStyleName("submit");
-								    		button.addStyleName("button");
-								    		button.addStyleName("selected");
-								    		button.addStyleName("search-app-button");								    		
-								    		
-								    		button.addClickHandler(new ClickHandler()
-								    		{
-											@Override
-											public void onClick(ClickEvent event)
-											{
-												try
+					       public void onSuccess(AppSearchResult appSearchResult)
+					       {
+					    	  if(appSearchResult != null)
+					        	  {
+					    		  		final PopupPanel popupPanel = new PopupPanel(false);
+									    popupPanel.setStyleName("search-app-popup");
+									    VerticalPanel PopUpPanelContents = new VerticalPanel();
+									    if(appSearchResult.getResultCount() > 0)
+									    {
+									    	for(int i = 0; i < appSearchResult.getResults().length(); i++)
+									    	{
+									    		final ResultApp resultApp = appSearchResult.getResults().get(i);
+									    		HorizontalPanel horizontalPanel = new HorizontalPanel();
+									    		horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+									    		Image image = new Image(resultApp.getArtworkUrl60());
+									    		image.addStyleName("search-app-image");
+									    		Label label = new Label(resultApp.getTrackName());
+									    		label.addStyleName("search-app-name");
+									    		Button button = new Button("Recommend");
+									    		button.addStyleName("submit");
+									    		button.addStyleName("button");
+									    		button.addStyleName("selected");
+									    		button.addStyleName("search-app-button");								    		
+									    		
+									    		button.addClickHandler(new ClickHandler()
+									    		{
+												@Override
+												public void onClick(ClickEvent event)
 												{
-													RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(ADD_RECOMMEND_APP_URL));
-													StringBuffer postData = new StringBuffer();
-													postData.append(URL.encode("userId")).append("=").append(URL.encode(Cookies.getCookie("sid")));
-													postData.append("&");
-													postData.append(URL.encode("appId")).append("=").append(URL.encode(String.valueOf(resultApp.getTrackId())));
-													postData.append("&");
-													postData.append(URL.encode("name")).append("=").append(URL.encode(resultApp.getTrackName()));
-													postData.append("&");
-													postData.append(URL.encode("icon")).append("=").append(URL.encode(resultApp.getArtworkUrl60()));
-													postData.append("&");
-													postData.append(URL.encode("link")).append("=").append(URL.encode(resultApp.getTrackViewUrl()));
-													postData.append("&");
-													postData.append(URL.encode("price")).append("=").append(URL.encode(String.valueOf(resultApp.getPrice())));
-													builder.setHeader("Content-type", "application/x-www-form-urlencoded");
-													builder.sendRequest(postData.toString(), new RequestCallback()
+													try
 													{
-														public void onResponseReceived(Request request, Response response)
+														RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(ADD_RECOMMEND_APP_URL));
+														StringBuffer postData = new StringBuffer();
+														postData.append(URL.encode("userId")).append("=").append(URL.encode(Cookies.getCookie("sid")));
+														postData.append("&");
+														postData.append(URL.encode("appId")).append("=").append(URL.encode(String.valueOf(resultApp.getTrackId())));
+														postData.append("&");
+														postData.append(URL.encode("name")).append("=").append(URL.encode(resultApp.getTrackName()));
+														postData.append("&");
+														postData.append(URL.encode("icon")).append("=").append(URL.encode(resultApp.getArtworkUrl60()));
+														postData.append("&");
+														postData.append(URL.encode("link")).append("=").append(URL.encode(resultApp.getTrackViewUrl()));
+														postData.append("&");
+														postData.append(URL.encode("price")).append("=").append(URL.encode(String.valueOf(resultApp.getPrice())));
+														builder.setHeader("Content-type", "application/x-www-form-urlencoded");
+														builder.sendRequest(postData.toString(), new RequestCallback()
 														{
-															if(200 == response.getStatusCode())
+															public void onResponseReceived(Request request, Response response)
 															{
-																lastUpdatedLabel.setText("App added successfully: " + response.getText());
+																if(200 == response.getStatusCode())
+																{
+																	lastUpdatedLabel.setText("App added successfully: " + response.getText());
+																}
+																else
+																{
+																	logger.warning("Couldn't add recommend app, response code: " + response.getStatusCode());
+																}
 															}
-															else
+															public void onError(Request request, Throwable exception)
 															{
-																logger.warning("Couldn't add recommend app, response code: " + response.getStatusCode());
-															}
-														}
-														public void onError(Request request, Throwable exception)
-														{
-															logger.warning("Couldn't add recommend app: " + exception);
-												        }
-													});
+																logger.warning("Couldn't add recommend app: " + exception);
+													        }
+														});
+													}
+													catch(Exception e)
+													{
+														logger.warning("Request exception happened during adding recommend app: " + e);
+													}
+													popupPanel.removeFromParent();
 												}
-												catch(Exception e)
-												{
-													logger.warning("Request exception happened during adding recommend app: " + e);
-												}
-												popupPanel.removeFromParent();
-											}
-								    		});
-								    		horizontalPanel.add(image);
-								    		horizontalPanel.add(label);
-								    		horizontalPanel.add(button);
-								    		PopUpPanelContents.add(horizontalPanel);
-								    	}
-								    }
-								    popupPanel.setTitle("Search count: " + appSearchResult.getResultCount());
-								    HTML message = new HTML("Search count: " + appSearchResult.getResultCount());
-								    message.setStyleName("demo-PopUpPanel-message");
-								    
-								    Button closeButton = new Button("Close");
-								    closeButton.addStyleName("submit");
-								    closeButton.addStyleName("button");								    
-								    closeButton.addClickHandler(new ClickHandler()
-								    {
-								    	public void onClick(ClickEvent event)
-								    	{
-								    		popupPanel.removeFromParent();
-								    	}
-								    });
-								    SimplePanel holder = new SimplePanel();
-								    holder.add(closeButton);
-								    holder.setStyleName("demo-PopUpPanel-footer");
-								    PopUpPanelContents.add(message);
-								    PopUpPanelContents.add(holder);
-								    popupPanel.setWidget(PopUpPanelContents );
-									popupPanel.setAnimationEnabled(true);
-									popupPanel.setGlassEnabled(true);
-								    popupPanel.center();
-				        	  }
-				       }
-				});			      
-		    } catch (Exception e) {
-		      displayError("Couldn't retrieve JSON");
-		    }
+									    		});
+									    		horizontalPanel.add(image);
+									    		horizontalPanel.add(label);
+									    		horizontalPanel.add(button);
+									    		PopUpPanelContents.add(horizontalPanel);
+									    	}
+									    }
+									    popupPanel.setTitle("Search count: " + appSearchResult.getResultCount());
+									    HTML message = new HTML("Search count: " + appSearchResult.getResultCount());
+									    message.setStyleName("demo-PopUpPanel-message");
+									    
+									    Button closeButton = new Button("Close");
+									    closeButton.addStyleName("submit");
+									    closeButton.addStyleName("button");								    
+									    closeButton.addClickHandler(new ClickHandler()
+									    {
+									    	public void onClick(ClickEvent event)
+									    	{
+									    		popupPanel.removeFromParent();
+									    	}
+									    });
+									    SimplePanel holder = new SimplePanel();
+									    holder.add(closeButton);
+									    holder.setStyleName("demo-PopUpPanel-footer");
+									    PopUpPanelContents.add(message);
+									    PopUpPanelContents.add(holder);
+									    popupPanel.setWidget(PopUpPanelContents );
+										popupPanel.setAnimationEnabled(true);
+										popupPanel.setGlassEnabled(true);
+									    popupPanel.center();
+					        	  }
+					       }
+					});			      
+			    } catch (Exception e) {
+			      displayError("Couldn't retrieve JSON");
+			    }
+			}
+		}
+		else
+		{
+			Window.alert("Please login first.");
 		}
 	}
 	
@@ -565,7 +573,7 @@ public class Rapplz implements EntryPoint
 				public void onResponseReceived(Request request, Response response)
 				{
 					if(200 == response.getStatusCode())
-					{Window.alert(response.getText());
+					{
 						StringBuilder sb = new StringBuilder(response.getText().trim());
 						if(sb.length() > 0)
 						{
@@ -576,8 +584,8 @@ public class Rapplz implements EntryPoint
 							else
 							{
 								updateTable(asArrayOfApp("[" + sb.substring((sb.indexOf(":") + 1), sb.lastIndexOf("}")) + "]"));
-							}														
-						}						
+							}
+						}
 					}
 					else
 					{
@@ -609,7 +617,7 @@ public class Rapplz implements EntryPoint
 			dialogBox.setWidget(dialogVPanel);
 	    	dialogBox.setAnimationEnabled(true);*/
 	    	
-	    	mainAppFlexTable.setHTML((i / 5), (i % 5), "<img src='" + apps.get(i).getImage().trim() + "' width='50%' style='float:left;' /><span class='jn'></span><span class='hn'><span class='in'></span></span><span class='kn'></span><div>");	    	
+	    	mainAppFlexTable.setHTML((i / 5), (i % 5), "<img src='" + apps.get(i).getImage().trim() + "' width='50%' style='float:left;' /><span class='jn'></span><span class='hn'><span class='in'>" + apps.get(i).getRecommendedCount() + "</span></span><span class='kn'></span><div>");	    	
 		}
 	    // Clear any errors.
 	    errorMsgLabel.setVisible(false);

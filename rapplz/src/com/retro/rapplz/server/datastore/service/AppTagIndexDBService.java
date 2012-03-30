@@ -28,15 +28,23 @@ public class AppTagIndexDBService
 	
 	public Key<AppTagIndex> getAppTagIndexKey(Key<AppTag> appTagKey)
 	{
-		return dao.ofy().query(AppTagIndex.class).filter("appTag", appTagKey).getKey();
+		return dao.ofy().query(AppTagIndex.class).ancestor(appTagKey).getKey();
 	}
 	
 	public List<App> getAppsByAppTag(AppTag appTag)
 	{
-		AppTagIndex appTagIndex = dao.ofy().query(AppTagIndex.class).ancestor(appTag).list().get(0);
-		if(appTagIndex != null && appTagIndex.getApps() != null && appTagIndex.getApps().size() > 0)
+		List<AppTagIndex> appTagIndexList = dao.ofy().query(AppTagIndex.class).ancestor(appTag).list();
+		if(appTagIndexList != null && appTagIndexList.size() > 0)
 		{
-			return new ArrayList<App>(dao.ofy().get(appTagIndex.getApps()).values());
+			AppTagIndex appTagIndex = appTagIndexList.get(0);
+			if(appTagIndex != null && appTagIndex.getApps() != null && appTagIndex.getApps().size() > 0)
+			{
+				return new ArrayList<App>(dao.ofy().get(appTagIndex.getApps()).values());
+			}
+			else
+			{
+				return null;
+			}
 		}
 		else
 		{

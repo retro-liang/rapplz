@@ -102,6 +102,7 @@ public class AppService
 				app.setImage(icon);
 				app.setLink(link);
 				app.setPrice(price);
+				app.setRecommendedCount(1);
 			}
 			else
 			{
@@ -131,6 +132,7 @@ public class AppService
 			appTagIndexDBService.saveAppTagIndex(appTagIndex);
 			
 			//need optimize, better put it to a queue
+			logger.info("Broadcasting new recommendation...");
 			ChannelService channelService = ChannelServiceFactory.getChannelService();
 			Profile profile = profileDBService.getProfileByKey(userDBService.getUser(userId).getProfile());
 			StringBuilder sb = new StringBuilder();
@@ -139,8 +141,9 @@ public class AppService
 			sb.append(profile.getAvatar()).append("|");
 			sb.append(appId).append("|");
 			sb.append(app.getName()).append("|");
-			sb.append(app.getImage()).append("|");
+			sb.append(app.getImage());
 			channelService.sendMessage(new ChannelMessage("activity", sb.toString()));
+			logger.info("Broadcasting new recommendation done. message: " + sb.toString());
 			
 			return appId.toString();
 		}
