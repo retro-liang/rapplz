@@ -32,6 +32,18 @@ public class AppDBService
 		}
 	}
 	
+	public Key<App> getAppKeyById(Long id)
+	{
+		try
+		{
+			return dao.ofy().query(App.class).filter("id", id).getKey();
+		}
+		catch(NotFoundException e)
+		{
+			return null;
+		}
+	}
+	
 	public Key<App> saveApp(App app)
 	{
 		return dao.ofy().put(app);

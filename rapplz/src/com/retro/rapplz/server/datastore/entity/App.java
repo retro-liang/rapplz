@@ -27,6 +27,8 @@ public class App
 	@Id
 	private Long id;
 	
+	private String os;
+	
 	private String name;
 	
 	@Unindexed
@@ -142,5 +144,13 @@ public class App
 
 	public void setRecommendedCount(int recommendedCount) {
 		this.recommendedCount = recommendedCount;
+	}
+
+	public String getOs() {
+		return os;
+	}
+
+	public void setOs(String os) {
+		this.os = os;
 	}
 }

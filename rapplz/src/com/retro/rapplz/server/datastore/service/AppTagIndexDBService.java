@@ -64,4 +64,9 @@ public class AppTagIndexDBService
 		appTagIndex.getApps().add(appKey);
 		return dao.ofy().put(appTagIndex);
 	}
+	
+	public List<AppTagIndex> getAppTagIndexByApp(App app)
+	{
+		return dao.ofy().query(AppTagIndex.class).filter("apps", app).list();
+	}
 }

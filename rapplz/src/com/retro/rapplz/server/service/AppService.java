@@ -11,6 +11,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -19,11 +20,13 @@ import com.google.appengine.api.channel.ChannelService;
 import com.google.appengine.api.channel.ChannelServiceFactory;
 import com.googlecode.objectify.Key;
 import com.retro.rapplz.server.datastore.entity.App;
+import com.retro.rapplz.server.datastore.entity.AppIndex;
 import com.retro.rapplz.server.datastore.entity.AppTag;
 import com.retro.rapplz.server.datastore.entity.AppTagIndex;
 import com.retro.rapplz.server.datastore.entity.Profile;
 import com.retro.rapplz.server.datastore.entity.User;
 import com.retro.rapplz.server.datastore.service.AppDBService;
+import com.retro.rapplz.server.datastore.service.AppIndexDBService;
 import com.retro.rapplz.server.datastore.service.AppTagDBService;
 import com.retro.rapplz.server.datastore.service.AppTagIndexDBService;
 import com.retro.rapplz.server.datastore.service.ProfileDBService;
@@ -37,6 +40,7 @@ public class AppService
 	private static final Logger logger = Logger.getLogger(AppService.class.getName());
 	
 	private AppDBService appDBService = new AppDBService();
+	private AppIndexDBService appIndexDBService = new AppIndexDBService();
 	private AppTagDBService appTagDBService = new AppTagDBService();
 	private AppTagIndexDBService appTagIndexDBService = new AppTagIndexDBService();
 	private UserDBService userDBService = new UserDBService();
@@ -88,33 +92,45 @@ public class AppService
 	@POST
 	@Path("recommend")
 	@Consumes("application/x-www-form-urlencoded")
-	public String recommend(@Context HttpServletRequest request, @FormParam("userId") String userId, @FormParam("appId") Long appId, @FormParam("name") String name, @FormParam("icon") String icon, @FormParam("link") String link, @FormParam("price") String price)
+	public String recommend(@Context HttpServletRequest request, @FormParam("userId") String userId, @FormParam("appId") Long appId, @FormParam("os") String os, @FormParam("name") String name, @FormParam("icon") String icon, @FormParam("link") String link, @FormParam("price") String price)
 	{
-		logger.info("id=" + appId + " name=" + name + " link=" + link + " price=" + price);
+		logger.info("User [id=" + userId + "] is trying to recommend an app [id=" + appId + " name=" + name + "] from ip [" + request.getRemoteAddr() + "]...");
 		if(userId != null && !userId.equals("") && appId != null && appId != 0)
 		{
+			Key<AppTag> appTagKey = appTagDBService.getAppTagKey("recommended");
+			if(appTagKey == null)
+			{
+				appTagKey = appTagDBService.saveAppTag("recommended");
+			}
+			
 			App app = appDBService.getAppById(appId);
 			if(app == null)
 			{
 				app = new App();
 				app.setId(appId);
+				app.setOs(os);
 				app.setName(name);
 				app.setImage(icon);
 				app.setLink(link);
 				app.setPrice(price);
-				app.setRecommendedCount(1);
+				appDBService.saveApp(app);
 			}
-			else
+			
+			Key<App> appKey = appDBService.getAppKeyById(appId);
+			Key<User> userKey = userDBService.getUserKey(userId);
+			
+			AppIndex appIndex = appIndexDBService.getAppIndexByUseKey(userKey);
+			if(appIndex == null)
 			{
-				app.setRecommendedCount(app.getRecommendedCount() + 1);
+				appIndex = new AppIndex();
+				appIndex.setUser(userKey);
+				appIndex.getApps().add(appKey);
+				appIndexDBService.saveAppIndex(appIndex);
 			}
-			Key<App> appKey = appDBService.saveApp(app);
-			
-			
-			Key<AppTag> appTagKey = appTagDBService.getAppTagKey("recommended");
-			if(appTagKey == null)
+			else if(!appIndex.getApps().contains(appKey))
 			{
-				appTagKey = appTagDBService.saveAppTag("recommended");
+				appIndex.getApps().add(appKey);
+				appIndexDBService.saveAppIndex(appIndex);
 			}
 			
 			Key<AppTagIndex> appTagIndexKey = appTagIndexDBService.getAppTagIndexKey(appTagKey);
@@ -123,13 +139,22 @@ public class AppService
 				appTagIndexKey = appTagIndexDBService.saveAppTagIndex(appTagKey, appKey);
 			}
 			
-			Key<User> userKey = userDBService.getUserKey(userId);
+			
 			
 			AppTagIndex appTagIndex = appTagIndexDBService.getAppTagIndex(appTagIndexKey);
-			appTagIndex.getApps().add(appKey);			
-			appTagIndex.getUsers().add(userKey);
-			logger.info("appKey: " + appKey + " | userKey: " + userKey);
-			appTagIndexDBService.saveAppTagIndex(appTagIndex);
+			if(!appTagIndex.getApps().contains(appKey) || !appTagIndex.getUsers().contains(userKey))
+			{
+				app.setRecommendedCount(app.getRecommendedCount() + 1);
+				appDBService.saveApp(app);
+				appTagIndex.getApps().add(appKey);			
+				appTagIndex.getUsers().add(userKey);
+				logger.info("User [" + userKey + "] recommends a new app [" + appKey + "] successfully.");
+				appTagIndexDBService.saveAppTagIndex(appTagIndex);
+			}
+			else
+			{
+				logger.info("User [" + userKey + "] has already recommended app [" + appKey + "] once.");
+			}
 			
 			//need optimize, better put it to a queue
 			logger.info("Broadcasting new recommendation...");
@@ -160,5 +185,13 @@ public class AppService
 	{
 		appDBService.deleteAllApps();
 		return "OK";
+	}
+	
+	@GET
+	@Path("test")
+	public String test(@QueryParam("id") String id)
+	{
+		App app = appDBService.getAppById(Long.valueOf(id));
+		return appTagIndexDBService.getAppTagIndexByApp(app).toString();		
 	}
 }
