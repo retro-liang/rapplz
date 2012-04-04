@@ -114,6 +114,16 @@ public class Rapplz implements EntryPoint
 	    };	    
 	    RootPanel.get("google-sign-in-button").addDomHandler(googleSignInClickHandler, ClickEvent.getType());
 	    
+	    ClickHandler facebookSignInClickHandler = new ClickHandler()
+	    {
+	    	@Override
+			public void onClick(ClickEvent event)
+			{
+	    		facebookSignIn();
+			}
+	    };	    
+	    RootPanel.get("facebook-sign-in-button").addDomHandler(facebookSignInClickHandler, ClickEvent.getType());
+	    
 	    ClickHandler searchAppClickHandler = new ClickHandler()
 	    {
 	    	@Override
@@ -388,6 +398,115 @@ public class Rapplz implements EntryPoint
 							}    							
 						}
 					});
+    			}
+
+    			@Override
+    			public void onFailure(Throwable caught)
+    			{
+    				displayError("Auth google failed: " + caught.toString());
+    			}
+    		});
+		}
+		catch(Exception e)
+		{
+			displayError("Exception: " + e);
+		}
+	}
+	
+	private void facebookSignIn()
+	{
+		try
+		{
+			AuthRequest req = new AuthRequest("https://www.facebook.com/dialog/oauth", "393043390720286").withScopes("user_about_me");
+    		Auth.get().login(req, new Callback<String, Throwable>()
+    		{
+    			@Override
+    			public void onSuccess(String token)
+    			{
+    				Window.alert("facebook token: " + token);
+    				displayError("facebook access url: " + "https://graph.facebook.com/oauth/access_token?client_id=393043390720286&client_secret=831851a023652076a92af4f6801a0241&redirect_uri=http://www.rapplz.com/&code=" + token);
+    				/*JsonpRequestBuilder jsonpRequestbuilder = new JsonpRequestBuilder();
+    				jsonpRequestbuilder.requestObject("https://graph.facebook.com/oauth/access_token?client_id=YOUR_APP_ID&client_secret=YOUR_APP_SECRET&redirect_uri=www.rapplz.com&code=" + token, new AsyncCallback<GoogleUser>()
+					{
+    					public void onFailure(Throwable throwable)
+						{
+							displayError("Couldn't retrieve JSON: " + throwable);
+						}
+
+    					public void onSuccess(final GoogleUser googleUser)
+						{
+    						Cookies.setCookie("sid", googleUser.getId(), expires, null, "/", false);
+    						Cookies.setCookie("fn", googleUser.getFirstName(), expires, null, "/", false);
+    						Cookies.setCookie("ln", googleUser.getLastName(), expires, null, "/", false);
+    						refreshStatus();
+    						
+    						RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode(SEARCH_USER_URL + "/" + googleUser.getId()));
+							try
+							{
+								builder.sendRequest(null, new RequestCallback()
+								{
+									public void onError(Request request, Throwable exception)
+									{
+										displayError("Can't search user: " + exception);
+									}
+
+									public void onResponseReceived(Request request, Response response)
+									{
+										if(200 != response.getStatusCode())
+										{
+											RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(SAVE_USER_URL));
+			    							try
+			    							{
+			    								StringBuffer postData = new StringBuffer();
+												postData.append(URL.encode("id")).append("=").append(URL.encode(googleUser.getId()));
+												postData.append("&");
+												postData.append(URL.encode("firstName")).append("=").append(URL.encode(googleUser.getFirstName()));
+												postData.append("&");
+												postData.append(URL.encode("lastName")).append("=").append(URL.encode(googleUser.getLastName()));
+												postData.append("&");
+												postData.append(URL.encode("email")).append("=").append(URL.encode(googleUser.getEmail()));
+												if(googleUser.getPicture() != null)
+												{
+													postData.append("&");
+													postData.append(URL.encode("avatar")).append("=").append(URL.encode(googleUser.getPicture()));
+												}
+												//Window.alert(postData.toString());
+												builder.setHeader("Content-type", "application/x-www-form-urlencoded");
+												builder.sendRequest(postData.toString(), new RequestCallback()
+			    								{
+			    									public void onError(Request request, Throwable exception)
+			    									{
+			    										displayError("Can't save user: " + exception);
+			    									}
+
+			    									public void onResponseReceived(Request request, Response response)
+			    									{
+			    										if(200 == response.getStatusCode())
+			    										{
+			    											Cookies.setCookie("sid", response.getText(), expires, null, "/", false);
+			    										}
+			    									}
+			    								});
+			    							}
+			    							catch(RequestException e)
+			    							{
+			    								displayError("Save user exception: " + e);
+			    							}
+										}
+										else
+										{
+											displayError("url: " + SEARCH_USER_URL + "/" + googleUser.getId());
+											Cookies.setCookie("sid", googleUser.getId(), expires, null, "/", false);
+										}
+									}
+								});
+							}
+							catch(RequestException e)
+							{
+								displayError("Search user exception: " + e);
+							}    							
+						}
+					});*/
     			}
 
     			@Override
