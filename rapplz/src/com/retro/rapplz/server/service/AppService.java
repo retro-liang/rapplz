@@ -15,9 +15,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.json.simple.JSONObject;
+
 import com.google.appengine.api.channel.ChannelMessage;
 import com.google.appengine.api.channel.ChannelService;
 import com.google.appengine.api.channel.ChannelServiceFactory;
+
 import com.googlecode.objectify.Key;
 import com.retro.rapplz.server.datastore.entity.App;
 import com.retro.rapplz.server.datastore.entity.AppIndex;
@@ -49,7 +52,7 @@ public class AppService
 	@GET
 	@Path("{id}")
 	@Produces({MediaType.APPLICATION_JSON})
-	public App getById(@PathParam("id") Long id)
+	public App getById(@PathParam("id") String id)
 	{
 		return appDBService.getAppById(id);
 	}
@@ -92,10 +95,10 @@ public class AppService
 	@POST
 	@Path("recommend")
 	@Consumes("application/x-www-form-urlencoded")
-	public String recommend(@Context HttpServletRequest request, @FormParam("userId") String userId, @FormParam("appId") Long appId, @FormParam("os") String os, @FormParam("name") String name, @FormParam("icon") String icon, @FormParam("link") String link, @FormParam("price") String price)
+	public String recommend(@Context HttpServletRequest request, @FormParam("userId") String userId, @FormParam("appId") String appId, @FormParam("os") String os, @FormParam("name") String name, @FormParam("icon") String icon, @FormParam("link") String link, @FormParam("price") String price)
 	{
 		logger.info("User [id=" + userId + "] is trying to recommend an app [id=" + appId + " name=" + name + "] from ip [" + request.getRemoteAddr() + "]...");
-		if(userId != null && !userId.equals("") && appId != null && appId != 0)
+		if(userId != null && !userId.equals("") && appId != null && !appId.equals(""))
 		{
 			Key<AppTag> appTagKey = appTagDBService.getAppTagKey("recommended");
 			if(appTagKey == null)
@@ -158,17 +161,18 @@ public class AppService
 			
 			//need optimize, better put it to a queue
 			logger.info("Broadcasting new recommendation...");
-			ChannelService channelService = ChannelServiceFactory.getChannelService();
-			Profile profile = profileDBService.getProfileByKey(userDBService.getUser(userId).getProfile());
-			StringBuilder sb = new StringBuilder();
-			sb.append(userId).append("|");
-			sb.append(profile.getFirstName() + " " + profile.getLastName()).append("|");
-			sb.append(profile.getAvatar()).append("|");
-			sb.append(appId).append("|");
-			sb.append(app.getName()).append("|");
-			sb.append(app.getImage());
-			channelService.sendMessage(new ChannelMessage("activity", sb.toString()));
-			logger.info("Broadcasting new recommendation done. message: " + sb.toString());
+			ChannelService channelService = ChannelServiceFactory.getChannelService();					
+			Profile profile = profileDBService.getProfileByKey(userDBService.getUser(userId).getProfile());			
+			JSONObject obj = new JSONObject();
+			obj.put("t", "ar");
+			obj.put("uid", userId);
+			obj.put("un", profile.getFirstName() + " " + profile.getLastName());
+			obj.put("ua", profile.getAvatar());
+			obj.put("aid", appId);
+			obj.put("an", app.getName());
+			obj.put("ai", app.getImage().trim());
+			channelService.sendMessage(new ChannelMessage("activity", obj.toString()));
+			logger.info("Broadcasting new recommendation done. message: " + obj.toString());
 			
 			return appId.toString();
 		}
@@ -191,7 +195,7 @@ public class AppService
 	@Path("test")
 	public String test(@QueryParam("id") String id)
 	{
-		App app = appDBService.getAppById(Long.valueOf(id));
+		App app = appDBService.getAppById(id);
 		return appTagIndexDBService.getAppTagIndexByApp(app).toString();		
 	}
 }

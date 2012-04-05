@@ -101,7 +101,7 @@ public class FeedProcessor
 							Matcher matcher = idPattern.matcher(link);
 							if(matcher.find())
 							{
-								app.setId(Long.valueOf(matcher.group().replace("/id", "").replace("?", "")));
+								app.setId(matcher.group().replace("/id", "").replace("?", ""));
 							}							
 						}
 						app.setUpdateDate(entry.getUpdatedDate().toString());

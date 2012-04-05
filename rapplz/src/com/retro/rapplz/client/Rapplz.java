@@ -209,11 +209,11 @@ public class Rapplz implements EntryPoint
 	    			@Override
 	    			public void onMessage(String message)
 	    			{
-	    				//Window.alert("Received: " + message + " length: " + message.trim().split("|").length);
-	    				if(message != null && !message.trim().equals("") && message.trim().split("|").length == 6)
+	    				Window.alert("Received: " + message);
+	    				if(message != null && !message.trim().equals(""))
 	    				{
-	    					//Window.alert("creating popup");
-	    					createActivityPopup(message.split("|"));
+	    					Window.alert("converted: " + asActivity(message));
+	    					createActivityPopup(asActivity(message));
 	    				}
 	    			}
 	    			@Override
@@ -231,7 +231,7 @@ public class Rapplz implements EntryPoint
 		});
 	}
 	
-	private void createActivityPopup(String[] attributes)
+	private void createActivityPopup(Activity activity)
 	{
 		final DialogBox dialogBox = new DialogBox();
 		dialogBox.setText("New Activity");
@@ -242,11 +242,11 @@ public class Rapplz implements EntryPoint
 		activityHorizontalPanel.addStyleName("concerned");
 		activityHorizontalPanel.addStyleName("notice");
 		activityHorizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-		Image userAvarta = new Image(attributes[1]);
-		Label userName = new Label(attributes[2]);
+		Image userAvarta = new Image(activity.getUserAvatar());
+		Label userName = new Label(activity.getUserName());
 		Label staticLabel = new Label(" has just recommended an app: ");
-		Image appIcon = new Image(attributes[4]);
-		Label appName = new Label(attributes[5]);
+		Image appIcon = new Image(activity.getAppIcon());
+		Label appName = new Label(activity.getAppName());
 		activityHorizontalPanel.add(userAvarta);
 		activityHorizontalPanel.add(userName);
 		activityHorizontalPanel.add(staticLabel);
@@ -255,6 +255,8 @@ public class Rapplz implements EntryPoint
 		dialogBox.setWidget(activityHorizontalPanel);		
 		dialogBox.setPopupPosition(100, 50);
 		dialogBox.show();
+		
+		Window.alert("display popup: " + activity);
 		
 		new Timer()
 	    {
@@ -862,4 +864,5 @@ public class Rapplz implements EntryPoint
 	private final native AppSearchResult asAppSearchResult(String json) /*-{return eval(json);}-*/;
 	private final native JsArray<App> asArrayOfApp(String json) /*-{return eval(json);}-*/;
 	private final native GoogleUser asGoogleUser(String json) /*-{return eval(json);}-*/;
+	private final native Activity asActivity(String json) /*-{return eval(json);}-*/;
 }

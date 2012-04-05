@@ -12,9 +12,10 @@
   <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
 
   <!-- Other module inherits                                      -->
+  <inherits name="com.google.gwt.json.JSON" />
   <inherits name="com.google.gwt.http.HTTP" />
   <inherits name="com.google.api.gwt.oauth2.OAuth2" />
-  <inherits name='com.google.gwt.appengine.channel.Channel'/>
+  <inherits name="com.google.gwt.appengine.channel.Channel" />  
   
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.retro.rapplz.client.Rapplz'/>

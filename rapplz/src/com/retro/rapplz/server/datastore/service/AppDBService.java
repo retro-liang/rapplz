@@ -20,7 +20,7 @@ public class AppDBService
 		dao = new DAO();
 	}
 	
-	public App getAppById(Long id)
+	public App getAppById(String id)
 	{
 		try
 		{
@@ -32,7 +32,7 @@ public class AppDBService
 		}
 	}
 	
-	public Key<App> getAppKeyById(Long id)
+	public Key<App> getAppKeyById(String id)
 	{
 		try
 		{
