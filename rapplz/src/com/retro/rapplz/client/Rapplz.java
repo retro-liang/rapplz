@@ -1,6 +1,7 @@
 package com.retro.rapplz.client;
 
 import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -27,6 +28,7 @@ import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.jsonp.client.JsonpRequestBuilder;
 import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -43,6 +45,10 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
+import static com.google.gwt.query.client.GQuery.*;
+import com.google.gwt.query.client.Function;
+
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -65,7 +71,7 @@ public class Rapplz implements EntryPoint
 	private static final String ALL_FEATURED_APPS_JSON_URL = "/rest/appService/tag/featured";
 	private static final String ALL_RECOMMENDED_APPS_JSON_URL = "/rest/appService/tag/recommended";
 	private static final String ALL_APPS_SIZE_URL = "/rest/appService/allAppsSize";
-	private static final String SEARCH_APP_URL = "http://itunes.apple.com/search?country=US&entity=software&limit=10&term=";
+	private static final String SEARCH_APP_URL = "http://itunes.apple.com/search?country=US&entity=software&limit=5&term=";
 	private static final String ADD_RECOMMEND_APP_URL = "/rest/appService/recommend";
 	private static final String REQUEST_CHANNEL_TOKEN_URL = "/channel/";	
 	
@@ -160,6 +166,37 @@ public class Rapplz implements EntryPoint
 	    //refreshTimer.scheduleRepeating(REFRESH_INTERVAL);
 	    
 	    setupChannel();
+	    
+	    $(".signin").click(new Function()
+	    {
+	    	public boolean f(Event e)
+	    	{
+	    		e.preventDefault();
+	    		$("fieldset#signin_menu").toggle();
+	    		$(".signin").toggleClass("menu-open");            
+	    		return true;
+	    	}
+        });
+
+	    $("fieldset#signin_menu").mouseup(new Function()
+	    {
+        	public boolean f(Event e)
+        	{
+        		return true;
+        	}
+        });
+	    
+        $(document).mouseup(new Function()
+        {
+        	public boolean f(Event e)
+        	{
+            //if($(e.getEventTarget().parent("a.signin").length==0) {        		
+                $(".signin").removeClass("menu-open");
+                $("fieldset#signin_menu").hide();
+            //}
+				return true;
+        	}
+        });
 	}
 	
 	private void setupChannel()
@@ -423,7 +460,8 @@ public class Rapplz implements EntryPoint
 	{
 		try
 		{
-			AuthRequest req = new AuthRequest("https://www.facebook.com/dialog/oauth", "393043390720286").withScopes("user_about_me");
+			//AuthRequest req = new AuthRequest("https://www.facebook.com/dialog/oauth", "393043390720286").withScopes("user_about_me");
+			AuthRequest req = new AuthRequest("https://graph.facebook.com/oauth/authorize", "393043390720286").withScopes("user_about_me");
     		Auth.get().login(req, new Callback<String, Throwable>()
     		{
     			@Override

@@ -18,7 +18,8 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-gae-channel-0.4-alpha.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/facebook-java-api-3.0.2.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gwtquery-1.1.0.jar"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
-	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT_2.4.0"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

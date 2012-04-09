@@ -1,6 +1,7 @@
 package com.retro.rapplz.server.service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,9 @@ import org.json.simple.JSONObject;
 import com.google.appengine.api.channel.ChannelMessage;
 import com.google.appengine.api.channel.ChannelService;
 import com.google.appengine.api.channel.ChannelServiceFactory;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.google.appengine.api.memcache.MemcacheService.IdentifiableValue;
 
 import com.googlecode.objectify.Key;
 import com.retro.rapplz.server.datastore.entity.App;
@@ -164,19 +168,27 @@ public class AppService
 			}
 			
 			//need optimize, better put it to a queue
-			logger.info("Broadcasting new recommendation...");
-			ChannelService channelService = ChannelServiceFactory.getChannelService();					
-			Profile profile = profileDBService.getProfileByKey(userDBService.getUser(userId).getProfileKey());			
-			JSONObject obj = new JSONObject();
-			obj.put("t", "ar");
-			obj.put("uid", userId);
-			obj.put("un", profile.getFirstName() + " " + profile.getLastName());
-			obj.put("ua", profile.getAvatar());
-			obj.put("aid", appId);
-			obj.put("an", app.getName());
-			obj.put("ai", app.getImage().trim());
-			channelService.sendMessage(new ChannelMessage("activity", ("[" + obj.toString() + "]")));
-			logger.info("Broadcasting new recommendation done. message: " + obj.toString());
+			MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+			Set<String> channels = (Set<String>)syncCache.getIdentifiable("channels");
+			if(channels != null && channels.size() > 0)
+			{
+				for(String channel : channels)
+				{
+					logger.info("Broadcasting new recommendation...");
+					ChannelService channelService = ChannelServiceFactory.getChannelService();					
+					Profile profile = profileDBService.getProfileByKey(userDBService.getUser(userId).getProfileKey());			
+					JSONObject obj = new JSONObject();
+					obj.put("t", "ar");
+					obj.put("uid", userId);
+					obj.put("un", profile.getFirstName() + " " + profile.getLastName());
+					obj.put("ua", profile.getAvatar());
+					obj.put("aid", appId);
+					obj.put("an", app.getName());
+					obj.put("ai", app.getImage().trim());
+					channelService.sendMessage(new ChannelMessage(channel, ("[" + obj.toString() + "]")));
+					logger.info("Broadcasting new recommendation done. message: " + obj.toString());
+				}
+			}			
 			
 			return appId.toString();
 		}

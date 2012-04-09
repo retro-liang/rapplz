@@ -1,6 +1,7 @@
 package com.retro.rapplz.server;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
@@ -22,7 +23,7 @@ public class ChannelServlet extends HttpServlet
 	{
 		logger.info("Requesting Channel Token...");
 		ChannelService channelService = ChannelServiceFactory.getChannelService();
-		String token = channelService.createChannel("activity");
+		String token = channelService.createChannel("activity-" + new Date());
 		logger.info("Channel Token Generated: " + token);
 		resp.setContentType("text/html");
 	    resp.getWriter().write(token);
