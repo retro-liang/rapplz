@@ -106,6 +106,7 @@ public class AppService
 				appTagKey = appTagDBService.saveAppTag("recommended");
 			}
 			
+			Key<App> appKey = null;
 			App app = appDBService.getAppById(appId);
 			if(app == null)
 			{
@@ -116,23 +117,26 @@ public class AppService
 				app.setImage(icon);
 				app.setLink(link);
 				app.setPrice(price);
-				appDBService.saveApp(app);
+				appKey = appDBService.saveApp(app);
+			}
+			else
+			{
+				appKey = appDBService.getAppKeyById(appId);
 			}
 			
-			Key<App> appKey = appDBService.getAppKeyById(appId);
 			Key<User> userKey = userDBService.getUserKey(userId);
 			
 			AppIndex appIndex = appIndexDBService.getAppIndexByUseKey(userKey);
 			if(appIndex == null)
 			{
 				appIndex = new AppIndex();
-				appIndex.setUser(userKey);
-				appIndex.getApps().add(appKey);
+				appIndex.setUserKey(userKey);
+				appIndex.getAppKeys().add(appKey);
 				appIndexDBService.saveAppIndex(appIndex);
 			}
-			else if(!appIndex.getApps().contains(appKey))
+			else if(!appIndex.getAppKeys().contains(appKey))
 			{
-				appIndex.getApps().add(appKey);
+				appIndex.getAppKeys().add(appKey);
 				appIndexDBService.saveAppIndex(appIndex);
 			}
 			
@@ -145,12 +149,12 @@ public class AppService
 			
 			
 			AppTagIndex appTagIndex = appTagIndexDBService.getAppTagIndex(appTagIndexKey);
-			if(!appTagIndex.getApps().contains(appKey) || !appTagIndex.getUsers().contains(userKey))
+			if(!appTagIndex.getAppKeys().contains(appKey) || !appTagIndex.getUserKeys().contains(userKey))
 			{
 				app.setRecommendedCount(app.getRecommendedCount() + 1);
 				appDBService.saveApp(app);
-				appTagIndex.getApps().add(appKey);			
-				appTagIndex.getUsers().add(userKey);
+				appTagIndex.getAppKeys().add(appKey);			
+				appTagIndex.getUserKeys().add(userKey);
 				logger.info("User [" + userKey + "] recommends a new app [" + appKey + "] successfully.");
 				appTagIndexDBService.saveAppTagIndex(appTagIndex);
 			}
@@ -162,7 +166,7 @@ public class AppService
 			//need optimize, better put it to a queue
 			logger.info("Broadcasting new recommendation...");
 			ChannelService channelService = ChannelServiceFactory.getChannelService();					
-			Profile profile = profileDBService.getProfileByKey(userDBService.getUser(userId).getProfile());			
+			Profile profile = profileDBService.getProfileByKey(userDBService.getUser(userId).getProfileKey());			
 			JSONObject obj = new JSONObject();
 			obj.put("t", "ar");
 			obj.put("uid", userId);
@@ -171,7 +175,7 @@ public class AppService
 			obj.put("aid", appId);
 			obj.put("an", app.getName());
 			obj.put("ai", app.getImage().trim());
-			channelService.sendMessage(new ChannelMessage("activity", obj.toString()));
+			channelService.sendMessage(new ChannelMessage("activity", ("[" + obj.toString() + "]")));
 			logger.info("Broadcasting new recommendation done. message: " + obj.toString());
 			
 			return appId.toString();

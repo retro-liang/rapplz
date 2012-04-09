@@ -18,11 +18,11 @@ public class AppTagIndex
 	private Long id;
 	
 	@Parent
-	private Key<AppTag> appTag;
+	private Key<AppTag> appTagKey;
 	
-	private Set<Key<App>> apps = new HashSet<Key<App>>();
+	private Set<Key<App>> appKeys = new HashSet<Key<App>>();
 	
-	private Set<Key<User>> users = new HashSet<Key<User>>();
+	private Set<Key<User>> userKeys = new HashSet<Key<User>>();
 	
 	public AppTagIndex()
 	{
@@ -37,27 +37,27 @@ public class AppTagIndex
 		this.id = id;
 	}
 
-	public Key<AppTag> getAppTag() {
-		return appTag;
+	public Key<AppTag> getAppTagKey() {
+		return appTagKey;
 	}
 
-	public void setAppTag(Key<AppTag> appTag) {
-		this.appTag = appTag;
+	public void setAppTagKey(Key<AppTag> appTagKey) {
+		this.appTagKey = appTagKey;
 	}
 
-	public Set<Key<App>> getApps() {
-		return apps;
+	public Set<Key<App>> getAppKeys() {
+		return appKeys;
 	}
 
-	public void setApps(Set<Key<App>> apps) {
-		this.apps = apps;
+	public void setApps(Set<Key<App>> appKeys) {
+		this.appKeys = appKeys;
 	}
 
-	public Set<Key<User>> getUsers() {
-		return users;
+	public Set<Key<User>> getUserKeys() {
+		return userKeys;
 	}
 
-	public void setUsers(Set<Key<User>> users) {
-		this.users = users;
+	public void setUsers(Set<Key<User>> userKeys) {
+		this.userKeys = userKeys;
 	}
 }

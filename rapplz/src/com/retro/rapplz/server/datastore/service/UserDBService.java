@@ -52,7 +52,7 @@ public class UserDBService
 	public List<App> findAppsByUserKey(Key<User> userKey)
 	{
 		AppIndex appIndex = dao.ofy().query(AppIndex.class).filter("user", userKey).get();
-		List<Key<App>> list = new ArrayList<Key<App>>(appIndex.getApps());
+		List<Key<App>> list = new ArrayList<Key<App>>(appIndex.getAppKeys());
 		return (List<App>)dao.ofy().get(App.class, list).values();
 	}
 	

@@ -37,9 +37,9 @@ public class AppTagIndexDBService
 		if(appTagIndexList != null && appTagIndexList.size() > 0)
 		{
 			AppTagIndex appTagIndex = appTagIndexList.get(0);
-			if(appTagIndex != null && appTagIndex.getApps() != null && appTagIndex.getApps().size() > 0)
+			if(appTagIndex != null && appTagIndex.getAppKeys() != null && appTagIndex.getAppKeys().size() > 0)
 			{
-				return new ArrayList<App>(dao.ofy().get(appTagIndex.getApps()).values());
+				return new ArrayList<App>(dao.ofy().get(appTagIndex.getAppKeys()).values());
 			}
 			else
 			{
@@ -60,8 +60,8 @@ public class AppTagIndexDBService
 	public Key<AppTagIndex> saveAppTagIndex(Key<AppTag> appTagKey, Key<App> appKey)
 	{
 		AppTagIndex appTagIndex = new AppTagIndex();
-		appTagIndex.setAppTag(appTagKey);
-		appTagIndex.getApps().add(appKey);
+		appTagIndex.setAppTagKey(appTagKey);
+		appTagIndex.getAppKeys().add(appKey);
 		return dao.ofy().put(appTagIndex);
 	}
 	

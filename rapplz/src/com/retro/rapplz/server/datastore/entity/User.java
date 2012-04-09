@@ -13,9 +13,9 @@ public class User
 	@Id
 	private String id;
 	
-	private Key<Account> account;
+	private Key<Account> accountKey;
 	
-	private Key<Profile> profile;
+	private Key<Profile> profileKey;
 	
 	public User()
 	{
@@ -30,19 +30,19 @@ public class User
 		this.id = id;
 	}
 
-	public Key<Account> getAccount() {
-		return account;
+	public Key<Account> getAccountKey() {
+		return accountKey;
 	}
 
-	public void setAccount(Key<Account> account) {
-		this.account = account;
+	public void setAccountKey(Key<Account> accountKey) {
+		this.accountKey = accountKey;
 	}
 
-	public Key<Profile> getProfile() {
-		return profile;
+	public Key<Profile> getProfileKey() {
+		return profileKey;
 	}
 
-	public void setProfile(Key<Profile> profile) {
-		this.profile = profile;
+	public void setProfileKey(Key<Profile> profileKey) {
+		this.profileKey = profileKey;
 	}	
 }

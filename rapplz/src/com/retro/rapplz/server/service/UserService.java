@@ -76,8 +76,8 @@ public class UserService
 			
 			User user = new User();
 			user.setId(id);
-			user.setAccount(accountKey);
-			user.setProfile(profileKey);
+			user.setAccountKey(accountKey);
+			user.setProfileKey(profileKey);
 			
 			logger.info("save user successfully: " + id);
 			return String.valueOf(userDBService.saveUser(user).getId());
@@ -99,13 +99,13 @@ public class UserService
 			if(userIndex == null)
 			{
 				userIndex = new UserIndex();
-				userIndex.setUser(userKey);
-				userIndex.getFollowers().add(followUserKey);
+				userIndex.setUserKey(userKey);
+				userIndex.getFollowerKeys().add(followUserKey);
 				userIndexDBService.saveUserIndex(userIndex);
 			}
-			else if(!userIndex.getFollowers().contains(followUserKey))
+			else if(!userIndex.getFollowerKeys().contains(followUserKey))
 			{
-				userIndex.getFollowers().add(followUserKey);
+				userIndex.getFollowerKeys().add(followUserKey);
 				userIndexDBService.saveUserIndex(userIndex);
 			}
 		}	

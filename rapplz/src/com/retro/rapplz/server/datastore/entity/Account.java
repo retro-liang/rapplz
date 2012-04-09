@@ -17,9 +17,9 @@ public class Account
 	
 	private String password;
 	
-	private Key<Role> role;
+	private Key<Role> roleKey;
 	
-	private Key<Status> status;
+	private Key<Status> statusKey;
 	
 	private String federalType;
 	
@@ -52,27 +52,27 @@ public class Account
 		this.password = password;
 	}
 
-	public Key<Role> getRole() {
-		return role;
-	}
-
-	public void setRole(Key<Role> role) {
-		this.role = role;
-	}
-
-	public Key<Status> getStatus() {
-		return status;
-	}
-
-	public void setStatus(Key<Status> status) {
-		this.status = status;
-	}
-
 	public String getFederalType() {
 		return federalType;
 	}
 
 	public void setFederalType(String federalType) {
 		this.federalType = federalType;
+	}
+
+	public Key<Role> getRoleKey() {
+		return roleKey;
+	}
+
+	public void setRoleKey(Key<Role> roleKey) {
+		this.roleKey = roleKey;
+	}
+
+	public Key<Status> getStatusKey() {
+		return statusKey;
+	}
+
+	public void setStatusKey(Key<Status> statusKey) {
+		this.statusKey = statusKey;
 	}
 }

@@ -18,9 +18,9 @@ public class AppIndex
 	private Long id;
 	
 	@Parent
-	private Key<User> user;
+	private Key<User> userKey;
 	
-	private Set<Key<App>> apps = new HashSet<Key<App>>();
+	private Set<Key<App>> appKeys = new HashSet<Key<App>>();
 	
 	public AppIndex()
 	{
@@ -35,19 +35,19 @@ public class AppIndex
 		this.id = id;
 	}
 
-	public Key<User> getUser() {
-		return user;
+	public Key<User> getUserKey() {
+		return userKey;
 	}
 
-	public void setUser(Key<User> user) {
-		this.user = user;
+	public void setUserKey(Key<User> userKey) {
+		this.userKey = userKey;
 	}
 
-	public Set<Key<App>> getApps() {
-		return apps;
+	public Set<Key<App>> getAppKeys() {
+		return appKeys;
 	}
 
-	public void setApps(Set<Key<App>> apps) {
-		this.apps = apps;
+	public void setAppKeys(Set<Key<App>> appKeys) {
+		this.appKeys = appKeys;
 	}
 }

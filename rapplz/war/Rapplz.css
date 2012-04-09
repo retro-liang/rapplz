@@ -140,7 +140,7 @@ small {
 
 #bd {
 	padding: 20px 20px;
-	min-height: 750px;
+	min-height: 720px;
 }
 
 #bd::after {
@@ -2290,8 +2290,8 @@ a.promoted-label:hover,a.promoted-label:focus {
 
 .app-info:focus {
 	outline: none;
-	background: #eee;
-	background: rgba(0, 0, 0, 0.02);
+	/*background: #eee;
+	background: rgba(0, 0, 0, 0.02);*/
 }
 
 #bd .app-info h3,.app-info dl {
@@ -2611,4 +2611,20 @@ p.cancel-callback {
 .jn, .kn {
     background: url("/images/google-elements.png") no-repeat scroll 0 0 transparent;
     float: left;
+}
+
+.app-box {
+	width: 550px;
+}
+
+.dislike-textbox {
+	
+}
+
+.float-left {
+	float: left;
+}
+
+.float-right {
+	float: right;
 }

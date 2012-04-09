@@ -18,9 +18,11 @@ public class UserIndex
 	private Long id;
 	
 	@Parent
-	private Key<User> user;
+	private Key<User> userKey;
 	
-	private Set<Key<User>> followers = new HashSet<Key<User>>();
+	private Set<Key<User>> followerKeys = new HashSet<Key<User>>();
+	
+	private Set<Key<User>> followedKeys = new HashSet<Key<User>>();
 	
 	public UserIndex()
 	{
@@ -35,19 +37,27 @@ public class UserIndex
 		this.id = id;
 	}
 
-	public Key<User> getUser() {
-		return user;
+	public Key<User> getUserKey() {
+		return userKey;
 	}
 
-	public void setUser(Key<User> user) {
-		this.user = user;
+	public void setUserKey(Key<User> userKey) {
+		this.userKey = userKey;
 	}
 
-	public Set<Key<User>> getFollowers() {
-		return followers;
+	public Set<Key<User>> getFollowerKeys() {
+		return followerKeys;
 	}
 
-	public void setFollowers(Set<Key<User>> followers) {
-		this.followers = followers;
-	}	
+	public void setFollowerKeys(Set<Key<User>> followerKeys) {
+		this.followerKeys = followerKeys;
+	}
+
+	public Set<Key<User>> getFollowedKeys() {
+		return followedKeys;
+	}
+
+	public void setFollowedKeys(Set<Key<User>> followedKeys) {
+		this.followedKeys = followedKeys;
+	}
 }

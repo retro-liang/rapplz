@@ -41,6 +41,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
@@ -54,8 +55,9 @@ public class Rapplz implements EntryPoint
 	private final long DURATION = 1000 * 60 * 60 * 24 * 14; //duration remembering login. 2 weeks
     private Date expires = new Date(System.currentTimeMillis() + DURATION);    
 	
-	private static final int REFRESH_DELAY = 1000;
+	private static final int REFRESH_DELAY = 500;
 	private static final int REFRESH_INTERVAL = 1000 * 60 * 60 *24; // ms
+	private static final int ACTIVITY_CLOSE_DELAY = 5 * 1000;
 	
 	private static final String SEARCH_USER_URL = "/rest/userService/search";
 	private static final String SAVE_USER_URL = "/rest/userService/save";
@@ -86,13 +88,8 @@ public class Rapplz implements EntryPoint
 		refreshStatus();
 		
 	    // Add styles to elements in the stock list table.
-	    mainAppFlexTable.setCellPadding(6);
-	    mainAppFlexTable.getRowFormatter().addStyleName(0, "watchListHeader");
-	    mainAppFlexTable.addStyleName("watchList");
-	    mainAppFlexTable.getCellFormatter().addStyleName(0, 1, "watchListNumericColumn");
-	    mainAppFlexTable.getCellFormatter().addStyleName(0, 2, "watchListNumericColumn");
-	    mainAppFlexTable.getCellFormatter().addStyleName(0, 3, "watchListRemoveColumn");
-
+		mainAppFlexTable.setCellPadding(3);
+	    
 	    // Assemble Main panel.
 	    errorMsgLabel.setStyleName("errorMessage");
 	    errorMsgLabel.setVisible(false);
@@ -209,11 +206,11 @@ public class Rapplz implements EntryPoint
 	    			@Override
 	    			public void onMessage(String message)
 	    			{
-	    				Window.alert("Received: " + message);
+	    				retrieveAppsInfo();
+	    				retrieveApps(ALL_RECOMMENDED_APPS_JSON_URL);
 	    				if(message != null && !message.trim().equals(""))
 	    				{
-	    					Window.alert("converted: " + asActivity(message));
-	    					createActivityPopup(asActivity(message));
+	    					createActivityPopup(asArrayOfActivity(message));
 	    				}
 	    			}
 	    			@Override
@@ -231,7 +228,7 @@ public class Rapplz implements EntryPoint
 		});
 	}
 	
-	private void createActivityPopup(Activity activity)
+	private void createActivityPopup(JsArray<Activity> activities)
 	{
 		final DialogBox dialogBox = new DialogBox();
 		dialogBox.setText("New Activity");
@@ -242,23 +239,27 @@ public class Rapplz implements EntryPoint
 		activityHorizontalPanel.addStyleName("concerned");
 		activityHorizontalPanel.addStyleName("notice");
 		activityHorizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-		Image userAvarta = new Image(activity.getUserAvatar());
-		Label userName = new Label(activity.getUserName());
-		Label staticLabel = new Label(" has just recommended an app: ");
-		Image appIcon = new Image(activity.getAppIcon());
-		Label appName = new Label(activity.getAppName());
-		activityHorizontalPanel.add(userAvarta);
-		activityHorizontalPanel.add(userName);
-		activityHorizontalPanel.add(staticLabel);
-		activityHorizontalPanel.add(appIcon);
-		activityHorizontalPanel.add(appName);
+		
+		for(int i = 0; i < activities.length(); i++)
+		{
+			//Image userAvarta = new Image(activity.getUserAvatar());
+			
+			Label userName = new Label(activities.get(i).getUserName());
+			Label staticLabel = new Label(activities.get(i).getUserName() + " has just recommended an app: " + activities.get(i).getAppName());
+			//Image appIcon = new Image(activity.getAppIcon());
+			Label appName = new Label(activities.get(i).getAppName());
+			//activityHorizontalPanel.add(userAvarta);
+			//activityHorizontalPanel.add(userName);
+			activityHorizontalPanel.add(staticLabel);
+			//activityHorizontalPanel.add(appIcon);
+			//activityHorizontalPanel.add(appName);
+		}		
+		
 		dialogBox.setWidget(activityHorizontalPanel);		
-		dialogBox.setPopupPosition(100, 50);
+		dialogBox.setPopupPosition(1050, 400);
 		dialogBox.show();
 		
-		Window.alert("display popup: " + activity);
-		
-		new Timer()
+		Timer closeTimer = new Timer()
 	    {
 			@Override
 			public void run()
@@ -266,6 +267,8 @@ public class Rapplz implements EntryPoint
 				dialogBox.removeFromParent();
 			}
 	    };
+	    
+	    closeTimer.schedule(ACTIVITY_CLOSE_DELAY);
 	}
 	
 	private void refreshStatus()
@@ -390,7 +393,6 @@ public class Rapplz implements EntryPoint
 										}
 										else
 										{
-											displayError("url: " + SEARCH_USER_URL + "/" + googleUser.getId());
 											Cookies.setCookie("sid", googleUser.getId(), expires, null, "/", false);
 										}
 									}
@@ -658,23 +660,21 @@ public class Rapplz implements EntryPoint
 					    		  		final PopupPanel popupPanel = new PopupPanel(false);
 									    popupPanel.setStyleName("search-app-popup");
 									    VerticalPanel PopUpPanelContents = new VerticalPanel();
+									    PopUpPanelContents.setSpacing(5);
 									    if(appSearchResult.getResultCount() > 0)
 									    {
 									    	for(int i = 0; i < appSearchResult.getResults().length(); i++)
 									    	{
 									    		final ResultApp resultApp = appSearchResult.getResults().get(i);
 									    		HorizontalPanel horizontalPanel = new HorizontalPanel();
-									    		horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+									    		horizontalPanel.addStyleName("app-box");
 									    		Image image = new Image(resultApp.getArtworkUrl60());
 									    		image.addStyleName("search-app-image");
 									    		Label label = new Label(resultApp.getTrackName());
+									    		label.addStyleName("float-left");
 									    		label.addStyleName("search-app-name");
-									    		Button button = new Button("Recommend");
-									    		button.addStyleName("submit");
-									    		button.addStyleName("button");
-									    		button.addStyleName("selected");
-									    		button.addStyleName("search-app-button");								    		
-									    		
+									    		HTML button = new HTML("<span class='submit button selected search-app-button'>Recommend</span>");									    										    		
+									    		button.addStyleName("float-right");
 									    		button.addClickHandler(new ClickHandler()
 									    		{
 												@Override
@@ -732,9 +732,7 @@ public class Rapplz implements EntryPoint
 									    HTML message = new HTML("Search count: " + appSearchResult.getResultCount());
 									    message.setStyleName("demo-PopUpPanel-message");
 									    
-									    Button closeButton = new Button("Close");
-									    closeButton.addStyleName("submit");
-									    closeButton.addStyleName("button");								    
+									    HTML closeButton = new HTML("<span class='submit button'>Close</span>");									    								    
 									    closeButton.addClickHandler(new ClickHandler()
 									    {
 									    	public void onClick(ClickEvent event)
@@ -838,18 +836,49 @@ public class Rapplz implements EntryPoint
 	
 	private void updateTable(JsArray<App> apps)
 	{
+		mainAppFlexTable.removeAllRows();
 		for(int i = 0; i < apps.length(); i++)
 		{
-	    	/*DialogBox dialogBox = new DialogBox();
-	    	dialogBox.setText(apps.get(i).getName());
-	    	VerticalPanel dialogVPanel = new VerticalPanel();
-			dialogVPanel.addStyleName("dialogVPanel");
-			dialogVPanel.add(new HTML("<img src='" + apps.get(i).getImage().trim() + "' />"));
-			dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);			
-			dialogBox.setWidget(dialogVPanel);
-	    	dialogBox.setAnimationEnabled(true);*/
+			VerticalPanel appPanel = new VerticalPanel();
+	    	appPanel.setSpacing(5);
+	    	appPanel.addStyleName("app-box");
 	    	
-	    	mainAppFlexTable.setHTML((i / 5), (i % 5), "<img src='" + apps.get(i).getImage().trim() + "' width='50%' style='float:left;' /><span class='jn'></span><span class='hn'><span class='in'>" + apps.get(i).getRecommendedCount() + "</span></span><span class='kn'></span><div>");	    	
+	    	Label label = new Label(apps.get(i).getName());
+	    	appPanel.add(label);
+	    	
+	    	HorizontalPanel horizontalPanel = new HorizontalPanel();
+	    	horizontalPanel.addStyleName("float-left");
+	    	horizontalPanel.setSpacing(5);
+	    	
+			Image image = new Image(apps.get(i).getImage().trim());
+			horizontalPanel.add(image);
+			
+			VerticalPanel verticalPanel = new VerticalPanel();
+			verticalPanel.setSpacing(3);
+			
+			
+			HorizontalPanel likePanel = new HorizontalPanel();
+			likePanel.setSpacing(3);
+			HTML count = new HTML("<span class='jn'></span><span class='hn'><span class='in'>" + apps.get(i).getRecommendedCount() + "</span></span><span class='kn'></span>");
+			likePanel.add(count);
+			HTML likeButton = new HTML("<span class='button selected'>I like it too.</span>");
+	    	likePanel.add(likeButton);
+			verticalPanel.add(likePanel);
+			
+			HorizontalPanel dislikePanel = new HorizontalPanel();
+			dislikePanel.setSpacing(3);
+			TextBox dislikeTextBox = new TextBox();	    	
+			dislikePanel.add(dislikeTextBox);
+			HTML dislikeButton = new HTML("<span class='button selected'>I have a better one.</span>");
+			dislikePanel.add(dislikeButton);
+			verticalPanel.add(dislikePanel);
+			
+	    	horizontalPanel.add(verticalPanel); 	
+	    	appPanel.add(horizontalPanel);
+	    	
+	    	//mainAppFlexTable.setHTML((i / 4), (i % 4), "<img src='" + apps.get(i).getImage().trim() + "' width='50%' style='float:left;' /><div>");
+	    	mainAppFlexTable.setWidget(i, 0, appPanel);
+	    	mainAppFlexTable.getCellFormatter().addStyleName(i, 0, "app-box");
 		}
 	    // Clear any errors.
 	    errorMsgLabel.setVisible(false);
@@ -864,5 +893,5 @@ public class Rapplz implements EntryPoint
 	private final native AppSearchResult asAppSearchResult(String json) /*-{return eval(json);}-*/;
 	private final native JsArray<App> asArrayOfApp(String json) /*-{return eval(json);}-*/;
 	private final native GoogleUser asGoogleUser(String json) /*-{return eval(json);}-*/;
-	private final native Activity asActivity(String json) /*-{return eval(json);}-*/;
+	private final native JsArray<Activity> asArrayOfActivity(String json) /*-{return eval(json);}-*/;
 }
