@@ -167,36 +167,7 @@ public class Rapplz implements EntryPoint
 	    
 	    setupChannel();
 	    
-	    $(".signin").click(new Function()
-	    {
-	    	public boolean f(Event e)
-	    	{
-	    		e.preventDefault();
-	    		$("fieldset#signin_menu").toggle();
-	    		$(".signin").toggleClass("menu-open");            
-	    		return true;
-	    	}
-        });
-
-	    $("fieldset#signin_menu").mouseup(new Function()
-	    {
-        	public boolean f(Event e)
-        	{
-        		return true;
-        	}
-        });
 	    
-        $(document).mouseup(new Function()
-        {
-        	public boolean f(Event e)
-        	{
-            //if($(e.getEventTarget().parent("a.signin").length==0) {        		
-                $(".signin").removeClass("menu-open");
-                $("fieldset#signin_menu").hide();
-            //}
-				return true;
-        	}
-        });
 	}
 	
 	private void setupChannel()
@@ -460,26 +431,26 @@ public class Rapplz implements EntryPoint
 	{
 		try
 		{
-			//AuthRequest req = new AuthRequest("https://www.facebook.com/dialog/oauth", "393043390720286").withScopes("user_about_me");
-			AuthRequest req = new AuthRequest("https://graph.facebook.com/oauth/authorize", "393043390720286").withScopes("user_about_me");
+			AuthRequest req = new AuthRequest("https://www.facebook.com/dialog/oauth", "393043390720286").withScopes("user_about_me","email","publish_actions");
+			//AuthRequest req = new AuthRequest("https://graph.facebook.com/oauth/authorize", "393043390720286").withScopes("user_about_me","email");
     		Auth.get().login(req, new Callback<String, Throwable>()
     		{
     			@Override
     			public void onSuccess(String token)
     			{
-    				Window.alert("facebook token: " + token);
-    				displayError("facebook access url: " + "https://graph.facebook.com/oauth/access_token?client_id=393043390720286&client_secret=831851a023652076a92af4f6801a0241&redirect_uri=http://www.rapplz.com/&code=" + token);
-    				/*JsonpRequestBuilder jsonpRequestbuilder = new JsonpRequestBuilder();
-    				jsonpRequestbuilder.requestObject("https://graph.facebook.com/oauth/access_token?client_id=YOUR_APP_ID&client_secret=YOUR_APP_SECRET&redirect_uri=www.rapplz.com&code=" + token, new AsyncCallback<GoogleUser>()
+    				displayError("https://graph.facebook.com/oauth/access_token?client_id=393043390720286&redirect_uri=http%3A%2F%2F127.0.0.1%3A8888%2Frapplz%2FoauthWindow.html&client_secret=831851a023652076a92af4f6801a0241&code=" + token);
+    				JsonpRequestBuilder jsonpRequestbuilder = new JsonpRequestBuilder();
+    				jsonpRequestbuilder.requestObject("https://graph.facebook.com/oauth/access_token?client_id=393043390720286&redirect_uri=http%3A%2F%2F127.0.0.1%3A8888%2Frapplz%2FoauthWindow.html&client_secret=831851a023652076a92af4f6801a0241&code=" + token, new AsyncCallback<FacebookAccessToken>()
 					{
     					public void onFailure(Throwable throwable)
 						{
-							displayError("Couldn't retrieve JSON: " + throwable);
+							displayError("Couldn't auth facebookb user: " + throwable);
 						}
 
-    					public void onSuccess(final GoogleUser googleUser)
+    					public void onSuccess(final FacebookAccessToken facebookAccessToken)
 						{
-    						Cookies.setCookie("sid", googleUser.getId(), expires, null, "/", false);
+    						Window.alert("good: " + facebookAccessToken.getAccessToken() + " | " + facebookAccessToken.getExpires());
+    						/*Cookies.setCookie("sid", googleUser.getId(), expires, null, "/", false);
     						Cookies.setCookie("fn", googleUser.getFirstName(), expires, null, "/", false);
     						Cookies.setCookie("ln", googleUser.getLastName(), expires, null, "/", false);
     						refreshStatus();
@@ -548,15 +519,15 @@ public class Rapplz implements EntryPoint
 							catch(RequestException e)
 							{
 								displayError("Search user exception: " + e);
-							}    							
+							}*/   							
 						}
-					});*/
+					});
     			}
 
     			@Override
     			public void onFailure(Throwable caught)
     			{
-    				displayError("Auth google failed: " + caught.toString());
+    				displayError("Auth facebook failed: " + caught.toString());
     			}
     		});
 		}

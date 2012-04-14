@@ -21,6 +21,8 @@
 		<!-- be added before this line.                -->
 		<!--                                           -->
 		<script type="text/javascript" language="javascript" src="rapplz/rapplz.nocache.js"></script>
+		
+		<script type="text/javascript" language="javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	</head>
 
 	<!--                                           -->
@@ -31,13 +33,34 @@
 	<body>
 		<div id="fb-root"></div>
 		<script>
-			(function(d, s, id) {
-			  var js, fjs = d.getElementsByTagName(s)[0];
-			  if (d.getElementById(id)) return;
-			  js = d.createElement(s); js.id = id;
-			  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-			  fjs.parentNode.insertBefore(js, fjs);
-			}(document, 'script', 'facebook-jssdk'));
+			window.fbAsyncInit = function() {
+			    FB.init({
+			      appId      : '393043390720286', // App ID
+			      channelUrl : '//127.0.0.1:8888/channel.html', // Channel File
+			      status     : true, // check login status
+			      cookie     : true, // enable cookies to allow the server to access the session
+			      xfbml      : true  // parse XFBML
+			    });
+	
+			    // Additional initialization code here
+			    
+			   /* $.ajax({
+			    	  type: "POST",
+			    	  url: "some.php",
+			    	  data: "name=John&location=Boston"
+			    	}).done(function( msg ) {
+			    	  alert( "Data Saved: " + msg );
+			    	}) */;
+			  };
+	
+			  // Load the SDK Asynchronously
+			  (function(d){
+			     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+			     if (d.getElementById(id)) {return;}
+			     js = d.createElement('script'); js.id = id; js.async = true;
+			     js.src = "//connect.facebook.net/en_US/all.js";
+			     ref.parentNode.insertBefore(js, ref);
+			   }(document));
 		</script>
 
 	    <!-- OPTIONAL: include this if you want history support -->
@@ -54,15 +77,28 @@
 		<div role="banner" id="header">
 			<div class="bar">
 				<div id="logo-bar">
-					<a class="alternate-context" href="http://www.rapplz.com/" title="www.rapplz.com">rapplz</a>
+					<!-- <a class="alternate-context" href="http://www.rapplz.com/" title="www.rapplz.com">rapplz</a> -->
+					<span style="color:#3399DD;font-size:50px;float:left;">R</span>
+					<span style="font-size:50px;float:left;">app</span>
+					<span style="font-size:50px;float:left;">lz</span>
 				</div>
 				<div id="recommend-bar">
 					<input id="search-app-text" aria-required="true" autocapitalize="off" autocorrect="off" autofocus="autofocus" class="text" name="session[username_or_email]" required="required" type="text" />
 					<span id="search-app-button" class="submit button selected">Recommend an App</span>
 				</div>
 				<div id="action-bar">
-					<div id="topnav"class="topnav"> Have an account? <a href="login"class="signin"><span>Sign in</span></a> </div>
+					<div id="topnav"class="topnav"><a href="login"class="signin"><span>Sign in</span></a></div>
 					  <fieldset id="signin_menu">
+					  	<!-- <div class="fb-login-button" scope="email,publish_actions">Login with Facebook</div> -->
+					  	
+					  	<ul style="line-height: 30px;">
+							<li style="padding:3px;"><img src="/images/signin_providers_icon/google.gif" style="vertical-align:bottom;" /> <span id="google-sign-in-button" class="submit button selected">Sign In with Google</span></li>
+							<li style="padding:3px;"><img src="/images/signin_providers_icon/facebook.gif" style="vertical-align:bottom;" /> <span id="facebook-sign-in-button" class="submit button selected">Sign In with Facebook</span></li>
+							<li style="padding:3px;"><img src="/images/signin_providers_icon/twitter.gif" style="vertical-align:bottom;" /> <span id="twitter-sign-in-button" class="submit button selected">Sign In with Twitter</span></li>							
+						</ul>
+						
+					  	<hr />
+					  	
 					    <form method="post"id="signin"action="https://twitter.com/sessions">
 					      <p>
 					      	<label for="username">Username or email</label>
@@ -72,15 +108,15 @@
 					        <label for="password">Password</label>
 					        <input id="password"name="password"value=""title="password"tabindex="5"type="password">
 					      </p>
+					      
 					      <p class="remember">
 					        <input id="signin_submit"value="Sign in"tabindex="6"type="submit">
 					        <input id="remember"name="remember_me"value="1"tabindex="7"type="checkbox">
 					        <label for="remember">Remember me</label>
 					      </p>
-					      <p class="forgot"> <a href="#"id="resend_password_link">Forgot your password?</a> </p>
-					      <p class="forgot-username"> <A id=forgot_username_link 
-					title="If you remember your password, try logging in with your email"
-					href="#">Forgot your username?</A> </p>
+					      <p class="forgot"> <a href="#" id="resend_password_link">Request a rapplz invite?</a> </p>
+					      <p class="forgot"> <a href="#" id="request_invite_link">Forgot your password?</a> </p>
+					      <p class="forgot-username"> <A id=forgot_username_link title="If you remember your password, try logging in with your email" href="#">Forgot your username?</A> </p>
 					    </form>
 					  </fieldset>
 				
@@ -116,16 +152,49 @@
 				<div id="commandBar"></div>
 				<div class="app-info" role="content-info" tabindex="0">
 					<div class="permissions allow">
-						<p>We support federal sign in with various popular website account<strong></strong>:</p>						
+						<p><strong style="color:#3399DD;">What's happening now</strong>:</p>
+						
+						<ul style="border: 1px dotted #3399DD;">
+							<li><a href="#">RetRo</a> has just recommended: <a href="#">Birzzle</a> - 10:18pm</li>
+							<li><a href="#">RetRo</a> thinks <a href="#">Filpboard</a> is better than <a href="#">Pinterest</a> - 10:18pm</li>
+							<li><a href="#">RetRo</a> starts following <a href="#">Orter</a> - 10:18pm</li>							
+						</ul>
+						
 					</div>
+					
 					<br />
-					<ul style="line-height: 30px;">
+					
+					<div class="permissions deny">
+						<p><strong>App Arena</strong>:</p>
+						
+						<ul style="border: 1px dotted #9B3919;">
+							<li><a href="#">Facebook</a> has <a href="#">5</a> competitors.</li>
+							<li><a href="#">Pinterest</a> is unbeatable so far!</li>							
+						</ul>
+						
+					</div>
+					
+					<br />
+					
+					<div class="permissions allow">
+						<p><strong>App Reviews</strong>:</p>
+						
+						<ul style="border: 1px dotted #6CAC50;">
+							<li><a href="#">Birzzle</a> - <a href="#">RetRo</a> 10:18pm</li>
+							<li><a href="#">Pinterest</a> - <a href="#">RetRo</a> 10:18pm</li>							
+						</ul>
+						
+					</div>
+					
+					<br />
+					
+					<!-- <ul style="line-height: 30px;">
 						<li><img src="/images/signin_providers_icon/google.gif" /> <span id="google-sign-in-button" class="submit button selected">Sign In with Google</span></li>
 						<li><img src="/images/signin_providers_icon/facebook.gif" /> <span id="facebook-sign-in-button" class="submit button selected">Sign In with Facebook</span></li>
 						<li><img src="/images/signin_providers_icon/twitter.gif" /> <span id="twitter-sign-in-button" class="submit button selected">Sign In with Twitter</span></li>
 						<li><img src="/images/signin_providers_icon/live.gif" /> <span id="live-sign-in-button" class="submit button selected">Sign In with Microsoft Live</span></li>
 					</ul>
-					<!-- <h3><img alt="" class="app-icon" src="http://a0.twimg.com/a/1331656155/images/oauth_application.png" title="Pinterest by Cold Brew Labs" />Pinterest</h3> -->
+					<h3><img alt="" class="app-icon" src="http://a0.twimg.com/a/1331656155/images/oauth_application.png" title="Pinterest by Cold Brew Labs" />Pinterest</h3> -->
 					
 					<!--
 					<div class="permissions allow">
@@ -164,10 +233,28 @@
 					
 					<p><a href="http://pinterest.com/twitter/?denied=IPGkaCsrluqeHtdknFwcA6o4sdaSkzGw1D0zXQhOj8" class="deny maintain-context">Cancel, and return to app</a></p>
 					 -->
+					
+					<p>
+						<!-- <a href="http://pinterest.com/pin/create/button/?url=http%3A%2F%2Fwww.rapplz.com%2F" class="pin-it-button" count-layout="horizontal">Pin It</a> -->						
+					</p>
 					 
-					<div class="fb-like" data-href="http://www.rapplz.com/" data-send="false" data-width="300" data-show-faces="true"></div>
-					<p><a href="http://pinterest.com/pin/create/button/?url=http%3A%2F%2Fwww.rapplz.com%2F" class="pin-it-button" count-layout="horizontal">Pin It</a></p>
-					<script type="text/javascript" src="http://assets.pinterest.com/js/pinit.js"></script>
+					<p>
+						<!-- Place this tag where you want the +1 button to render -->
+						<g:plusone annotation="inline"></g:plusone>
+						
+						<!-- Place this render call where appropriate -->
+						<script type="text/javascript">
+						  (function() {
+						    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+						    po.src = 'https://apis.google.com/js/plusone.js';
+						    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+						  })();
+						</script>
+					</p>
+					
+					<div class="fb-like" data-send="false" data-width="400" data-show-faces="true"></div>					
+					
+					<br />
 					
 					<script type="text/javascript">
 						<!--
@@ -207,7 +294,28 @@
 			})();		
 		</script>
 		
+		<script type="text/javascript">
+		$(document).ready(function() {
+
+            $(".signin").click(function(e) {
+                e.preventDefault();
+                $("fieldset#signin_menu").toggle();
+                $(".signin").toggleClass("menu-open");
+            });
+
+            $("fieldset#signin_menu").mouseup(function() {
+                return false
+            });
+            $(document).mouseup(function(e) {
+                if($(e.target).parent("a.signin").length==0) {
+                    $(".signin").removeClass("menu-open");
+                    $("fieldset#signin_menu").hide();
+                }
+            });            
+        });
+		</script>
+
+		<!-- <script type="text/javascript" src="http://assets.pinterest.com/js/pinit.js"></script> -->
 		
-			
 	</body>
 </html>

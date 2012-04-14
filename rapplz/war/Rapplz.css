@@ -202,7 +202,7 @@ h2.action-information {
 	color: #777;
 	border-bottom: 1px solid #EBEBEB;
 	margin: 10px -20px;
-	padding: 0 20px 4px;
+	padding: 20px 20px 4px;
 }
 
 form.flow,form.flow div {
@@ -795,6 +795,7 @@ html {
 	position: static\9;
 	top: 0;
 	left: 0;
+	padding-top: 5px;
 	min-height: 40px;
 	width: 100%;
 	-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
@@ -1309,7 +1310,7 @@ line-height
 	border-width: 1px;
 	cursor: pointer;
 	display: inline-block;
-	vertical-align: top;
+	vertical-align: middle;
 	font: 12px/15px Helvetica Neue, Arial, "Lucida Grande", Sans-serif;
 	margin: 0;
 	overflow: visible;
@@ -2652,7 +2653,7 @@ a img {
     border-width:0;
 }
 #topnav {
-    padding:10px 0px 12px;
+    padding:10px 0px 5px;
     font-size:11px;
     line-height:23px;
     text-align:right;
@@ -2661,7 +2662,7 @@ a img {
     background:#88bbd4;
     padding:4px 6px 6px;
     text-decoration:none;
-    font-weight:bold;
+    /*font-weight:bold;*/
     color:#fff;
     -webkit-border-radius:4px;
     -moz-border-radius:4px;
@@ -2686,7 +2687,7 @@ a.signin span {
     background-image:url("images/toggle_down_light.png");
     background-repeat:no-repeat;
     background-position:100% 50%;
-    padding:4px 16px 6px 0;
+    /*padding:4px 16px 6px 0;*/
 }
 #topnav a.menu-open {
     background:#ddeef6!important;
@@ -2716,7 +2717,7 @@ a.signin.menu-open span {
     display:none;
     background-color:#ddeef6;
     position:absolute;
-    width:210px;
+    width:245px;
     z-index:100;
     border:1px transparent;
     text-align:left;
