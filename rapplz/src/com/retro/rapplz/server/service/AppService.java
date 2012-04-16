@@ -23,15 +23,15 @@ import com.google.appengine.api.channel.ChannelService;
 import com.google.appengine.api.channel.ChannelServiceFactory;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
-import com.google.appengine.api.memcache.MemcacheService.IdentifiableValue;
-
 import com.googlecode.objectify.Key;
 import com.retro.rapplz.server.datastore.entity.App;
+import com.retro.rapplz.server.datastore.entity.AppCompetitorIndex;
 import com.retro.rapplz.server.datastore.entity.AppIndex;
 import com.retro.rapplz.server.datastore.entity.AppTag;
 import com.retro.rapplz.server.datastore.entity.AppTagIndex;
 import com.retro.rapplz.server.datastore.entity.Profile;
 import com.retro.rapplz.server.datastore.entity.User;
+import com.retro.rapplz.server.datastore.service.AppCompetitorIndexDBService;
 import com.retro.rapplz.server.datastore.service.AppDBService;
 import com.retro.rapplz.server.datastore.service.AppIndexDBService;
 import com.retro.rapplz.server.datastore.service.AppTagDBService;
@@ -50,6 +50,7 @@ public class AppService
 	private AppIndexDBService appIndexDBService = new AppIndexDBService();
 	private AppTagDBService appTagDBService = new AppTagDBService();
 	private AppTagIndexDBService appTagIndexDBService = new AppTagIndexDBService();
+	private AppCompetitorIndexDBService appCompetitorIndexDBService = new AppCompetitorIndexDBService();
 	private UserDBService userDBService = new UserDBService();
 	private ProfileDBService profileDBService = new ProfileDBService();
 	
@@ -80,6 +81,23 @@ public class AppService
 		if(appTag != null)
 		{
 			return appTagIndexDBService.getAppsByAppTag(appTag);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	@GET
+	@Path("competitors")
+	@Produces({MediaType.APPLICATION_JSON})
+	public List<App> getCompetitorApps(@QueryParam("appId") String appId)
+	{
+		logger.info("getCompetitorApps get invoked: " + appId);
+		Key<App> appKey = appDBService.getAppKeyById(appId);
+		if(appKey != null)
+		{
+			return appCompetitorIndexDBService.getCompetitorApps(appKey);
 		}
 		else
 		{
@@ -169,7 +187,123 @@ public class AppService
 			
 			//need optimize, better put it to a queue
 			MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-			Set<String> channels = (Set<String>)syncCache.getIdentifiable("channels");
+			Set<String> channels = (Set<String>)syncCache.getIdentifiable("channels").getValue();
+			if(channels != null && channels.size() > 0)
+			{
+				for(String channel : channels)
+				{
+					logger.info("Broadcasting new recommendation...");
+					ChannelService channelService = ChannelServiceFactory.getChannelService();					
+					Profile profile = profileDBService.getProfileByKey(userDBService.getUser(userId).getProfileKey());			
+					JSONObject obj = new JSONObject();
+					obj.put("t", "ar");
+					obj.put("uid", userId);
+					obj.put("un", profile.getFirstName() + " " + profile.getLastName());
+					obj.put("ua", profile.getAvatar());
+					obj.put("aid", appId);
+					obj.put("an", app.getName());
+					obj.put("ai", app.getImage().trim());
+					channelService.sendMessage(new ChannelMessage(channel, ("[" + obj.toString() + "]")));
+					logger.info("Broadcasting new recommendation done. message: " + obj.toString());
+				}
+			}			
+			
+			return appId.toString();
+		}
+		else
+		{
+			logger.warning("User id: " + userId + " app id: " + appId);
+			return null;
+		}
+	}
+	
+	@POST
+	@Path("prefer")
+	@Consumes("application/x-www-form-urlencoded")
+	public String prefer(@Context HttpServletRequest request, @FormParam("userId") String userId, @FormParam("appId") String appId, @FormParam("thanAppId") String thanAppId, @FormParam("os") String os, @FormParam("name") String name, @FormParam("icon") String icon, @FormParam("link") String link, @FormParam("price") String price)
+	{
+		logger.info("User [id=" + userId + "] is trying to recommend an app [id=" + appId + " name=" + name + "] from ip [" + request.getRemoteAddr() + "]...");
+		if(userId != null && !userId.equals("") && appId != null && !appId.equals(""))
+		{
+			Key<AppTag> appTagKey = appTagDBService.getAppTagKey("recommended");
+			if(appTagKey == null)
+			{
+				appTagKey = appTagDBService.saveAppTag("recommended");
+			}
+			
+			Key<App> appKey = null;
+			App app = appDBService.getAppById(appId);
+			if(app == null)
+			{
+				app = new App();
+				app.setId(appId);
+				app.setOs(os);
+				app.setName(name);
+				app.setImage(icon);
+				app.setLink(link);
+				app.setPrice(price);
+				appKey = appDBService.saveApp(app);
+			}
+			else
+			{
+				appKey = appDBService.getAppKeyById(appId);
+			}
+			
+			Key<User> userKey = userDBService.getUserKey(userId);
+			
+			AppIndex appIndex = appIndexDBService.getAppIndexByUseKey(userKey);
+			if(appIndex == null)
+			{
+				appIndex = new AppIndex();
+				appIndex.setUserKey(userKey);
+				appIndex.getAppKeys().add(appKey);
+				appIndexDBService.saveAppIndex(appIndex);
+			}
+			else if(!appIndex.getAppKeys().contains(appKey))
+			{
+				appIndex.getAppKeys().add(appKey);
+				appIndexDBService.saveAppIndex(appIndex);
+			}
+			
+			Key<AppTagIndex> appTagIndexKey = appTagIndexDBService.getAppTagIndexKey(appTagKey);
+			if(appTagIndexKey == null)
+			{			
+				appTagIndexKey = appTagIndexDBService.saveAppTagIndex(appTagKey, appKey);
+			}
+			
+			
+			
+			AppTagIndex appTagIndex = appTagIndexDBService.getAppTagIndex(appTagIndexKey);
+			if(!appTagIndex.getAppKeys().contains(appKey) || !appTagIndex.getUserKeys().contains(userKey))
+			{
+				app.setRecommendedCount(app.getRecommendedCount() + 1);
+				appDBService.saveApp(app);
+				appTagIndex.getAppKeys().add(appKey);			
+				appTagIndex.getUserKeys().add(userKey);
+				logger.info("User [" + userKey + "] recommends a new app [" + appKey + "] successfully.");
+				appTagIndexDBService.saveAppTagIndex(appTagIndex);
+			}
+			else
+			{
+				logger.info("User [" + userKey + "] has already recommended app [" + appKey + "] once.");
+			}
+			
+			logger.info("User [id=" + userId + "] prefer app[id=" + appId + " name=" + name + "] than app [id=" + thanAppId + "]");
+			Key<App> thanAppKey = appDBService.getAppKeyById(thanAppId);
+			
+			AppCompetitorIndex appCompetitorIndex = appCompetitorIndexDBService.getAppCompetitorIndexByAppKey(appKey);
+			if(appCompetitorIndex == null)
+			{
+				appCompetitorIndex = new AppCompetitorIndex();
+				appCompetitorIndex.setAppKey(thanAppKey);
+				appCompetitorIndex.getAppCompetitorKeys().add(appKey);
+			}			
+			appCompetitorIndexDBService.saveAppCompetitorIndex(appCompetitorIndex);
+			
+			
+			//need optimize, better put it to a queue
+			MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+			Set<String> channels = (Set<String>)syncCache.getIdentifiable("channels").getValue();
 			if(channels != null && channels.size() > 0)
 			{
 				for(String channel : channels)

@@ -83,51 +83,53 @@
 					<span style="font-size:50px;float:left;">lz</span>
 				</div>
 				<div id="recommend-bar">
-					<input id="search-app-text" aria-required="true" autocapitalize="off" autocorrect="off" autofocus="autofocus" class="text" name="session[username_or_email]" required="required" type="text" />
+					<input id="search-app-text" type="text" style="clear:both;" />
 					<span id="search-app-button" class="submit button selected">Recommend an App</span>
 				</div>
 				<div id="action-bar">
 					<div id="topnav"class="topnav"><a href="login"class="signin"><span>Sign in</span></a></div>
-					  <fieldset id="signin_menu">
-					  	<!-- <div class="fb-login-button" scope="email,publish_actions">Login with Facebook</div> -->
-					  	
-					  	<ul style="line-height: 30px;">
-							<li style="padding:3px;"><img src="/images/signin_providers_icon/google.gif" style="vertical-align:bottom;" /> <span id="google-sign-in-button" class="submit button selected">Sign In with Google</span></li>
-							<li style="padding:3px;"><img src="/images/signin_providers_icon/facebook.gif" style="vertical-align:bottom;" /> <span id="facebook-sign-in-button" class="submit button selected">Sign In with Facebook</span></li>
-							<li style="padding:3px;"><img src="/images/signin_providers_icon/twitter.gif" style="vertical-align:bottom;" /> <span id="twitter-sign-in-button" class="submit button selected">Sign In with Twitter</span></li>							
-						</ul>
+					<fieldset id="signin_menu">
+					<!-- <div class="fb-login-button" scope="email,publish_actions">Login with Facebook</div> -->
+					
+					<ul style="line-height: 30px;">
+					<li style="padding:3px;"><img src="/images/signin_providers_icon/google.gif" style="vertical-align:bottom;" /> <span id="google-sign-in-button" class="submit button selected">Sign In with Google</span></li>
+					<li style="padding:3px;"><img src="/images/signin_providers_icon/facebook.gif" style="vertical-align:bottom;" /> <span id="facebook-sign-in-button" class="submit button selected">Sign In with Facebook</span></li>
+					<li style="padding:3px;"><img src="/images/signin_providers_icon/twitter.gif" style="vertical-align:bottom;" /> <span id="twitter-sign-in-button" class="submit button selected">Sign In with Twitter</span></li>							
+					</ul>
+					
+					<hr />
+					 	
+					<form method="post"id="signin"action="https://twitter.com/sessions">
+						<p>
+							<label for="username">Username or email</label>
+							<input id="username"name="username"value=""title="username"tabindex="4"type="text">
+						</p>
+						<p>
+						  <label for="password">Password</label>
+						  <input id="password"name="password"value=""title="password"tabindex="5"type="password">
+						</p>
 						
-					  	<hr />
-					  	
-					    <form method="post"id="signin"action="https://twitter.com/sessions">
-					      <p>
-					      	<label for="username">Username or email</label>
-					      	<input id="username"name="username"value=""title="username"tabindex="4"type="text">
-					      </p>
-					      <p>
-					        <label for="password">Password</label>
-					        <input id="password"name="password"value=""title="password"tabindex="5"type="password">
-					      </p>
-					      
-					      <p class="remember">
-					        <input id="signin_submit"value="Sign in"tabindex="6"type="submit">
-					        <input id="remember"name="remember_me"value="1"tabindex="7"type="checkbox">
-					        <label for="remember">Remember me</label>
-					      </p>
-					      <p class="forgot"> <a href="#" id="resend_password_link">Request a rapplz invite?</a> </p>
-					      <p class="forgot"> <a href="#" id="request_invite_link">Forgot your password?</a> </p>
-					      <p class="forgot-username"> <A id=forgot_username_link title="If you remember your password, try logging in with your email" href="#">Forgot your username?</A> </p>
-					    </form>
-					  </fieldset>
+						<p class="remember">
+						  <input id="signin_submit"value="Sign in"tabindex="6"type="submit">
+						  <input id="remember"name="remember_me"value="1"tabindex="7"type="checkbox">
+						  <label for="remember">Remember me</label>
+						</p>
+						<p class="forgot"> <a href="#" id="resend_password_link">Request a rapplz invite?</a> </p>
+						<p class="forgot"> <a href="#" id="request_invite_link">Forgot your password?</a> </p>
+						<p class="forgot-username"> <A id=forgot_username_link title="If you remember your password, try logging in with your email" href="#">Forgot your username?</A> </p>
+					</form>
+					</fieldset>
 				
 					<!-- 
 					<span class="blurb">Not a member?</span>
 					<a class="register alternate-context" href="#">Sign up</a>
 					<hr class="vr">
 					 -->
-					<a id="user-link"><span id="user-text" class="blurb" style="color: #FFFFFF;"></span></a>
-					<hr class="vr">
-					<a id="sign-link" class="register" href="#"><span id="sign-text"></span></a>
+					 <div class="username">
+					 	<a id="user-link"><span id="user-text" class="blurb" style="color: #FFFFFF;"></span></a>
+						<hr class="vr">
+						<a id="sign-link" class="register" href="#"><span id="sign-text"></span></a>
+					 </div>
 				</div>
 			</div>
 		</div>
@@ -189,10 +191,7 @@
 					<br />
 					
 					<!-- <ul style="line-height: 30px;">
-						<li><img src="/images/signin_providers_icon/google.gif" /> <span id="google-sign-in-button" class="submit button selected">Sign In with Google</span></li>
-						<li><img src="/images/signin_providers_icon/facebook.gif" /> <span id="facebook-sign-in-button" class="submit button selected">Sign In with Facebook</span></li>
-						<li><img src="/images/signin_providers_icon/twitter.gif" /> <span id="twitter-sign-in-button" class="submit button selected">Sign In with Twitter</span></li>
-						<li><img src="/images/signin_providers_icon/live.gif" /> <span id="live-sign-in-button" class="submit button selected">Sign In with Microsoft Live</span></li>
+						
 					</ul>
 					<h3><img alt="" class="app-icon" src="http://a0.twimg.com/a/1331656155/images/oauth_application.png" title="Pinterest by Cold Brew Labs" />Pinterest</h3> -->
 					

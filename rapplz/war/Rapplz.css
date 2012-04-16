@@ -833,7 +833,7 @@ html {
 #header #logo-bar {
 	margin: 0;
 	padding: 0;
-	height: 40px;
+	height: 58px;
 	top: 0;
 	left: 0;
 	float:left;
@@ -1359,6 +1359,14 @@ line-height
 	border-color: #39d #39d #28c;
 	color: #fff !important;
 	text-shadow: -1px -1px 0 #39d;
+}
+
+.button.arena {
+    background-color: #FFFFFF;
+    background-position: 0 0;
+    border-color: #3399DD #3399DD #2288CC;
+    color: #3399DD !important;
+    /*text-shadow: -1px -1px 0 #3399DD;*/
 }
 
 .button.selected:hover,.button.selected:focus {
@@ -2779,4 +2787,8 @@ border:0;
 #signin_submit:hover, #signin_submit:focus {
     background-position:0 -5px;
     cursor:pointer;
+}
+
+.hidden {
+	display:none;
 }
