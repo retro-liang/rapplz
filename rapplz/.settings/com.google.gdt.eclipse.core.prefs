@@ -1,6 +1,6 @@
-#Sat Mar 31 12:20:05 EDT 2012
 eclipse.preferences.version=1
 jarsExcludedFromWebInfLib=
+lastWarOutDir=D\:/workspace_git/rapplz/rapplz/target/rapplz-0.0.1-SNAPSHOT
 launchConfigExternalUrlPrefix=
-warSrcDir=war
-warSrcDirIsOutput=true
+warSrcDir=src/main/webapp
+warSrcDirIsOutput=false
