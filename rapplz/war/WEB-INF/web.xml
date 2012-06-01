@@ -28,6 +28,7 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	
+	<!-- 
 	<servlet>
 		<servlet-name>channelServlet</servlet-name>
 		<servlet-class>com.retro.rapplz.server.ChannelServlet</servlet-class>
@@ -57,6 +58,8 @@
 		<servlet-name>channelDisconnectedServlet</servlet-name>
 		<url-pattern>/_ah/channel/disconnected/</url-pattern>
 	</servlet-mapping>
+	 -->
+	
 	<!-- Default page to serve -->
 	<welcome-file-list>		
 		<welcome-file>index.html</welcome-file>		

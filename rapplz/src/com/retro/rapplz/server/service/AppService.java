@@ -1,5 +1,6 @@
 package com.retro.rapplz.server.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -76,16 +77,27 @@ public class AppService
 	@Produces({MediaType.APPLICATION_JSON})
 	public List<App> getTaggedApps(@PathParam("tagName") String tagName)
 	{
-		logger.info("getTaggedApps get invoked: " + tagName);
-		AppTag appTag = appTagDBService.getAppTag(tagName);
-		if(appTag != null)
+		logger.info("getTaggedApps get invoked: [" + tagName + "]");
+		Date start = new Date();
+		List<App> apps = null;
+		MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+		Object cachedApps = syncCache.get("apps");
+		if(cachedApps != null && ((List<App>)cachedApps).size() > 0)
 		{
-			return appTagIndexDBService.getAppsByAppTag(appTag);
+			apps = (List<App>)cachedApps;
 		}
 		else
 		{
-			return null;
+			logger.info("No cached apps found, start loading from DB");
+			AppTag appTag = appTagDBService.getAppTag(tagName);
+			if(appTag != null)
+			{
+				 List<App> loadedapps =  appTagIndexDBService.getAppsByAppTag(appTag);
+				 apps = loadedapps;
+			}
 		}
+		logger.info("Retrieved [" + tagName + "] apps in " + (new Date().getTime() - start.getTime()));
+		return apps;
 	}
 	
 	@GET
@@ -186,7 +198,7 @@ public class AppService
 			}
 			
 			//need optimize, better put it to a queue
-			MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+			/*MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
 			Set<String> channels = (Set<String>)syncCache.getIdentifiable("channels").getValue();
 			if(channels != null && channels.size() > 0)
 			{
@@ -206,7 +218,7 @@ public class AppService
 					channelService.sendMessage(new ChannelMessage(channel, ("[" + obj.toString() + "]")));
 					logger.info("Broadcasting new recommendation done. message: " + obj.toString());
 				}
-			}			
+			}	*/		
 			
 			return appId.toString();
 		}
@@ -302,7 +314,7 @@ public class AppService
 			
 			
 			//need optimize, better put it to a queue
-			MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+			/*MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
 			Set<String> channels = (Set<String>)syncCache.getIdentifiable("channels").getValue();
 			if(channels != null && channels.size() > 0)
 			{
@@ -322,7 +334,7 @@ public class AppService
 					channelService.sendMessage(new ChannelMessage(channel, ("[" + obj.toString() + "]")));
 					logger.info("Broadcasting new recommendation done. message: " + obj.toString());
 				}
-			}			
+			}*/			
 			
 			return appId.toString();
 		}

@@ -114,7 +114,7 @@ public class Rapplz implements EntryPoint
 	      @Override
 	      public void run()
 	      {
-	    	  retrieveAppsInfo();
+	    	  //retrieveAppsInfo();
 	    	  retrieveApps(ALL_RECOMMENDED_APPS);
 	      }
 	    };
@@ -140,7 +140,7 @@ public class Rapplz implements EntryPoint
 	    		facebookSignIn();
 			}
 	    };	    
-	    RootPanel.get("facebook-sign-in-button").addDomHandler(facebookSignInClickHandler, ClickEvent.getType());
+	    //RootPanel.get("facebook-sign-in-button").addDomHandler(facebookSignInClickHandler, ClickEvent.getType());
 	    
 	    ClickHandler searchAppClickHandler = new ClickHandler()
 	    {
@@ -170,7 +170,7 @@ public class Rapplz implements EntryPoint
 	    
 	    refreshStatus();
 	    
-	    setupChannel();
+	    //setupChannel();
 	}
 	
 	private void setupChannel()

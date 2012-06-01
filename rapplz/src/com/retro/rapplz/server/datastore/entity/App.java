@@ -1,29 +1,21 @@
 package com.retro.rapplz.server.datastore.entity;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.Serializable;
 
 import javax.persistence.Id;
-import javax.ws.rs.ext.ContextResolver;
-import javax.ws.rs.ext.Provider;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Unindexed;
-import com.sun.jersey.api.json.JSONConfiguration;
-import com.sun.jersey.api.json.JSONJAXBContext;
 
 @Cached
 @Entity
 @XmlRootElement
-public class App
+public class App implements Serializable
 {
+	private static final long serialVersionUID = -7078530518037645827L;
+
 	@Id
 	private String id;
 	

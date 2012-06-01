@@ -23,6 +23,8 @@
 		<script type="text/javascript" language="javascript" src="rapplz/rapplz.nocache.js"></script>
 		
 		<script type="text/javascript" language="javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		
+		
 	</head>
 
 	<!--                                           -->
@@ -62,6 +64,8 @@
 			     ref.parentNode.insertBefore(js, ref);
 			   }(document));
 		</script>
+		
+		
 
 	    <!-- OPTIONAL: include this if you want history support -->
 	    <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
@@ -312,6 +316,28 @@
                 }
             });            
         });
+		</script>
+		
+		<script type="text/javascript">
+			
+			$("#facebook-sign-in-button").click
+			(
+				function()
+				{
+					alert(0);
+					FB.login(function(response) {
+						   if (response.authResponse) {
+						     alert('Welcome!  Fetching your information.... ');
+						     FB.api('/me', function(response) {
+						    	 alert('Good to see you, ' + response.name + '.');
+						     });
+						   } else {
+							   alert('User cancelled login or did not fully authorize.');
+						   }
+						 });
+					return false;
+				}
+			);
 		</script>
 
 		<!-- <script type="text/javascript" src="http://assets.pinterest.com/js/pinit.js"></script> -->
