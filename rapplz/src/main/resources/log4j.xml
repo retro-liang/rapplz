@@ -7,6 +7,17 @@
 	     	<param name="ConversionPattern" value="%d{MM-dd@HH:mm:ss} %-5p (%13F:%L) %3x - %m%n" />
 	     </layout>
 	</appender>
+	
+	<appender name="appstats" class="com.google.appengine.tools.appstats">
+	     <layout class="org.apache.log4j.PatternLayout">
+	     	<param name="ConversionPattern" value="%d{MM-dd@HH:mm:ss} %-5p (%13F:%L) %3x - %m%n" />
+	     </layout>
+	</appender>
+	
+	<logger name="com.google.appengine.tools.appstats.AppstatsFilter" additivity="false">
+		<level value="info"/>
+		<appender-ref ref="STDOUT"/>
+	</logger>
 
 	<root>
 		<priority value="debug" />

@@ -41,11 +41,6 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>com.google.gwt.eclipse.core.gwtProjectValidator</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
 			<name>org.eclipse.m2e.core.maven2Builder</name>
 			<arguments>
 			</arguments>
@@ -59,6 +54,5 @@
 		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 		<nature>com.google.appengine.eclipse.core.gaeNature</nature>
-		<nature>com.google.gwt.eclipse.core.gwtNature</nature>
 	</natures>
 </projectDescription>

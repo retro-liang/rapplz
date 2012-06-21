@@ -1,0 +1,346 @@
+<!doctype html>
+<!-- The DOCTYPE declaration above will set the     -->
+<!-- browser's rendering engine into                -->
+<!-- "Standards Mode". Replacing this declaration   -->
+<!-- with a "Quirks Mode" doctype is not supported. -->
+
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		
+		<!--                                                               -->
+		<!-- Consider inlining CSS to reduce the number of requested files -->
+		<!--                                                               -->
+		<link type="text/css" rel="stylesheet" href="Rapplz.css">
+		
+		<title>Rapplz</title>
+		
+		<!--                                           -->
+		<!-- This script loads your compiled module.   -->
+		<!-- If you add any GWT meta tags, they must   -->
+		<!-- be added before this line.                -->
+		<!--                                           -->
+		<script type="text/javascript" language="javascript" src="rapplz/rapplz.nocache.js"></script>
+		
+		<script type="text/javascript" language="javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		
+		
+	</head>
+
+	<!--                                           -->
+	<!-- The body can have arbitrary html, or      -->
+	<!-- you can leave the body empty if you want  -->
+	<!-- to create a completely dynamic UI.        -->
+	<!--                                           -->
+	<body>
+		<div id="fb-root"></div>
+		<script>
+			window.fbAsyncInit = function() {
+			    FB.init({
+			      appId      : '393043390720286', // App ID
+			      channelUrl : '//127.0.0.1:8888/channel.html', // Channel File
+			      status     : true, // check login status
+			      cookie     : true, // enable cookies to allow the server to access the session
+			      xfbml      : true  // parse XFBML
+			    });
+	
+			    // Additional initialization code here
+			    
+			   /* $.ajax({
+			    	  type: "POST",
+			    	  url: "some.php",
+			    	  data: "name=John&location=Boston"
+			    	}).done(function( msg ) {
+			    	  alert( "Data Saved: " + msg );
+			    	}) */;
+			  };
+	
+			  // Load the SDK Asynchronously
+			  (function(d){
+			     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+			     if (d.getElementById(id)) {return;}
+			     js = d.createElement('script'); js.id = id; js.async = true;
+			     js.src = "//connect.facebook.net/en_US/all.js";
+			     ref.parentNode.insertBefore(js, ref);
+			   }(document));
+		</script>
+		
+		
+
+	    <!-- OPTIONAL: include this if you want history support -->
+	    <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
+	    
+	    <!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
+	    <noscript>
+	      <div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
+	        Your web browser must have JavaScript enabled
+	        in order for this application to display correctly.
+	      </div>
+	    </noscript>
+	    
+		<div role="banner" id="header">
+			<div class="bar">
+				<div id="logo-bar">
+					<!-- <a class="alternate-context" href="http://www.rapplz.com/" title="www.rapplz.com">rapplz</a> -->
+					<span style="color:#3399DD;font-size:50px;float:left;">R</span>
+					<span style="font-size:50px;float:left;">app</span>
+					<span style="font-size:50px;float:left;">lz</span>
+				</div>
+				<div id="recommend-bar">
+					<input id="search-app-text" type="text" style="clear:both;" />
+					<span id="search-app-button" class="submit button selected">Recommend an App</span>
+				</div>
+				<div id="action-bar">
+					<div id="topnav"class="topnav"><a href="login"class="signin"><span>Sign in</span></a></div>
+					<fieldset id="signin_menu">
+					<!-- <div class="fb-login-button" scope="email,publish_actions">Login with Facebook</div> -->
+					
+					<ul style="line-height: 30px;">
+					<li style="padding:3px;"><img src="/images/signin_providers_icon/google.gif" style="vertical-align:bottom;" /> <span id="google-sign-in-button" class="submit button selected">Sign In with Google</span></li>
+					<li style="padding:3px;"><img src="/images/signin_providers_icon/facebook.gif" style="vertical-align:bottom;" /> <span id="facebook-sign-in-button" class="submit button selected">Sign In with Facebook</span></li>
+					<li style="padding:3px;"><img src="/images/signin_providers_icon/twitter.gif" style="vertical-align:bottom;" /> <span id="twitter-sign-in-button" class="submit button selected">Sign In with Twitter</span></li>							
+					</ul>
+					
+					<hr />
+					 	
+					<form method="post"id="signin"action="https://twitter.com/sessions">
+						<p>
+							<label for="username">Username or email</label>
+							<input id="username"name="username"value=""title="username"tabindex="4"type="text">
+						</p>
+						<p>
+						  <label for="password">Password</label>
+						  <input id="password"name="password"value=""title="password"tabindex="5"type="password">
+						</p>
+						
+						<p class="remember">
+						  <input id="signin_submit"value="Sign in"tabindex="6"type="submit">
+						  <input id="remember"name="remember_me"value="1"tabindex="7"type="checkbox">
+						  <label for="remember">Remember me</label>
+						</p>
+						<p class="forgot"> <a href="#" id="resend_password_link">Request a rapplz invite?</a> </p>
+						<p class="forgot"> <a href="#" id="request_invite_link">Forgot your password?</a> </p>
+						<p class="forgot-username"> <A id=forgot_username_link title="If you remember your password, try logging in with your email" href="#">Forgot your username?</A> </p>
+					</form>
+					</fieldset>
+				
+					<!-- 
+					<span class="blurb">Not a member?</span>
+					<a class="register alternate-context" href="#">Sign up</a>
+					<hr class="vr">
+					 -->
+					 <div class="username">
+					 	<a id="user-link"><span id="user-text" class="blurb" style="color: #FFFFFF;"></span></a>
+						<hr class="vr">
+						<a id="sign-link" class="register" href="#"><span id="sign-text"></span></a>
+					 </div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="container">
+		  
+		</div>
+	
+		<div role="main" id="bd">
+			<div id="activity-notice" class="concerned notice" style="display:none;"></div>
+			
+			<!-- 
+			<div class="concerned notice">
+				<h2>New Activity:</h2>
+				<p><img id="activity-user-avarta" /><b><span id="activity-user-name"></span></b> has just recommended an app: <img id="activity-app-icon" /><b><span id="activity-app-name"></span></b></p>
+			</div>
+			 -->
+	
+			<div class="auth">
+				<h3><strong>Recommended Apps - </strong> category: <a href="#">all</a></h3>
+				<div id="appList"></div>
+				<div id="commandBar"></div>
+				<div class="app-info" role="content-info" tabindex="0">
+					<div class="permissions allow">
+						<p><strong style="color:#3399DD;">What's happening now</strong>:</p>
+						
+						<ul style="border: 1px dotted #3399DD;">
+							<li><a href="#">RetRo</a> has just recommended: <a href="#">Birzzle</a> - 10:18pm</li>
+							<li><a href="#">RetRo</a> thinks <a href="#">Filpboard</a> is better than <a href="#">Pinterest</a> - 10:18pm</li>
+							<li><a href="#">RetRo</a> starts following <a href="#">Orter</a> - 10:18pm</li>							
+						</ul>
+						
+					</div>
+					
+					<br />
+					
+					<div class="permissions deny">
+						<p><strong>App Arena</strong>:</p>
+						
+						<ul style="border: 1px dotted #9B3919;">
+							<li><a href="#">Facebook</a> has <a href="#">5</a> competitors.</li>
+							<li><a href="#">Pinterest</a> is unbeatable so far!</li>							
+						</ul>
+						
+					</div>
+					
+					<br />
+					
+					<div class="permissions allow">
+						<p><strong>App Reviews</strong>:</p>
+						
+						<ul style="border: 1px dotted #6CAC50;">
+							<li><a href="#">Birzzle</a> - <a href="#">RetRo</a> 10:18pm</li>
+							<li><a href="#">Pinterest</a> - <a href="#">RetRo</a> 10:18pm</li>							
+						</ul>
+						
+					</div>
+					
+					<br />
+					
+					<!-- <ul style="line-height: 30px;">
+						
+					</ul>
+					<h3><img alt="" class="app-icon" src="http://a0.twimg.com/a/1331656155/images/oauth_application.png" title="Pinterest by Cold Brew Labs" />Pinterest</h3> -->
+					
+					<!--
+					<div class="permissions allow">
+						<p>Want to use <strong>your own rapplz account</strong> to sign in?</p>
+					</div>
+					 			
+					<form action="#" id="oauth_form" method="post"><div style="margin:0;padding:0">
+						<input name="authenticity_token" type="hidden" value="" /></div>
+						<input id="oauth_token" name="oauth_token" type="hidden" value="" />        
+						<fieldset class="sign-in">
+							<legend>Sign in to Twitter</legend>
+							<div class="row user">
+								<label for="username_or_email" tabindex="-1">Username or email</label>
+								<input aria-required="true" autocapitalize="off" autocorrect="off" autofocus="autofocus" class="text" id="username_or_email" name="session[username_or_email]" required="required" type="text" />
+							</div>
+							<div class="row password">
+								<label for="password" tabindex="-1">Password</label>
+								<input aria-required="true" class="password" id="password" name="session[password]" required="required" type="password" value="" />
+							</div>
+							<p class="forgot"><a class="alternate-context" href="#">Forgot your password?</a></p>
+						</fieldset>
+						<fieldset class="buttons">
+							<legend>Sign in to Pinterest using your account?</legend>
+							<input type="submit" value="Sign In" class="submit button selected" id="allow">
+							<input type="submit" value="Cancel" class="submit button" name="cancel" id="deny">
+						</fieldset>
+					</form>
+
+									
+					<div class="permissions deny">
+						<p>This application <strong>will not be able to</strong>:</p>
+						<ul>
+							<li>Access your direct messages.</li>							
+						</ul>
+					</div>
+					
+					<p><a href="http://pinterest.com/twitter/?denied=IPGkaCsrluqeHtdknFwcA6o4sdaSkzGw1D0zXQhOj8" class="deny maintain-context">Cancel, and return to app</a></p>
+					 -->
+					
+					<p>
+						<!-- <a href="http://pinterest.com/pin/create/button/?url=http%3A%2F%2Fwww.rapplz.com%2F" class="pin-it-button" count-layout="horizontal">Pin It</a> -->						
+					</p>
+					 
+					<p>
+						<!-- Place this tag where you want the +1 button to render -->
+						<g:plusone annotation="inline"></g:plusone>
+						
+						<!-- Place this render call where appropriate -->
+						<script type="text/javascript">
+						  (function() {
+						    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+						    po.src = 'https://apis.google.com/js/plusone.js';
+						    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+						  })();
+						</script>
+					</p>
+					
+					<div class="fb-like" data-send="false" data-width="400" data-show-faces="true"></div>					
+					
+					<br />
+					
+					<script type="text/javascript">
+						<!--
+							google_ad_client = "ca-pub-3748265501907091";
+							/* rapplz */
+							google_ad_slot = "8283218969";
+							google_ad_width = 300;
+							google_ad_height = 250;
+						//-->
+					</script>
+					<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+				</div>
+			</div>
+		</div>
+		
+		<div role="navigation" class="footer">
+			<div id="ft">
+				<div style="float:left;">
+					<img src="images/appengine-silver-120x30.gif" />
+				</div>
+				<div style="float:right;">
+					<p class="tip">RetRo Lab Product <a href="mailto:contact@rapplz.com">Contact us</a></p>
+				</div>
+			</div>
+		</div>
+		
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-30210796-1']);
+			_gaq.push(['_setDomainName', 'rapplz.com']);
+			_gaq.push(['_trackPageview']);
+			
+			(function() {
+			  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();		
+		</script>
+		
+		<script type="text/javascript">
+		$(document).ready(function() {
+
+            $(".signin").click(function(e) {
+                e.preventDefault();
+                $("fieldset#signin_menu").toggle();
+                $(".signin").toggleClass("menu-open");
+            });
+
+            $("fieldset#signin_menu").mouseup(function() {
+                return false
+            });
+            $(document).mouseup(function(e) {
+                if($(e.target).parent("a.signin").length==0) {
+                    $(".signin").removeClass("menu-open");
+                    $("fieldset#signin_menu").hide();
+                }
+            });            
+        });
+		</script>
+		
+		<script type="text/javascript">
+			
+			$("#facebook-sign-in-button").click
+			(
+				function()
+				{
+					alert(0);
+					FB.login(function(response) {
+						   if (response.authResponse) {
+						     alert('Welcome!  Fetching your information.... ');
+						     FB.api('/me', function(response) {
+						    	 alert('Good to see you, ' + response.name + '.');
+						     });
+						   } else {
+							   alert('User cancelled login or did not fully authorize.');
+						   }
+						 });
+					return false;
+				}
+			);
+		</script>
+
+		<!-- <script type="text/javascript" src="http://assets.pinterest.com/js/pinit.js"></script> -->
+		
+	</body>
+</html>

@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
-              http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	version="2.5" xmlns="http://java.sun.com/xml/ns/javaee">
+			xmlns="http://java.sun.com/xml/ns/javaee"
+			xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+			version="2.5">
+	<display-name>rapplz</display-name>
 
+	<description>rapplz application</description>
+	
+	<!-- Spring Servlet -->
+	<servlet>
+        <servlet-name>spring-servlet</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+        	<param-name>contextConfigLocation</param-name>
+        	<param-value>WEB-INF/spring/applicationContext.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>spring-servlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    
 	<!-- Jersey Servlets -->
+	<!-- 
 	<servlet>
 		<servlet-name>Jersey Web Application</servlet-name>
 		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
@@ -12,23 +32,56 @@
 			<param-name>javax.ws.rs.Application</param-name>
 			<param-value>com.retro.rapplz.server.service.JerseyResource</param-value>
 		</init-param>
-		
-		<load-on-startup>1</load-on-startup>
+		<load-on-startup>2</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>Jersey Web Application</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
+	 -->
 
-	<!-- Servlets -->
+	<!-- Google App Stats -->
+	<filter>
+        <filter-name>appstats</filter-name>
+        <filter-class>com.google.appengine.tools.appstats.AppstatsFilter</filter-class>
+        <init-param>
+            <param-name>logMessage</param-name>
+            <param-value>Appstats available: /appstats/details?time={ID}</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>appstats</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <servlet>
+        <servlet-name>appstats</servlet-name>
+        <servlet-class>com.google.appengine.tools.appstats.AppstatsServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>appstats</servlet-name>
+        <url-pattern>/appstats/*</url-pattern>
+    </servlet-mapping>
+
+    <security-constraint>
+        <web-resource-collection>
+        	<web-resource-name>appstats</web-resource-name>
+            <url-pattern>/appstats/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+	<!-- 
 	<servlet>
 		<servlet-name>initServlet</servlet-name>
 		<servlet-class>com.retro.rapplz.server.InitServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
+		<load-on-startup>3</load-on-startup>
 	</servlet>
 	
-	<!-- 
 	<servlet>
 		<servlet-name>channelServlet</servlet-name>
 		<servlet-class>com.retro.rapplz.server.ChannelServlet</servlet-class>
