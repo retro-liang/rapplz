@@ -1,4 +1,4 @@
-package com.retro.rapplz.server.config;
+package com.retro.rapplz.config;
 
 import java.util.logging.Logger;
 
