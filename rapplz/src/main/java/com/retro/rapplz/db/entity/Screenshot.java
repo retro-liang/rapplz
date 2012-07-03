@@ -11,30 +11,40 @@ import org.hibernate.annotations.CascadeType;
 
 @SuppressWarnings("serial")
 @Entity
-@Table(name="device")
-public class Device extends BaseEntity
+@Table(name="screenshot")
+public class Screenshot extends BaseEntity
 {
-	private String name;
+	private String type;
+	
+	private String url;
 	
 	@ManyToMany
 	(
-        mappedBy = "devices",
+        mappedBy = "screenshots",
         targetEntity = App.class
     )
 	@Cascade(CascadeType.SAVE_UPDATE)
 	private Set<App> apps;
 	
-	public Device()
+	public Screenshot()
 	{
 		
 	}
 
-	public String getName() {
-		return name;
+	public String getType() {
+		return type;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	public Set<App> getApps() {

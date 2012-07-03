@@ -1,6 +1,5 @@
 package com.retro.rapplz.db.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -11,7 +10,8 @@ import javax.persistence.Table;
 @Table(name="tag")
 public class Tag extends BaseEntity
 {
-	@Column(name="tag_name_id")
+	@ManyToOne
+	@JoinColumn(name="tag_name_id")
 	private TagName tagName;
 	
 	@ManyToOne

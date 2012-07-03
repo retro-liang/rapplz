@@ -1,6 +1,5 @@
 package com.retro.rapplz.db.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -15,10 +14,12 @@ public class Recommendation extends BaseEntity
 	@JoinColumn(name="app_id")
 	private App app;
 	
-	@Column(name="from_user_id")
+	@ManyToOne
+	@JoinColumn(name="from_user_id")
 	private User fromUser;
 	
-	@Column(name="to_user_id")
+	@ManyToOne
+	@JoinColumn(name="to_user_id")
 	private User toUser;
 	
 	private String message;

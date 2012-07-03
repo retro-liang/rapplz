@@ -1,6 +1,9 @@
 package com.retro.rapplz.db.entity;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @SuppressWarnings("serial")
@@ -9,6 +12,9 @@ import javax.persistence.Table;
 public class AccountType extends BaseEntity
 {
 	private String name;
+	
+	@OneToMany(mappedBy="accountType")
+    private Set<User> users;
 	
 	public AccountType()
 	{
@@ -21,5 +27,13 @@ public class AccountType extends BaseEntity
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Set<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<User> users) {
+		this.users = users;
 	}
 }

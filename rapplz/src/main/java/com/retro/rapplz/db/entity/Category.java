@@ -11,20 +11,20 @@ import org.hibernate.annotations.CascadeType;
 
 @SuppressWarnings("serial")
 @Entity
-@Table(name="device")
-public class Device extends BaseEntity
+@Table(name="category")
+public class Category extends BaseEntity
 {
 	private String name;
 	
 	@ManyToMany
 	(
-        mappedBy = "devices",
+        mappedBy = "categories",
         targetEntity = App.class
     )
 	@Cascade(CascadeType.SAVE_UPDATE)
 	private Set<App> apps;
 	
-	public Device()
+	public Category()
 	{
 		
 	}
