@@ -1,6 +1,6 @@
 package com.retro.rapplz.db.entity;
 
-import javax.jdo.annotations.Column;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
