@@ -15,8 +15,8 @@
 
     <!-- GAE properties -->
     <gae.version>1.7.0</gae.version>
-    <!-- <gae.home>${user.home}/.m2/repository/com/google/appengine/appengine-java-sdk/${gae.version}/appengine-java-sdk-${gae.version}</gae.home> -->
-    <gae.home>C:/.m2/repository/com/google/appengine/appengine-java-sdk/${gae.version}/appengine-java-sdk-${gae.version}</gae.home>
+    <gae.home>${user.home}/.m2/repository/com/google/appengine/appengine-java-sdk/${gae.version}/appengine-java-sdk-${gae.version}</gae.home>
+    <!-- <gae.home>C:/.m2/repository/com/google/appengine/appengine-java-sdk/${gae.version}/appengine-java-sdk-${gae.version}</gae.home> -->
     <gae.application.version>1</gae.application.version>
     
     <spring.version>3.1.1.RELEASE</spring.version>

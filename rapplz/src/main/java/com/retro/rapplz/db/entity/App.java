@@ -8,9 +8,11 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @SuppressWarnings("serial")
 @Entity
+@Table(name="app")
 public class App extends BaseEntity
 {
 	private String name;

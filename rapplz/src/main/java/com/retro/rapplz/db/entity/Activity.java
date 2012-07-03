@@ -1,13 +1,16 @@
 package com.retro.rapplz.db.entity;
 
+import javax.jdo.annotations.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @SuppressWarnings("serial")
 @Entity
+@Table(name="activity")
 public class Activity extends BaseEntity
 {
 	@ManyToOne
@@ -15,9 +18,11 @@ public class Activity extends BaseEntity
 	private User user;
 	
 	@Enumerated(EnumType.STRING)
+	@Column(name="activity_type")
 	private ActivityType activityType;
 	
 	@Enumerated(EnumType.STRING)
+	@Column(name="activity_result")
 	private ActivityResult activityResult;
 	
 	private String content;

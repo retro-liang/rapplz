@@ -1,12 +1,21 @@
 package com.retro.rapplz.db.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @SuppressWarnings("serial")
 @Entity
+@Table(name="follow")
 public class Follow extends BaseEntity
 {
+	@ManyToOne
+	@JoinColumn(name="follower_user_id")
 	public User follower;
+	
+	@ManyToOne
+	@JoinColumn(name="following_user_id")
 	public User following;
 	
 	public Follow()
