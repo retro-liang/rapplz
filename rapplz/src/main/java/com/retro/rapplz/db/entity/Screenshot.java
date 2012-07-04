@@ -1,13 +1,9 @@
 package com.retro.rapplz.db.entity;
 
-import java.util.Set;
-
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 @SuppressWarnings("serial")
 @Entity
@@ -18,13 +14,9 @@ public class Screenshot extends BaseEntity
 	
 	private String url;
 	
-	@ManyToMany
-	(
-        mappedBy = "screenshots",
-        targetEntity = App.class
-    )
-	@Cascade(CascadeType.SAVE_UPDATE)
-	private Set<App> apps;
+	@ManyToOne
+	@JoinColumn(name="app_id")
+	private App app;
 	
 	public Screenshot()
 	{
@@ -47,11 +39,11 @@ public class Screenshot extends BaseEntity
 		this.url = url;
 	}
 
-	public Set<App> getApps() {
-		return apps;
+	public App getApp() {
+		return app;
 	}
 
-	public void setApps(Set<App> apps) {
-		this.apps = apps;
+	public void setApp(App app) {
+		this.app = app;
 	}
 }

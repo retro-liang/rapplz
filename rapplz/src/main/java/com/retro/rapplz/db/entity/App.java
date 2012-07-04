@@ -32,21 +32,18 @@ public class App extends BaseEntity
 	private OS os;
 
 	@ManyToMany
-	(
-		targetEntity=Device.class
-	)
-    @JoinTable
+	@JoinTable
     (
         name="app_device",
-        joinColumns=@JoinColumn(name="app_id"),
-        inverseJoinColumns=@JoinColumn(name="device_id")
+        joinColumns={@JoinColumn(name="app_id")},
+        inverseJoinColumns={@JoinColumn(name="device_id")}
     )
-	@Cascade(CascadeType.SAVE_UPDATE)
+	@Cascade(CascadeType.ALL)
 	private Set<Device> devices = new HashSet<Device>();
 	
 	@ManyToMany
 	(
-		targetEntity=Device.class
+		targetEntity=Category.class
 	)
     @JoinTable
     (
@@ -85,17 +82,7 @@ public class App extends BaseEntity
 	@Column(name="app_store_rating_count")
 	private String appStoreRatingCount;
 	
-	@ManyToMany
-	(
-		targetEntity=Device.class
-	)
-    @JoinTable
-    (
-        name="app_screenshot",
-        joinColumns=@JoinColumn(name="app_id"),
-        inverseJoinColumns=@JoinColumn(name="screenshot_id")
-    )
-	@Cascade(CascadeType.SAVE_UPDATE)
+	@OneToMany(mappedBy="app")
 	private Set<Screenshot> screenshots = new HashSet<Screenshot>();
 	
 	@OneToMany(mappedBy="app")

@@ -6,10 +6,14 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.Email;
 
 @SuppressWarnings("serial")
@@ -40,13 +44,26 @@ public class User extends BaseEntity
 	private Set<Activity> activities = new HashSet<Activity>();
 	
 	@OneToMany(mappedBy="author")
-	private Set<BaseMessage> messages = new HashSet<BaseMessage>();
+	private Set<AppComment> appComments = new HashSet<AppComment>();
 	
-	@OneToMany(mappedBy="follower")
-	private Set<User> followers = new HashSet<User>();
+	@OneToMany(mappedBy="author")
+	private Set<Review> reviews = new HashSet<Review>();
 	
-	@OneToMany(mappedBy="following")
-	private Set<User> followerings = new HashSet<User>();
+	@OneToMany(mappedBy="author")
+	private Set<ReviewComment> reviewComments = new HashSet<ReviewComment>();
+	
+	@ManyToMany
+    @JoinTable
+    (
+    	name="follower_following",
+        joinColumns={@JoinColumn(name="follower_user_id")},
+        inverseJoinColumns={@JoinColumn(name="following_user_id")}
+    )
+	@Cascade(CascadeType.ALL)
+    private Set<User> followers = new HashSet<User>();
+	
+	@ManyToMany(mappedBy="followers")
+    private Set<User> followings = new HashSet<User>();
 	
 	@OneToMany(mappedBy="fromUser")
 	private Set<Recommendation> sentRecommendation = new HashSet<Recommendation>();
@@ -118,14 +135,6 @@ public class User extends BaseEntity
 		this.activities = activities;
 	}
 
-	public Set<BaseMessage> getMessages() {
-		return messages;
-	}
-
-	public void setMessages(Set<BaseMessage> messages) {
-		this.messages = messages;
-	}
-
 	public Set<User> getFollowers() {
 		return followers;
 	}
@@ -134,12 +143,12 @@ public class User extends BaseEntity
 		this.followers = followers;
 	}
 
-	public Set<User> getFollowerings() {
-		return followerings;
+	public Set<User> getFollowings() {
+		return followings;
 	}
 
-	public void setFollowerings(Set<User> followerings) {
-		this.followerings = followerings;
+	public void setFollowings(Set<User> followings) {
+		this.followings = followings;
 	}
 
 	public Set<Recommendation> getSentRecommendation() {
@@ -164,5 +173,29 @@ public class User extends BaseEntity
 
 	public void setTags(Set<Tag> tags) {
 		this.tags = tags;
+	}
+
+	public Set<AppComment> getAppComments() {
+		return appComments;
+	}
+
+	public void setAppComments(Set<AppComment> appComments) {
+		this.appComments = appComments;
+	}
+
+	public Set<Review> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(Set<Review> reviews) {
+		this.reviews = reviews;
+	}
+
+	public Set<ReviewComment> getReviewComments() {
+		return reviewComments;
+	}
+
+	public void setReviewComments(Set<ReviewComment> reviewComments) {
+		this.reviewComments = reviewComments;
 	}
 }

@@ -1,5 +1,6 @@
 package com.retro.rapplz.db.entity;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -14,7 +15,7 @@ public class AccountType extends BaseEntity
 	private String name;
 	
 	@OneToMany(mappedBy="accountType")
-    private Set<User> users;
+    private Set<User> users = new HashSet<User>();
 	
 	public AccountType()
 	{

@@ -1,5 +1,8 @@
 package com.retro.rapplz.db.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -12,7 +15,7 @@ public class OS extends BaseEntity
 	private String name;
 	
 	@OneToMany(mappedBy="os")
-	private App app;
+	private Set<App> app = new HashSet<App>();
 	
 	public OS()
 	{
@@ -27,11 +30,11 @@ public class OS extends BaseEntity
 		this.name = name;
 	}
 
-	public App getApp() {
+	public Set<App> getApp() {
 		return app;
 	}
 
-	public void setApp(App app) {
+	public void setApp(Set<App> app) {
 		this.app = app;
 	}
 }

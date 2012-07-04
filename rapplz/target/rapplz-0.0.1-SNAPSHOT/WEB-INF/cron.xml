@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+	<cron>
+		<!-- 
+		<url>/feedprocessor/ios</url>
+		<description>Repopulate ios apps cache from itune every 30 minutes</description>
+		<schedule>every 24 hours</schedule>
+		 -->
+		 
+		<url>/rest/cronService/loadApps</url>
+		<description>Load apps every 30 minutes</description>
+		<schedule>every 30 minutes</schedule>
+		
+	</cron>	
+</cronentries>

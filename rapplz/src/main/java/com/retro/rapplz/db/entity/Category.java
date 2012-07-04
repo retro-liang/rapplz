@@ -1,5 +1,6 @@
 package com.retro.rapplz.db.entity;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -22,7 +23,7 @@ public class Category extends BaseEntity
         targetEntity = App.class
     )
 	@Cascade(CascadeType.SAVE_UPDATE)
-	private Set<App> apps;
+	private Set<App> apps = new HashSet<App>();
 	
 	public Category()
 	{
