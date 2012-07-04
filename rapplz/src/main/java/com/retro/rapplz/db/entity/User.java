@@ -37,6 +37,10 @@ public class User extends BaseEntity
 	private AccountType accountType;
 	
 	@ManyToOne
+	@JoinColumn(name="account_role_id")
+	private AccountRole accountRole;
+	
+	@ManyToOne
 	@JoinColumn(name="account_status_id")
 	private AccountStatus accountStatus;
 	
@@ -197,5 +201,13 @@ public class User extends BaseEntity
 
 	public void setReviewComments(Set<ReviewComment> reviewComments) {
 		this.reviewComments = reviewComments;
+	}
+
+	public AccountRole getAccountRole() {
+		return accountRole;
+	}
+
+	public void setAccountRole(AccountRole accountRole) {
+		this.accountRole = accountRole;
 	}
 }

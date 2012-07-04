@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.retro.rapplz.db.dao.AppDao;
+import com.retro.rapplz.db.dao.OSDao;
 import com.retro.rapplz.db.entity.App;
+import com.retro.rapplz.db.entity.OS;
 
 @Controller
 @RequestMapping("/test")
@@ -22,12 +24,31 @@ public class RapplzController
 	@Autowired
     private AppDao appDao;
 	
+	@Autowired
+    private OSDao osDao;
+	
 	@RequestMapping(method = RequestMethod.GET)
     public String welcomeHandler(HttpServletRequest request)
 	{
-		logger.info("request: " + request.getAttributeNames());
+		logger.info("welcome request: " + request.getAttributeNames());
+		return "welcome";
+    }
+	
+	@RequestMapping("app")
+	public String appHandler(HttpServletRequest request)
+	{
+		logger.info("app request: " + request.getAttributeNames());
 		List<App> apps = appDao.getApps();
 		logger.info("apps: " + apps);
+		return "welcome";
+    }
+	
+	@RequestMapping("os")
+	public String osHandler(HttpServletRequest request)
+	{
+		logger.info("os request: " + request.getAttributeNames());
+		List<OS> oss = osDao.getOSs();
+		logger.info("oss: " + oss);
 		return "welcome";
     }
 }

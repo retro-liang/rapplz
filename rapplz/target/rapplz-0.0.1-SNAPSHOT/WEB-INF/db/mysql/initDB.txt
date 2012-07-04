@@ -13,8 +13,9 @@ DROP TABLE IF EXISTS recommendation;
 DROP TABLE IF EXISTS follower_following;
 DROP TABLE IF EXISTS activity;
 DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS account_status;
 DROP TABLE IF EXISTS account_type;
+DROP TABLE IF EXISTS account_role;
+DROP TABLE IF EXISTS account_status;
 DROP TABLE IF EXISTS screenshot;
 DROP TABLE IF EXISTS app_category;
 DROP TABLE IF EXISTS category;
@@ -28,8 +29,8 @@ CREATE TABLE IF NOT EXISTS os
 (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(20) NOT NULL,
-	created_date DATETIME NOT NULL DEFAULT 0,
-	modified_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	created_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	modified_date DATETIME,
 	INDEX(name)
 )ENGINE=InnoDB;
 
@@ -50,8 +51,8 @@ CREATE TABLE IF NOT EXISTS app
 	release_date VARCHAR(30),
 	app_store_rating REAL,
 	app_store_rating_count INT UNSIGNED,
-	created_date DATETIME NOT NULL DEFAULT 0,
-	modified_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	created_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	modified_date DATETIME,
 	FOREIGN KEY (os_id) REFERENCES os(id),
 	INDEX(name)
 )ENGINE=InnoDB;
@@ -60,8 +61,8 @@ CREATE TABLE IF NOT EXISTS device
 (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(20) NOT NULL,
-	created_date DATETIME NOT NULL DEFAULT 0,
-	modified_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	created_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	modified_date DATETIME,
 	INDEX(name)
 )ENGINE=InnoDB;
 
@@ -78,8 +79,8 @@ CREATE TABLE IF NOT EXISTS category
 (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(20) NOT NULL,
-	created_date DATETIME NOT NULL DEFAULT 0,
-	modified_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	created_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	modified_date DATETIME,
 	INDEX(name)
 )ENGINE=InnoDB;
 
@@ -98,8 +99,8 @@ CREATE TABLE IF NOT EXISTS screenshot
 	app_id BIGINT UNSIGNED NOT NULL,
 	type VARCHAR(20) NOT NULL,
 	url VARCHAR(255) NOT NULL,
-	created_date DATETIME NOT NULL DEFAULT 0,
-	modified_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	created_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	modified_date DATETIME,
 	FOREIGN KEY (app_id) REFERENCES app(id),
 	INDEX(app_id)
 )ENGINE=InnoDB;
@@ -108,8 +109,17 @@ CREATE TABLE IF NOT EXISTS account_type
 (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(20) NOT NULL,
-	created_date DATETIME NOT NULL DEFAULT 0,
-	modified_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	created_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	modified_date DATETIME,
+	INDEX(name)
+)ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS account_role
+(
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	name VARCHAR(20) NOT NULL,
+	created_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	modified_date DATETIME,
 	INDEX(name)
 )ENGINE=InnoDB;
 
@@ -117,8 +127,8 @@ CREATE TABLE IF NOT EXISTS account_status
 (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(20) NOT NULL,
-	created_date DATETIME NOT NULL DEFAULT 0,
-	modified_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	created_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	modified_date DATETIME,
 	INDEX(name)
 )ENGINE=InnoDB;
 
@@ -126,13 +136,14 @@ CREATE TABLE IF NOT EXISTS user
 (
 	id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	account_type_id INT UNSIGNED NOT NULL,
+	account_role_id INT UNSIGNED NOT NULL,
 	account_status_id INT UNSIGNED NOT NULL,
 	email VARCHAR(80) NOT NULL,
 	password VARCHAR(30) NOT NULL,
 	first_name VARCHAR(30),
 	last_name VARCHAR(30),
-	created_date DATETIME NOT NULL DEFAULT 0,
-	modified_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	created_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	modified_date DATETIME,
 	FOREIGN KEY (account_type_id) REFERENCES account_type(id),
 	FOREIGN KEY (account_status_id) REFERENCES account_status(id),
 	INDEX(email,first_name)
@@ -145,8 +156,8 @@ CREATE TABLE IF NOT EXISTS activity
 	activity_type VARCHAR(20) NOT NULL,
 	activity_result VARCHAR(20) NOT NULL,
 	content VARCHAR(255) NOT NULL,
-	created_date DATETIME NOT NULL DEFAULT 0,
-	modified_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	created_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	modified_date DATETIME,
 	FOREIGN KEY (user_id) REFERENCES user(id),
 	INDEX(user_id,activity_type,activity_result)
 )ENGINE=InnoDB;
@@ -156,8 +167,8 @@ CREATE TABLE IF NOT EXISTS follower_following
 	id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	follower_user_id BIGINT UNSIGNED NOT NULL,
 	following_user_id BIGINT UNSIGNED NOT NULL,
-	created_date DATETIME NOT NULL DEFAULT 0,
-	modified_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	created_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	modified_date DATETIME,
 	FOREIGN KEY (follower_user_id) REFERENCES user(id),
 	FOREIGN KEY (following_user_id) REFERENCES user(id),
 	INDEX(follower_user_id,following_user_id)
@@ -170,8 +181,8 @@ CREATE TABLE IF NOT EXISTS recommendation
 	from_user_id BIGINT UNSIGNED NOT NULL,
 	to_user_id BIGINT UNSIGNED NOT NULL,
 	message TEXT,
-	created_date DATETIME NOT NULL DEFAULT 0,
-	modified_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	created_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	modified_date DATETIME,
 	FOREIGN KEY (app_id) REFERENCES app(id),
 	FOREIGN KEY (from_user_id) REFERENCES app(id),
 	FOREIGN KEY (to_user_id) REFERENCES app(id),
@@ -184,8 +195,8 @@ CREATE TABLE IF NOT EXISTS app_comment
 	author_user_id BIGINT UNSIGNED NOT NULL,
 	app_id BIGINT UNSIGNED NOT NULL,
 	content TEXT NOT NULL,
-	created_date DATETIME NOT NULL DEFAULT 0,
-	modified_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	created_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	modified_date DATETIME,
 	FOREIGN KEY (author_user_id) REFERENCES user(id),
 	FOREIGN KEY (app_id) REFERENCES app(id),
 	INDEX(app_id,author_user_id)
@@ -197,8 +208,8 @@ CREATE TABLE IF NOT EXISTS review
 	author_user_id BIGINT UNSIGNED NOT NULL,
 	app_id BIGINT UNSIGNED NOT NULL,
 	content TEXT NOT NULL,
-	created_date DATETIME NOT NULL DEFAULT 0,
-	modified_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	created_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	modified_date DATETIME,
 	FOREIGN KEY (author_user_id) REFERENCES user(id),
 	FOREIGN KEY (app_id) REFERENCES app(id),
 	INDEX(app_id,author_user_id)
@@ -210,8 +221,8 @@ CREATE TABLE IF NOT EXISTS review_comment
 	author_user_id BIGINT UNSIGNED NOT NULL,
 	review_id BIGINT UNSIGNED NOT NULL,
 	content TEXT NOT NULL,
-	created_date DATETIME NOT NULL DEFAULT 0,
-	modified_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	created_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	modified_date DATETIME,
 	FOREIGN KEY (author_user_id) REFERENCES user(id),
 	FOREIGN KEY (review_id) REFERENCES review(id),
 	INDEX(author_user_id,review_id)
@@ -221,8 +232,8 @@ CREATE TABLE IF NOT EXISTS tag_name
 (
 	id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(20) NOT NULL,
-	created_date DATETIME NOT NULL DEFAULT 0,
-	modified_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	created_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	modified_date DATETIME,
 	INDEX(name)
 )ENGINE=InnoDB;
 
@@ -232,8 +243,8 @@ CREATE TABLE IF NOT EXISTS tag
 	author_user_id BIGINT UNSIGNED NOT NULL,
 	app_id BIGINT UNSIGNED NOT NULL,
 	tag_name_id BIGINT UNSIGNED NOT NULL,
-	created_date DATETIME NOT NULL DEFAULT 0,
-	modified_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	created_date TIMESTAMP NOT NULL DEFAULT NOW(),
+	modified_date DATETIME,
 	FOREIGN KEY (author_user_id) REFERENCES user(id),
 	FOREIGN KEY (app_id) REFERENCES app(id),
 	FOREIGN KEY (tag_name_id) REFERENCES tag_name(id),

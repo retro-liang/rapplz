@@ -45,6 +45,7 @@
 				<value>com.retro.rapplz.db.entity.Category</value>
 				<value>com.retro.rapplz.db.entity.Screenshot</value>
 				<value>com.retro.rapplz.db.entity.AccountType</value>
+				<value>com.retro.rapplz.db.entity.AccountRole</value>
 				<value>com.retro.rapplz.db.entity.AccountStatus</value>
 				<value>com.retro.rapplz.db.entity.User</value>
 				<value>com.retro.rapplz.db.entity.Activity</value>
@@ -74,6 +75,7 @@
 	
 	<!-- ========================= BUSINESS OBJECT DEFINITIONS ========================= -->
 	
+	<bean id="osDao" class="com.retro.rapplz.db.dao.OSDaoImpl" />
 	<bean id="appDao" class="com.retro.rapplz.db.dao.AppDaoImpl" />
 	
 	<!--

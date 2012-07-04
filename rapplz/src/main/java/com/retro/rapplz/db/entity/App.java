@@ -1,5 +1,6 @@
 package com.retro.rapplz.db.entity;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -60,7 +61,7 @@ public class App extends BaseEntity
 	@Column(name = "app_store_url")
 	private String appStoreUrl;
 	
-	private String price;
+	private BigDecimal price;
 	
 	private String version;
 	
@@ -134,11 +135,11 @@ public class App extends BaseEntity
 		this.appStoreUrl = appStoreUrl;
 	}
 
-	public String getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 
