@@ -20,6 +20,7 @@
     <gae.application.version>1</gae.application.version>
     
     <spring.version>3.1.1.RELEASE</spring.version>
+    <spring-security.version>3.1.0.RELEASE</spring-security.version>
     <slf4j.version>1.6.6</slf4j.version>
 
     <!-- Don't let your Mac use a crazy non-standard encoding -->
@@ -95,6 +96,21 @@
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-web</artifactId>
 		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.security</groupId>
+		<artifactId>spring-security-core</artifactId>
+		<version>${spring-security.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.security</groupId>
+		<artifactId>spring-security-web</artifactId>
+		<version>${spring-security.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.security</groupId>
+		<artifactId>spring-security-config</artifactId>
+		<version>${spring-security.version}</version>
 	</dependency>
 	<dependency>
 		<groupId>org.springframework</groupId>

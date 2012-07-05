@@ -2,7 +2,6 @@ package com.retro.rapplz.db.dao;
 
 import java.util.List;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -10,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.retro.rapplz.db.entity.App;
 
-@Repository
+@Repository("appDao")
 @Transactional
 public class AppDaoImpl implements AppDao
 {
