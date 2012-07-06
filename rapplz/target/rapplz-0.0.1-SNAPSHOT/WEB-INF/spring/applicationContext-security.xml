@@ -1,26 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/security"
-  xmlns:beans="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-           http://www.springframework.org/schema/security
-           http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
-	<http pattern="/img/**" security="none"/>
-	<http pattern="/js/**" security="none"/>
-	<http pattern="/css/**" security="none"/>
-	<http pattern="/appstats*" security="none"/>
-  
-	<http auto-config="true">
-		<intercept-url pattern="/login.jsp*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-    	<intercept-url pattern="/**" access="ROLE_USER" />
-		<form-login login-page="/jsp/login.jsp" authentication-failure-url="/login.do?error=failed" login-processing-url="/login-please.do" />
-		<logout logout-url="/logoff-please.do" logout-success-url="/logoff.html" />
-	</http>
+    <debug />
+
+    <global-method-security pre-post-annotations="enabled" />
+
+    <http pattern="/img/**" security="none" />
+	<http pattern="/js/**" security="none" />
+	<http pattern="/css/**" security="none" />
+	<http pattern="/appstats*" security="none" />
+	<http pattern="/index.html*" security="none" />
+    <http pattern="/loggedout" security="none"/>
+
+    <http use-expressions="true">
+        <intercept-url pattern="/secure/extreme/**" access="hasRole('supervisor')"/>
+        <intercept-url pattern="/secure/**" access="isAuthenticated()" />
+        <intercept-url pattern="/**" access="permitAll" />
+        <form-login login-page="/sign_in.html" default-target-url="/sign_in_success" authentication-failure-url="/sign_in_failed.html?error=failed" />
+        <logout logout-success-url="/signed_out.html" delete-cookies="JSESSIONID"/>
+        <remember-me />
+        <session-management invalid-session-url="/timeout">
+            <concurrency-control max-sessions="1" error-if-maximum-exceeded="true" />
+        </session-management>
+    </http>
+
+    <beans:bean id="encoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder" />
+    
+    <beans:bean id="userService" class="com.retro.rapplz.service.UserServiceImpl" />
+    
+    <beans:bean id="daoAuthenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+		<beans:property name="userDetailsService" ref="userService" />
+	</beans:bean>
+	
+	<beans:bean id="authenticationManager" class="org.springframework.security.authentication.ProviderManager">
+        <beans:property name="providers">
+            <beans:list>
+                <beans:ref local="daoAuthenticationProvider" />
+            </beans:list>
+        </beans:property>
+    </beans:bean>
 
 	<authentication-manager>
 		<authentication-provider user-service-ref="userService">
-			<password-encoder hash="md5">
+			<password-encoder ref="encoder">
 				<salt-source user-property="username"/>
 			</password-encoder>
 		</authentication-provider>

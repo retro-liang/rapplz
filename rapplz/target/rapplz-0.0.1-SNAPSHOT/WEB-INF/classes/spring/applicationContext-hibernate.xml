@@ -78,6 +78,7 @@
 	<bean id="osDao" class="com.retro.rapplz.db.dao.OSDaoImpl" />
 	<bean id="appDao" class="com.retro.rapplz.db.dao.AppDaoImpl" />
 	<bean id="userDao" class="com.retro.rapplz.db.dao.UserDaoImpl" />
+	<bean id="accountRoleDao" class="com.retro.rapplz.db.dao.AccountRoleDaoImpl" />
 	
 	<!--
 		Activates various annotations to be detected in bean classes: Spring's @Required and @Autowired, as well as JSR 250's @Resource.

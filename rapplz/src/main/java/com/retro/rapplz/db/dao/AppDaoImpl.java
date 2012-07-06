@@ -13,13 +13,8 @@ import com.retro.rapplz.db.entity.App;
 @Transactional
 public class AppDaoImpl implements AppDao
 {
-	private SessionFactory sessionFactory;
-	
 	@Autowired
-	public AppDaoImpl(SessionFactory sessionFactory)
-	{
-		this.sessionFactory = sessionFactory;
-	}
+	private SessionFactory sessionFactory;
 	
 	@Override
 	public App loadApp(Long id)

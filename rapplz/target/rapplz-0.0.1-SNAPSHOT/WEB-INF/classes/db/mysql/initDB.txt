@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS app_comment;
 DROP TABLE IF EXISTS recommendation;
 DROP TABLE IF EXISTS follower_following;
 DROP TABLE IF EXISTS activity;
+DROP TABLE IF EXISTS user_account_role;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS account_type;
 DROP TABLE IF EXISTS account_role;
@@ -136,17 +137,27 @@ CREATE TABLE IF NOT EXISTS user
 (
 	id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	account_type_id INT UNSIGNED NOT NULL,
-	account_role_id INT UNSIGNED NOT NULL,
 	account_status_id INT UNSIGNED NOT NULL,
 	email VARCHAR(80) NOT NULL,
 	password VARCHAR(30),
 	first_name VARCHAR(30),
 	last_name VARCHAR(30),
+	avatar VARCHAR(80),
 	created_date TIMESTAMP NOT NULL DEFAULT NOW(),
 	modified_date DATETIME,
+	UNIQUE(email),
 	FOREIGN KEY (account_type_id) REFERENCES account_type(id),
 	FOREIGN KEY (account_status_id) REFERENCES account_status(id),
 	INDEX(email,first_name)
+)ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS user_account_role
+(
+	id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	user_id BIGINT UNSIGNED NOT NULL,
+	account_role_id INT UNSIGNED NOT NULL,
+	FOREIGN KEY (user_id) REFERENCES user(id),
+	FOREIGN KEY (account_role_id) REFERENCES account_role(id)
 )ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS activity

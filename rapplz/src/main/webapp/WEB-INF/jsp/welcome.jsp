@@ -1,16 +1,18 @@
-<%@ include file="/WEB-INF/jsp/includes.jsp" %>
-<%@ include file="/WEB-INF/jsp/header.jsp" %>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
-<img src="<spring:url value="/images/pets.png" htmlEscape="true" />" align="right" style="position:relative;right:30px;">
-<h2><fmt:message key="welcome"/></h2>
+	<%@ include file="/WEB-INF/jsp/includes.jsp" %>
+	<%@ include file="/WEB-INF/jsp/header.jsp" %>
 
-<ul>
-  <li><a href="<spring:url value="/owners/search" htmlEscape="true" />">Find owner</a></li>
-  <li><a href="<spring:url value="/vets" htmlEscape="true" />">Display all veterinarians</a></li>
-  <li><a href="<spring:url value="/static/html/tutorial.html" htmlEscape="true" />">Tutorial</a></li>
-</ul>
+	<body onload="document.f.j_username.focus();">
 
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+		<div id="main">
+			
+			<h3>Welcome</h3>
 
-<%@ include file="/WEB-INF/jsp/footer.jsp" %>
+		</div>
+
+		<%@ include file="/WEB-INF/jsp/footer.jsp" %>
+	
+	</body>
+	
+</html>

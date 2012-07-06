@@ -4,8 +4,3 @@
 <td align="right"><img src="<spring:url value="/images/springsource-logo.png" htmlEscape="true" />" alt="Sponsored by SpringSource"/></td>
 </tr>
 </table>
-
-</div>
-</body>
-
-</html>

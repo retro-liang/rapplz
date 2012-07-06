@@ -1,5 +1,6 @@
 package com.retro.rapplz.db.entity;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -16,11 +19,21 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.Email;
 
-@SuppressWarnings("serial")
 @Entity
 @Table(name="user")
-public class User extends BaseEntity
+@NamedQueries
+({
+	@NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
+	@NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.id = :id"),
+	@NamedQuery(name = "User.findByFirstName", query = "SELECT u FROM User u WHERE u.firstName = :firstName"),
+	@NamedQuery(name = "User.findByLastName", query = "SELECT u FROM User u WHERE u.lastName = :lastName"),
+	@NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
+	@NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password")
+})
+public class User extends BaseEntity implements Serializable
 {
+	private static final long serialVersionUID = 3295552597219824938L;
+
 	@Email
 	private String email;
 	
@@ -32,13 +45,21 @@ public class User extends BaseEntity
 	@Column(name = "last_name")
 	private String lastName;
 	
+	@Column(name = "avatar")
+	private String avatar;
+	
 	@ManyToOne
 	@JoinColumn(name="account_type_id")
 	private AccountType accountType;
 	
-	@ManyToOne
-	@JoinColumn(name="account_role_id")
-	private AccountRole accountRole;
+	@ManyToMany
+    @JoinTable
+    (
+    	name="user_account_role",
+        joinColumns={@JoinColumn(name="user_id")},
+        inverseJoinColumns={@JoinColumn(name="account_role_id")}
+    )
+	private Set<AccountRole> accountRoles = new HashSet<AccountRole>();
 	
 	@ManyToOne
 	@JoinColumn(name="account_status_id")
@@ -81,6 +102,36 @@ public class User extends BaseEntity
 	public User()
 	{
 		
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		int hash = 0;
+		hash += (id != null ? id.hashCode() : 0);
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object object)
+	{
+		//Warning - this method won't work in the case the id fields are not set
+		if (!(object instanceof User))
+		{
+			return false;
+		}
+		User other = (User) object;
+		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)))
+		{
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "com.retro.rapplz.entity.User[id=" + id + "]";
 	}
 
 	public String getEmail() {
@@ -203,11 +254,19 @@ public class User extends BaseEntity
 		this.reviewComments = reviewComments;
 	}
 
-	public AccountRole getAccountRole() {
-		return accountRole;
+	public String getAvatar() {
+		return avatar;
 	}
 
-	public void setAccountRole(AccountRole accountRole) {
-		this.accountRole = accountRole;
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	public Set<AccountRole> getAccountRoles() {
+		return accountRoles;
+	}
+
+	public void setAccountRoles(Set<AccountRole> accountRoles) {
+		this.accountRoles = accountRoles;
 	}
 }

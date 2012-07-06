@@ -1,4 +1,5 @@
 -----------------------------------------------
+DELETE FROM user_account_role;
 DELETE FROM user;
 DELETE FROM account_status;
 DELETE FROM account_role;
@@ -58,14 +59,17 @@ INSERT INTO account_type(name) VALUES('RAPPLZ');
 INSERT INTO account_type(name) VALUES('GOOGLE');
 INSERT INTO account_type(name) VALUES('FACEBOOK');
 
-INSERT INTO account_role(name) VALUES('USER');
-INSERT INTO account_role(name) VALUES('ADMIN');
+INSERT INTO account_role(name) VALUES('ROLE_USER');
+INSERT INTO account_role(name) VALUES('ROLE_ADMIN');
 
 INSERT INTO account_status(name) VALUES('ACTIVE');
 INSERT INTO account_status(name) VALUES('INACTIVE');
 INSERT INTO account_status(name) VALUES('PENDING');
 
-INSERT INTO user(account_type_id,account_role_id,account_status_id,email,password,first_name,last_name) VALUES(1,1,1,'test@rapplz.com','123456','testFirstName1','testLastName1');
-INSERT INTO user(account_type_id,account_role_id,account_status_id,email,password,first_name,last_name) VALUES(2,1,1,'test@google.com','123456','testFirstName2','testLastName2');
-INSERT INTO user(account_type_id,account_role_id,account_status_id,email,password,first_name,last_name) VALUES(3,1,1,'test@facebook.com','123456','testFirstName3','testLastName3');
+INSERT INTO user(account_type_id,account_status_id,email,password,first_name,last_name) VALUES(1,1,'test@rapplz.com','123456','testFirstName1','testLastName1');
+INSERT INTO user(account_type_id,account_status_id,email,password,first_name,last_name) VALUES(2,1,'test@google.com','123456','testFirstName2','testLastName2');
+INSERT INTO user(account_type_id,account_status_id,email,password,first_name,last_name) VALUES(3,1,'test@facebook.com','123456','testFirstName3','testLastName3');
 
+INSERT INTO user_account_role(user_id,account_role_id) VALUES(1,2);
+INSERT INTO user_account_role(user_id,account_role_id) VALUES(2,1);
+INSERT INTO user_account_role(user_id,account_role_id) VALUES(3,1);

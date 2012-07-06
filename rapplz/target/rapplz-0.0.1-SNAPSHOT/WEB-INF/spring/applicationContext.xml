@@ -12,7 +12,5 @@
 	<import resource="applicationContext-servlet.xml"/>
 	<import resource="applicationContext-security.xml"/>
 	<import resource="applicationContext-hibernate.xml"/>
-	
-	<bean id="userService" class="com.retro.rapplz.service.UserServiceImpl" />
 
 </beans>
