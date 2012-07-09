@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS user
 	account_type_id INT UNSIGNED NOT NULL,
 	account_status_id INT UNSIGNED NOT NULL,
 	email VARCHAR(80) NOT NULL,
-	password VARCHAR(30),
+	password VARCHAR(40),
 	first_name VARCHAR(30),
 	last_name VARCHAR(30),
 	avatar VARCHAR(80),

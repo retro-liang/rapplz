@@ -66,9 +66,9 @@ INSERT INTO account_status(name) VALUES('ACTIVE');
 INSERT INTO account_status(name) VALUES('INACTIVE');
 INSERT INTO account_status(name) VALUES('PENDING');
 
-INSERT INTO user(account_type_id,account_status_id,email,password,first_name,last_name) VALUES(1,1,'test@rapplz.com','123456','testFirstName1','testLastName1');
-INSERT INTO user(account_type_id,account_status_id,email,password,first_name,last_name) VALUES(2,1,'test@google.com','123456','testFirstName2','testLastName2');
-INSERT INTO user(account_type_id,account_status_id,email,password,first_name,last_name) VALUES(3,1,'test@facebook.com','123456','testFirstName3','testLastName3');
+INSERT INTO user(account_type_id,account_status_id,email,password,first_name,last_name) VALUES(1,1,'test@rapplz.com','e10adc3949ba59abbe56e057f20f883e','testFirstName1','testLastName1');
+INSERT INTO user(account_type_id,account_status_id,email,password,first_name,last_name) VALUES(2,1,'test@google.com','e10adc3949ba59abbe56e057f20f883e','testFirstName2','testLastName2');
+INSERT INTO user(account_type_id,account_status_id,email,password,first_name,last_name) VALUES(3,1,'test@facebook.com','e10adc3949ba59abbe56e057f20f883e','testFirstName3','testLastName3');
 
 INSERT INTO user_account_role(user_id,account_role_id) VALUES(1,2);
 INSERT INTO user_account_role(user_id,account_role_id) VALUES(2,1);

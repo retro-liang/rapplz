@@ -2,6 +2,7 @@ package com.retro.rapplz.db.dao;
 
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.retro.rapplz.db.entity.AccountRole;
 import com.retro.rapplz.db.entity.User;
+import com.retro.rapplz.service.UserServiceImpl;
 
 @Repository("userDao")
 @Transactional
 public class UserDaoImpl implements UserDao
 {
+	private static final Logger logger = Logger.getLogger(UserDaoImpl.class.getName());
+	
 	@Autowired
 	private SessionFactory sessionFactory;
 
@@ -34,7 +38,10 @@ public class UserDaoImpl implements UserDao
 	@Override
 	public User findByEmail(String email)
 	{
-		User user = (User) sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "'").uniqueResult();
+		logger.info("findByEmail email: " + email);
+		logger.info("findByEmail sessionFactory: " + sessionFactory);
+		User user = (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "'").uniqueResult();
+		logger.info("findByEmail user: " + user);
 		return user;
 	}
 
@@ -42,7 +49,7 @@ public class UserDaoImpl implements UserDao
 	public User getUserByID(Long id)
 	{
 
-		User user = (User) sessionFactory.getCurrentSession().createQuery("select u from User u where id = '" + id + "'").uniqueResult();
+		User user = (User)sessionFactory.getCurrentSession().createQuery("select u from User u where id = '" + id + "'").uniqueResult();
 		return user;
 	}
 

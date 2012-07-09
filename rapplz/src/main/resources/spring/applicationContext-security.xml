@@ -2,12 +2,13 @@
 <beans:beans xmlns="http://www.springframework.org/schema/security"
     xmlns:beans="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    					http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security
+                        http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
-    <debug />
-
-    <global-method-security pre-post-annotations="enabled" />
+	<global-method-security pre-post-annotations="enabled" />
 
     <http pattern="/img/**" security="none" />
 	<http pattern="/js/**" security="none" />
@@ -28,7 +29,11 @@
         </session-management>
     </http>
 
-    <beans:bean id="encoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder" />
+    <beans:bean id="saltSource" class="org.springframework.security.authentication.dao.ReflectionSaltSource">
+    	<beans:property name="userPropertyToUse" value="username" />
+    </beans:bean>
+
+	<beans:bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
     
     <beans:bean id="userService" class="com.retro.rapplz.service.UserServiceImpl" />
     
@@ -46,8 +51,10 @@
 
 	<authentication-manager>
 		<authentication-provider user-service-ref="userService">
-			<password-encoder ref="encoder">
-				<salt-source user-property="username"/>
+			<!-- <password-encoder ref="encoder"> -->
+			<password-encoder hash="md5">
+				<!-- Salt value must be null when used with crypto module PasswordEncoder -->
+				<!-- <salt-source user-property="username"/> -->
 			</password-encoder>
 		</authentication-provider>
 	</authentication-manager>
