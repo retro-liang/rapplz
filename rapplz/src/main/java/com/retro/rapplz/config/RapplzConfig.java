@@ -44,6 +44,11 @@ public class RapplzConfig extends XMLConfiguration
         return instance;
     }
     
+    public String getSenderEmailAddress()
+    {
+    	return instance.getString("sender-email-address");
+    }
+    
     public String getFeedURL(String os, String device, String type)
 	{
 		return instance.getString("app-feed." + os + "." + device + "." + type);

@@ -21,15 +21,13 @@ public class UserAssembler
 	{
 		String username = user.getEmail();
 		String password = user.getPassword();
-		boolean enabled = user.getAccountStatus().getName().trim().equalsIgnoreCase("ACTIVE");
-		boolean accountNonExpired = user.getAccountStatus().getName().trim().equalsIgnoreCase("ACTIVE");
-		boolean credentialsNonExpired = user.getAccountStatus().getName().trim().equalsIgnoreCase("ACTIVE");
-		boolean accountNonLocked = user.getAccountStatus().getName().trim().equalsIgnoreCase("ACTIVE");
-		logger.info("user.getAccountRoles(): " + user.getAccountRoles());
+		boolean enabled = true;	//not used
+		boolean accountNonExpired = true;	//not used
+		boolean credentialsNonExpired = true;	//not used
+		boolean accountNonLocked = true;	//not used
 		Collection<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
 		for (AccountRole accountRole : user.getAccountRoles())
 		{
-			logger.info("accountRole.getName(): " + accountRole.getName());
 			authorities.add(new SimpleGrantedAuthority(accountRole.getName()));
 		}
 		User springUser = new User(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);

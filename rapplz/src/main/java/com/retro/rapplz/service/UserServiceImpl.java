@@ -11,7 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.retro.rapplz.db.dao.UserDao;
+import com.retro.rapplz.db.entity.AccountRole;
+import com.retro.rapplz.db.entity.AccountStatus;
+import com.retro.rapplz.db.entity.AccountType;
 import com.retro.rapplz.db.entity.User;
+import com.retro.rapplz.service.exception.ApplicationServiceException;
 
 @Service("userService")
 public class UserServiceImpl implements UserService, UserDetailsService
@@ -35,5 +39,28 @@ public class UserServiceImpl implements UserService, UserDetailsService
 			throw new UsernameNotFoundException("user not found");
 		}
 		return userAssembler.buildUserFromUserEntity(user);
+	}
+	
+	@Override
+	public User createUser(String accountType, String email, String password, String firstName, String lastName) throws ApplicationServiceException
+	{
+		logger.info("createUser: " + email);
+		/*AccountType accountType = new AccountType();
+		accountType.setId(1l);
+		accountType.setName("RAPPLZ");
+		user.setAccountType(accountType);*/
+		User user = new User();
+		user.setEmail(email);
+		user.setPassword(password);
+		AccountStatus accountStatus = new AccountStatus();
+		accountStatus.setId(1l);
+		accountStatus.setName(AccountStatus.DEFAULT);
+		user.setAccountStatus(accountStatus);
+		AccountRole accountRole = new AccountRole();
+		accountRole.setId(1l);
+		accountRole.setName("ROLE_USER");
+		user.getAccountRoles().add(accountRole);		
+		userDao.addUser(user);
+		return null;
 	}
 }

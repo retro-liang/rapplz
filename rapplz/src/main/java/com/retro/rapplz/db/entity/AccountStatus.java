@@ -12,7 +12,8 @@ import javax.persistence.Table;
 @Table(name="account_status")
 public class AccountStatus extends BaseEntity
 {
-	private String name;
+	public static final String DEFAULT = "PENDING";
+	private String name = DEFAULT;
 	
 	@OneToMany(mappedBy="accountStatus")
     private Set<User> users = new HashSet<User>();

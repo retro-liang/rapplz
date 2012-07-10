@@ -53,8 +53,7 @@
 		<authentication-provider user-service-ref="userService">
 			<!-- <password-encoder ref="encoder"> -->
 			<password-encoder hash="md5">
-				<!-- Salt value must be null when used with crypto module PasswordEncoder -->
-				<!-- <salt-source user-property="username"/> -->
+				<salt-source ref="saltSource"/>
 			</password-encoder>
 		</authentication-provider>
 	</authentication-manager>
