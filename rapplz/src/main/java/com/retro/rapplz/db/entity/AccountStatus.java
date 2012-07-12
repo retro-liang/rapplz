@@ -4,12 +4,20 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @SuppressWarnings("serial")
 @Entity
 @Table(name="account_status")
+@NamedQueries
+({
+	@NamedQuery(name = "AccountStatus.findAll", query = "SELECT s FROM AccountStatus s"),
+	@NamedQuery(name = "AccountStatus.findById", query = "SELECT s FROM AccountStatus s WHERE s.id = :id"),
+	@NamedQuery(name = "AccountStatus.findByName", query = "SELECT s FROM AccountStatus s WHERE s.name = :name")
+})
 public class AccountStatus extends BaseEntity
 {
 	public static final String DEFAULT = "PENDING";

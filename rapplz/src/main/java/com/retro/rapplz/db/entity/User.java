@@ -131,7 +131,7 @@ public class User extends BaseEntity implements Serializable
 	@Override
 	public String toString()
 	{
-		return "com.retro.rapplz.entity.User[id=" + id + "]";
+		return "User[id=" + id + " email=" + email + " type=" + accountType + " status=" + accountStatus + "]";
 	}
 
 	public String getEmail() {

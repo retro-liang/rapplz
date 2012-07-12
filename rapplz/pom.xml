@@ -364,6 +364,7 @@
 				<jvmFlag>-Drdbms.driver=com.mysql.jdbc.Driver</jvmFlag>
 				<jvmFlag>-Drdbms.url=jdbc:mysql://localhost:3306/rapplz?user=root&amp;password=admin</jvmFlag>
 	    	</jvmFlags>
+	    	<address>localhost</address>
 	    	<monitorPort>8082</monitorPort>
 		</configuration>
       </plugin>

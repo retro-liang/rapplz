@@ -7,7 +7,11 @@
 
 		<div id="main">
 			
-			<h3>Welcome</h3>
+			<h3>Thank you</h3>
+			
+			<p>An activation email will be sent to you shortly.</p>
+			
+			<p><a href="<spring:url value="/" htmlEscape="true" />">Go to homepage</a></p>
 
 		</div>
 

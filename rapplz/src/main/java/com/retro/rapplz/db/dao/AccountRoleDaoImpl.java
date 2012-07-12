@@ -35,7 +35,6 @@ public class AccountRoleDaoImpl implements AccountRoleDao
 	public List<AccountRole> listAccountRoles()
 	{
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(AccountRole.class);
-		criteria.add(Restrictions.ne("name", "ROLE_ADMIN"));
 		return (List<AccountRole>)criteria.list();
 	}
 
@@ -44,6 +43,14 @@ public class AccountRoleDaoImpl implements AccountRoleDao
 	{
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(AccountRole.class);
 		criteria.add(Restrictions.eq("id", id));
+		return (AccountRole) criteria.uniqueResult();
+	}
+	
+	@Override
+	public AccountRole getAccountRoleByName(String name)
+	{
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(AccountRole.class);
+		criteria.add(Restrictions.eq("name", name));
 		return (AccountRole) criteria.uniqueResult();
 	}
 

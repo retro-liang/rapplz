@@ -8,6 +8,8 @@
 		<div id="main">
 			
 			<h3>You have been signed out securely.</h3>
+			
+			<p><a href="<spring:url value="/" htmlEscape="true" />">Go to homepage</a></p>
 
 		</div>
 

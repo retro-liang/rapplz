@@ -8,7 +8,7 @@
 		<max-concurrent-requests>10</max-concurrent-requests>
 		<retry-parameters>
 			<task-retry-limit>5</task-retry-limit>
-			<task-age-limit>1</task-age-limit>
+			<task-age-limit>1d</task-age-limit>
 		</retry-parameters>
 	</queue>
 	<queue>

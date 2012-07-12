@@ -22,7 +22,8 @@ public class AccountRole extends BaseEntity implements Serializable
 {
 	private static final long serialVersionUID = -5934155326162492033L;
 
-	private String name;
+	public static final String DEFAULT = "ROLE_USER";
+	private String name = DEFAULT;
 	
 	@ManyToMany(mappedBy="accountRoles")	
     private Set<User> users = new HashSet<User>();

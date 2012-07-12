@@ -10,17 +10,30 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.retro.rapplz.db.dao.AccountRoleDao;
+import com.retro.rapplz.db.dao.AccountStatusDao;
+import com.retro.rapplz.db.dao.AccountTypeDao;
 import com.retro.rapplz.db.dao.UserDao;
 import com.retro.rapplz.db.entity.AccountRole;
 import com.retro.rapplz.db.entity.AccountStatus;
 import com.retro.rapplz.db.entity.AccountType;
 import com.retro.rapplz.db.entity.User;
 import com.retro.rapplz.service.exception.ApplicationServiceException;
+import com.retro.rapplz.util.UserAssembler;
 
 @Service("userService")
 public class UserServiceImpl implements UserService, UserDetailsService
 {
 	private static final Logger logger = Logger.getLogger(UserServiceImpl.class.getName());
+	
+	@Autowired
+	private AccountRoleDao accountRoleDao;
+	
+	@Autowired
+	private AccountTypeDao accountTypeDao;
+	
+	@Autowired
+	private AccountStatusDao accountStatusDao;
 	
 	@Autowired
 	private UserDao userDao;
@@ -42,25 +55,21 @@ public class UserServiceImpl implements UserService, UserDetailsService
 	}
 	
 	@Override
-	public User createUser(String accountType, String email, String password, String firstName, String lastName) throws ApplicationServiceException
+	public User createUser(String accountRoleName, String accountTypeName, String accountStatusName, String email, String password, String firstName, String lastName) throws ApplicationServiceException
 	{
 		logger.info("createUser: " + email);
-		/*AccountType accountType = new AccountType();
-		accountType.setId(1l);
-		accountType.setName("RAPPLZ");
-		user.setAccountType(accountType);*/
+		AccountRole accountRole = accountRoleDao.getAccountRoleByName(accountRoleName);
+		AccountType accountType = accountTypeDao.getAccountTypeByName(accountTypeName);
+		AccountStatus accountStatus = accountStatusDao.getAccountStatusByName(accountStatusName);
 		User user = new User();
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
 		user.setEmail(email);
 		user.setPassword(password);
-		AccountStatus accountStatus = new AccountStatus();
-		accountStatus.setId(1l);
-		accountStatus.setName(AccountStatus.DEFAULT);
+		user.getAccountRoles().add(accountRole);
+		user.setAccountType(accountType);
 		user.setAccountStatus(accountStatus);
-		AccountRole accountRole = new AccountRole();
-		accountRole.setId(1l);
-		accountRole.setName("ROLE_USER");
-		user.getAccountRoles().add(accountRole);		
 		userDao.addUser(user);
-		return null;
+		return user;
 	}
 }
