@@ -52,11 +52,21 @@ public class UserDaoImpl implements UserDao
 		User user = (User)sessionFactory.getCurrentSession().createQuery("select u from User u where id = '" + id + "'").uniqueResult();
 		return user;
 	}
+	
+	@Override
+	public void resetPassword(String email, String password)
+	{
+		String hql = "update User set password = :password where email = :email";
+		org.hibernate.Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setString("password", password);
+		query.setString("email", email);
+		query.executeUpdate();
+	}
 
 	@Override
 	public String activateUser(Long id)
 	{
-		String hql = "update Userset active = :active where id = :id";
+		String hql = "update User set active = :active where id = :id";
 		org.hibernate.Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setString("active", "Y");
 		query.setLong("id", id);

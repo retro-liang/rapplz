@@ -109,6 +109,16 @@
 	</dependency>
 	<dependency>
 		<groupId>org.springframework.security</groupId>
+		<artifactId>spring-security-web</artifactId>
+		<version>${spring-security.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.security</groupId>
+		<artifactId>spring-security-taglibs</artifactId>
+		<version>${spring-security.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.security</groupId>
 		<artifactId>spring-security-config</artifactId>
 		<version>${spring-security.version}</version>
 	</dependency>
@@ -363,6 +373,8 @@
 				<jvmFlag>-Drdbms.server=local</jvmFlag>
 				<jvmFlag>-Drdbms.driver=com.mysql.jdbc.Driver</jvmFlag>
 				<jvmFlag>-Drdbms.url=jdbc:mysql://localhost:3306/rapplz?user=root&amp;password=admin</jvmFlag>
+				<jvmFlag>-Dmail.log_mail_level=WARNING</jvmFlag>
+      			<jvmFlag>-Dmail.log_mail_body=true</jvmFlag>
 	    	</jvmFlags>
 	    	<address>localhost</address>
 	    	<monitorPort>8082</monitorPort>

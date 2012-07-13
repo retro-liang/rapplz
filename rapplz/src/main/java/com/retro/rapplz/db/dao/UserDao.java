@@ -11,6 +11,7 @@ public interface UserDao
 	public void addUser(User user);
 	public User findByEmail(String email);
 	public User getUserByID(Long id);
+	public void resetPassword(String email, String password);
 	public String activateUser(Long id);
 	public String disableUser(Long id);
 	public void updateUser(User user);

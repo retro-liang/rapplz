@@ -18,6 +18,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Table(name="user")
@@ -34,14 +36,22 @@ public class User extends BaseEntity implements Serializable
 {
 	private static final long serialVersionUID = 3295552597219824938L;
 
+	@NotBlank
+	@Length(min=6, max=50)
 	@Email
 	private String email;
 	
+	@NotBlank
+	@Length(min=6, max=40)
 	private String password;
 	
+	@NotBlank
+	@Length(min=3, max=30)
 	@Column(name = "first_name")
 	private String firstName;
 	
+	@NotBlank
+	@Length(min=3, max=30)
 	@Column(name = "last_name")
 	private String lastName;
 	

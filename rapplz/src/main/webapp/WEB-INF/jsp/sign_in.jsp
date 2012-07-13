@@ -28,6 +28,8 @@
 					</tr>
 				</table>
 			</form>
+			
+			<p><a href="<spring:url value="/access/forget_password.html" htmlEscape="true" />">Forget password?</a></p>
 
 		</div>
 

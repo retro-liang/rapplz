@@ -14,28 +14,26 @@
 	<http pattern="/js/**" security="none" />
 	<http pattern="/css/**" security="none" />
 	<http pattern="/appstats*" security="none" />
-	<http pattern="/index.html*" security="none" />
-    <http pattern="/loggedout" security="none"/>
+	<http pattern="/access/*.html*" security="none"/>
 
-    <http use-expressions="true">
+    <http auto-config="true" use-expressions="true">
         <intercept-url pattern="/secure/extreme/**" access="hasRole('supervisor')"/>
         <intercept-url pattern="/secure/**" access="isAuthenticated()" />
         <intercept-url pattern="/**" access="permitAll" />
-        <form-login login-page="/sign_in.html" default-target-url="/sign_in_success" authentication-failure-url="/sign_in_failed.html?error=failed" />
-        <logout logout-success-url="/signed_out.html" delete-cookies="JSESSIONID"/>
+        <form-login login-page="/access/sign_in.html" default-target-url="/access/sign_in_success" authentication-failure-url="/access/sign_in_failed" />
+        <logout logout-success-url="/access/sign_out_success.html" delete-cookies="JSESSIONID"/>
         <remember-me />
-        <session-management invalid-session-url="/timeout">
-            <concurrency-control max-sessions="1" error-if-maximum-exceeded="true" />
-        </session-management>
     </http>
+    
+    <beans:bean id="encoder" class="org.springframework.security.authentication.encoding.PlaintextPasswordEncoder" />
+
+    <beans:bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
 
     <beans:bean id="saltSource" class="org.springframework.security.authentication.dao.ReflectionSaltSource">
     	<beans:property name="userPropertyToUse" value="username" />
     </beans:bean>
 
-	<beans:bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
-    
-    <beans:bean id="userService" class="com.retro.rapplz.service.UserServiceImpl" />
+	<beans:bean id="userService" class="com.retro.rapplz.service.UserServiceImpl" />
     
     <beans:bean id="daoAuthenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
 		<beans:property name="userDetailsService" ref="userService" />
@@ -51,8 +49,7 @@
 
 	<authentication-manager>
 		<authentication-provider user-service-ref="userService">
-			<!-- <password-encoder ref="encoder"> -->
-			<password-encoder hash="md5">
+			<password-encoder ref="passwordEncoder">
 				<salt-source ref="saltSource"/>
 			</password-encoder>
 		</authentication-provider>

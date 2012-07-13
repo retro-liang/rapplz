@@ -4,6 +4,8 @@ import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.authentication.dao.SaltSource;
+import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -39,6 +41,12 @@ public class UserServiceImpl implements UserService, UserDetailsService
 	private UserDao userDao;
 	
 	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private SaltSource saltSource;
+	
+	@Autowired
 	private UserAssembler userAssembler;
 
 	@Override
@@ -58,18 +66,28 @@ public class UserServiceImpl implements UserService, UserDetailsService
 	public User createUser(String accountRoleName, String accountTypeName, String accountStatusName, String email, String password, String firstName, String lastName) throws ApplicationServiceException
 	{
 		logger.info("createUser: " + email);
-		AccountRole accountRole = accountRoleDao.getAccountRoleByName(accountRoleName);
-		AccountType accountType = accountTypeDao.getAccountTypeByName(accountTypeName);
-		AccountStatus accountStatus = accountStatusDao.getAccountStatusByName(accountStatusName);
 		User user = new User();
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setEmail(email);
 		user.setPassword(password);
+		user.setPassword(passwordEncoder.encodePassword(password, saltSource.getSalt(userAssembler.buildUserFromUserEntity(user))));
+		AccountRole accountRole = accountRoleDao.getAccountRoleByName(accountRoleName);
+		AccountType accountType = accountTypeDao.getAccountTypeByName(accountTypeName);
+		AccountStatus accountStatus = accountStatusDao.getAccountStatusByName(accountStatusName);
 		user.getAccountRoles().add(accountRole);
 		user.setAccountType(accountType);
 		user.setAccountStatus(accountStatus);
 		userDao.addUser(user);
 		return user;
+	}
+	
+	@Override
+	public void resetPassword(String email, String password)
+	{
+		logger.info("reset password: " + email);
+		UserDetails userDetail = loadUserByUsername(email);
+	    String encodedPassword = passwordEncoder.encodePassword(password, saltSource.getSalt(userDetail));
+		userDao.resetPassword(email, encodedPassword);
 	}
 }
