@@ -49,6 +49,11 @@ public class RapplzConfig extends XMLConfiguration
     	return instance.getString("sender-email-address");
     }
     
+    public String getSecurityKey()
+    {
+    	return instance.getString("security-key");
+    }
+    
     public String getFeedURL(String os, String device, String type)
 	{
 		return instance.getString("app-feed." + os + "." + device + "." + type);

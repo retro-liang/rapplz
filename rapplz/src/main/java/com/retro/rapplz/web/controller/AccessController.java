@@ -27,6 +27,7 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.retro.rapplz.config.RapplzConfig;
 import com.retro.rapplz.db.entity.User;
+import com.retro.rapplz.security.EncryptAES;
 import com.retro.rapplz.service.UserService;
 import com.retro.rapplz.service.exception.ApplicationServiceException;
 
@@ -36,9 +37,6 @@ import com.retro.rapplz.service.exception.ApplicationServiceException;
 public class AccessController extends MultiActionController
 {
 	private static final Logger logger = Logger.getLogger(AccessController.class.getName());
-	
-	@Autowired
-	private PlaintextPasswordEncoder encoder;
 	
 	@Autowired
 	private UserService userService;
@@ -117,17 +115,17 @@ public class AccessController extends MultiActionController
     }
 
 	@RequestMapping(value="forget_password", method=RequestMethod.POST)
-    public String forgetPasswordHandler(@RequestParam("email") String email) throws UnsupportedEncodingException
+    public String forgetPasswordHandler(HttpServletRequest request, @RequestParam("email") String email) throws UnsupportedEncodingException
 	{
 		logger.info("forgetPasswordHandler");
-		String token = encoder.encodePassword(email, new Date());
+		String token = EncryptAES.encrypt((email + "~~" + System.currentTimeMillis()), RapplzConfig.getInstance().getSecurityKey());
 		Queue queue = QueueFactory.getQueue("send-email");
 	    queue.add(withUrl("/task/send_email").param("fromEmail", RapplzConfig.getInstance().getSenderEmailAddress())
 	    										.param("fromName", "Rapplz")
 	    										.param("toEmail", email)
 	    										.param("toName", "")
 	    										.param("subject", "Rapplz - reset password")
-	    										.param("content", "http://www.rapplz.com/access/reset_password.html?token=" + token));
+	    										.param("content", "http://" + request.getLocalAddr() + ":" + request.getServerPort() + "/access/reset_password.html?token=" + token));
 		return "redirect:forget_password_email_sent.html";
     }
 	
@@ -142,27 +140,26 @@ public class AccessController extends MultiActionController
     public String resetPasswordPage(@RequestParam("token") String token, ModelMap model) throws UnsupportedEncodingException
 	{
 		logger.info("Display reset password page.");
-		String[] result = encoder.obtainPasswordAndSalt(token);
-		if(result != null && result.length == 2)
+		if(token != null && !token.trim().equals(""))
 		{
-			String email = result[0];
-			String createdDate = result[1];
-			logger.info("email: " + email);
-			logger.info("createdDate: " + createdDate);
-			if(email != null && !email.equals("") && createdDate != null && !createdDate.equals(""))
+			String decryptedToken = EncryptAES.decrypt(token, RapplzConfig.getInstance().getSecurityKey());
+			if(decryptedToken != null && !decryptedToken.trim().equals(""))
 			{
-				SimpleDateFormat dataFormat = new SimpleDateFormat();
-				try
+				String[] result = decryptedToken.split("~~");
+				if(result != null && result.length == 2)
 				{
-					Date date = dataFormat.parse(createdDate);
-					if(System.currentTimeMillis() - date.getTime() <= 1000 * 60 * 60 *24)
+					String email = result[0];
+					String createdDate = result[1];
+					logger.info("email: " + email);
+					logger.info("createdDate: " + createdDate);
+					if(email != null && !email.equals("") && createdDate != null && !createdDate.equals(""))
 					{
-						model.addAttribute("token", token);
-						return "reset_password";
+						if(System.currentTimeMillis() - Long.valueOf(createdDate) <= 1000 * 60 * 60 *24)
+						{
+							model.addAttribute("token", token);
+							return "reset_password";
+						}						
 					}
-				}
-				catch (ParseException e)
-				{
 				}
 			}
 		}
@@ -173,17 +170,28 @@ public class AccessController extends MultiActionController
     public String resetPasswordHandler(@RequestParam("token") String token, @RequestParam("password") String password, ModelMap model)
 	{
 		logger.info("Display sign out page.");
-		String[] result = encoder.obtainPasswordAndSalt(token);
-		String email = result[0];
-		try
+		if(token != null && !token.trim().equals(""))
 		{
-			userService.resetPassword(email, password);
-			return "redirect:reset_password_success.html";
+			String decryptedToken = EncryptAES.decrypt(token, RapplzConfig.getInstance().getSecurityKey());
+			if(decryptedToken != null && !decryptedToken.trim().equals(""))
+			{
+				String[] result = decryptedToken.split("~~");
+				if(result != null && result.length == 2)
+				{
+					String email = result[0];
+					try
+					{
+						userService.resetPassword(email, password);
+						return "redirect:reset_password_success.html";
+					}
+					catch (ApplicationServiceException e)
+					{
+						return "redirect:reset_password_fail.html";
+					}
+				}
+			}
 		}
-		catch (ApplicationServiceException e)
-		{
-			return "redirect:reset_password_fail.html";
-		}
+		return "redirect:reset_password_fail.html";
     }
 	
 	@RequestMapping("reset_password_success.html")

@@ -23,6 +23,7 @@
 						<td colspan="2"><input name="submit" type="submit" value="Submit" /></td>
 					</tr>
 				</table>
+				<input type="hidden" name="token" value="${token}" />
 			</form>
 
 		</div>

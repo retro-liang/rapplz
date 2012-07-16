@@ -9,15 +9,11 @@
 			
 			<h3>This reset password link is expired, please request a new one.</h3>
 			
-			<form action="/access/reset_password" method="POST">
+			<form action="/access/forget_password" method="POST">
 				<table>
 					<tr>
-						<td>New password:</td>
-						<td><input type="text" name="password" value="" /></td>
-					</tr>
-					<tr>
-						<td>Confirm password:</td>
-						<td><input type="text" name="confirm_password" value="" /></td>
+						<td>Email:</td>
+						<td><input type="text" name="email" value="" /></td>
 					</tr>
 					<tr>
 						<td colspan="2"><input name="submit" type="submit" value="Submit" /></td>

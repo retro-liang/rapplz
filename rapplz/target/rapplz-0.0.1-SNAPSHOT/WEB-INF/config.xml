@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <rapplz>
+	<security-key>retro</security-key>
 	<sender-email-address>contact@rapplz.com</sender-email-address>
 	<app-search>
 		<ios>
