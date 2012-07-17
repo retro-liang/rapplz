@@ -63,6 +63,7 @@ public class UserServiceImpl implements UserService, UserDetailsService
 	}
 	
 	@Override
+	@Transactional
 	public User createUser(String accountRoleName, String accountTypeName, String accountStatusName, String email, String password, String firstName, String lastName) throws ApplicationServiceException
 	{
 		logger.info("createUser: " + email);
@@ -83,6 +84,7 @@ public class UserServiceImpl implements UserService, UserDetailsService
 	}
 	
 	@Override
+	@Transactional
 	public void resetPassword(String email, String password)
 	{
 		logger.info("reset password: " + email);
