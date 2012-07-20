@@ -22,24 +22,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" output="target/rapplz-0.0.1-SNAPSHOT/WEB-INF/classes" path="target/generated-sources/apt">
-		<attributes>
-			<attribute name="optional" value="true"/>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="lib" path="C:/.m2/repository/com/google/appengine/appengine-java-sdk/1.7.0/appengine-java-sdk-1.7.0/lib/shared/appengine-local-runtime-shared.jar">
 		<attributes>
@@ -149,6 +132,22 @@
 	<classpathentry kind="lib" path="C:/.m2/repository/com/google/appengine/appengine-java-sdk/1.7.0/appengine-java-sdk-1.7.0/lib/user/appengine-api-1.0-sdk-1.7.0.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/C:/.m2/repository/com/google/appengine/appengine-java-sdk/1.7.0/appengine-java-sdk-1.7.0/docs/javadoc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/rapplz-0.0.1-SNAPSHOT/WEB-INF/classes" path="target/generated-sources/apt">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="target/rapplz-0.0.1-SNAPSHOT/WEB-INF/classes"/>

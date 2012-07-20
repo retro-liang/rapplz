@@ -1,6 +1,6 @@
 		<div class="footer">
 			<div class="logo"></div>
-			<div class="copyright">© 2012 Rapplz. All Rights Reserved</div>
+			<div class="copyright">© 2012 . All Rights Reserved</div>
 			<div class="link-box">
 				<ul>
 					<li><a href="<spring:url value="/" htmlEscape="true" />">Home</a></li>

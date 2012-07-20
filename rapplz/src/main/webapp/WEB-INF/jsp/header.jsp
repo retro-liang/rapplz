@@ -5,18 +5,18 @@
 			    <c:set var="authenticated" value="${true}" />
 			</sec:authorize>
 
-			<div id="logo-container">
+			<div id="logo-container" class="float_left">
 				<a id="logo-link" href="<spring:url value="/" htmlEscape="true" />">
 					<img id="logo-image" src="/img/logo.png" alt="Logo" />
 				</a>
 			</div>
 
-			<div id="app-search-container">
+			<div id="app-search-container" class="float_left">
 				<input id="app-search-box" type="text" name="app-search" />
 				<a id="app-recommend" href="<spring:url value="/recommend" htmlEscape="true" />">Recommend an app</a>
 			</div>
 
-			<div id="access-container">
+			<div id="access-container" class="float_left">
 				<c:choose>
 					<c:when test="${!authenticated}">
 						<ul id="access-container-not-ssigned-in">
