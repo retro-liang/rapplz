@@ -12,8 +12,8 @@
 			</div>
 
 			<div id="app-search-container" class="float_left">
-				<input id="app-search-box" type="text" name="app-search" />
-				<a id="app-recommend" href="<spring:url value="/recommend" htmlEscape="true" />">Recommend an app</a>
+				<input id="app-search-box" name="app-search-box" type="text" />
+				<a id="app-search-button" href="#search-result-box" class="inline">Recommend</a>
 			</div>
 
 			<div id="access-container" class="float_left">
@@ -34,3 +34,31 @@
 			</div>
 
 		</div>
+		
+		<div style="display:none;">
+			<div id="search-result-box">
+			<!-- Future navigation panel -->
+			<div class="holder"></div>
+			
+			<!-- Item container (doesn't need to be an UL) -->
+			<table>
+	            <thead>
+	            	<tr>
+	            		<th>Rank</th>
+	            		<th>Rating</th>
+	            		<th>Title</th>
+	            		<th>Votes</th>
+	            	</tr>
+	            </thead>
+	            <tbody id="search-result">
+	            	<tr>
+	            		<td>1.</td>
+	            		<td>9.2</td>
+	            		<td>The Shawshank Redemption (1994)</td>
+	            		<td>699,295</td>
+	            	</tr>
+				</tbody>
+			</table>
+			</div>
+		</div>
+            

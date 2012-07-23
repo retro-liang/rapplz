@@ -1,5 +1,5 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-		<link rel="stylesheet" href="<spring:url value="/css/style.css" htmlEscape="true" />" type="text/css"/>
+		<link rel="stylesheet" type="text/css" href="/css/rapplz.css" />
 		<title>springed gae</title>
 	</head>
