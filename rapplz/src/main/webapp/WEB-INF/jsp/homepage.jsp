@@ -21,7 +21,7 @@
 		
 		<script type="text/javascript">
 		$(document).ready(function(){
-			$(".inline").colorbox({inline:true, width:"50%"});
+			
 			$(".callbacks").colorbox({
 				onOpen:function(){ alert('onOpen: colorbox is about to open'); },
 				onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
@@ -35,8 +35,9 @@
 			
 			$("#app-search-button").click(function(event)
 			{
+				event.preventDefault();
+				event.stopPropagation();
 				var keyword = $("#app-search-box").val();
-				alert("search: " + keyword);
 				
 				$.ajax
 				({
@@ -46,12 +47,69 @@
 					{
 						country: "us",
 						entity: "software",
-						limit: "10",
+						limit: "20",
 						term: keyword
 					},
 					success: function(data)
 					{
-						alert("success: " + data.resultCount);
+						//alert("success: " + data.resultCount);
+						var result = "";
+						$.each(data.results, function(index, item)
+						{
+						    //alert(item.trackId + ': ' + item.trackName);
+						    result += "<tr><td><a target='_blank' href='" + item.artistViewUrl + "'><img src='" + item.artworkUrl60 + "' /></a></td><td><a target='_blank' href='" + item.artistViewUrl + "'>" + item.trackName + "</a></td><td>" + item.artistName + "</td><td>" + item.averageUserRating + "</td><td>" + item.userRatingCount + "</td><td><a href='/recommend'>Recommend</a></td></tr>";
+						});
+						$("#search-result").html(result);
+						$("div.holder").jPages({ 
+				            containerID : "search-result",
+				            previous : "←",
+				            next : "→",
+				            perPage : 5,
+				            delay : 0
+				        });
+						$.colorbox({inline:true, href:"#search-result-box", width:"50%", height:"50%"});
+					},
+					error: function(jqXHR, textStatus, errorThrown)
+					{
+						alert("error: " + errorThrown);
+					}
+				});
+			});
+			
+			$("#sign-in-button").click(function(event)
+			{
+				event.preventDefault();
+				event.stopPropagation();
+				$.colorbox({inline:true, href:"#sign-in-box"});
+			});
+			
+			$("#sign-in-submit").click(function(event)
+			{
+				event.preventDefault();
+				event.stopPropagation();
+				
+				var signInUrl = $("#sign-in-form").attr("action");
+				var username = $("#j_username").val();
+				var password = $("#j_password").val();
+				var rememberMe = $("#remember-me").prop("checked");
+				
+				$.ajax
+				({
+					url: signInUrl,
+					type: "POST",
+					data: 
+					{
+						j_username: username,
+						j_password: password,
+						_spring_security_remember_me: rememberMe
+					},
+					beforeSend: function (xhr)
+					{
+						xhr.setRequestHeader("X-Ajax-call", "true");
+			        },
+					success: function(data)
+					{
+						alert(data.email);
 					},
 					error: function(jqXHR, textStatus, errorThrown)
 					{
@@ -62,15 +120,9 @@
 		</script>
 		
 		<script>
-		    $(function(){
-		        $("div.holder").jPages({ 
-		            containerID : "search-result",
-		            previous : "<-",
-		            next : "->",
-		            perPage : 20,
-		            delay : 20
-		        });
-		    });
+	    $(function(){
+	        
+	    });
 	    </script>
 		
 		<script type="text/javascript">

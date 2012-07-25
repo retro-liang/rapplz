@@ -4,22 +4,19 @@ import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
 
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.encoding.PlaintextPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
@@ -41,15 +38,15 @@ public class AccessController extends MultiActionController
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping("sign_in.html")
+	@RequestMapping("sign-in.html")
     public String signInPage(HttpServletRequest request)
 	{
 		logger.info("displaySignInPage: " + request.getRemoteAddr());
-		return "sign_in";
+		return "sign-in";
     }
 	
-	@RequestMapping("sign_in_success")
-    public String signInSuccessHandler(HttpServletRequest request, ModelMap model, Principal principal)
+	@RequestMapping("sign-in-success")
+    public @ResponseBody User signInSuccessHandler(HttpServletRequest request, ModelMap model, Principal principal)
 	{
 		logger.info("signInSuccessHandler: " + request.getRemoteAddr());
 		String email = principal.getName();
@@ -57,86 +54,87 @@ public class AccessController extends MultiActionController
 		user.setEmail(email);
 		//model.addAttribute("firstName", firstName);
 		//model.addAttribute("lastName", lastName);
-		model.addAttribute("user", user);
-		return "redirect:/index.html";
+		//model.addAttribute("user", user);
+		//return "redirect:/index.html";
+		return user;
     }
 	
-    @RequestMapping("sign_in_fail")
+    @RequestMapping("sign-in-fail")
     public String signInFailedHandler(ModelMap model)
 	{
 		logger.info("Sign in fail.");
 		model.addAttribute("signInFailMessage", "Sign in fail, your email or password are not correct.");
-		return "redirect:sign_in.html";
+		return "redirect:sign-in.html";
     }
 	
-	@RequestMapping("sign_up.html")
+	@RequestMapping("sign-up.html")
     public String signUpPage(HttpServletRequest request, ModelMap modelMap)
 	{
 		logger.info("displaySignUpPage: " + request.getRemoteAddr());
 		modelMap.addAttribute("user", new User());
-		return "sign_up";
+		return "sign-up";
     }
 	
-	@RequestMapping(value="sign_up", method=RequestMethod.POST)
+	@RequestMapping(value="sign-up", method=RequestMethod.POST)
     public String signUpHandler(HttpServletRequest request, @Valid User user, BindingResult result)
 	{
 		logger.info("signUpHandler: " + request.getRemoteAddr());
 		if(result.hasErrors())
 		{
-			return "sign_up";
+			return "sign-up";
 		}
 		else
 		{
 			Queue queue = QueueFactory.getQueue("create-user");
-		    queue.add(withUrl("/task/create_user").param("accountType", "ROLE_USER").param("email", user.getEmail()).param("password", user.getPassword()).param("firstName", user.getFirstName()).param("lastName", user.getLastName()));
-			return "redirect:sign_up_success.html";
+		    queue.add(withUrl("/task/create-user").param("accountType", "ROLE_USER").param("email", user.getEmail()).param("password", user.getPassword()).param("firstName", user.getFirstName()).param("lastName", user.getLastName()));
+			return "redirect:sign-up-success.html";
 		}
     }
 	
-	@RequestMapping("sign_up_success.html")
+	@RequestMapping("sign-up-success.html")
     public String signUpSuccessPage()
 	{
 		logger.info("Display sign up success page.");
-		return "sign_up_success";
+		return "sign-up-success";
     }
 	
-	@RequestMapping("sign_out_success.html")
+	@RequestMapping("sign-out-success.html")
     public String signOutPage()
 	{
 		logger.info("Display sign out page.");
-		return "sign_out_success";
+		return "sign-out-success";
     }
 	
-	@RequestMapping("forget_password.html")
+	@RequestMapping("forget-password.html")
     public String forgetPasswordPage()
 	{
 		logger.info("Display forget password page.");
-		return "forget_password";
+		return "forget-password";
     }
 
-	@RequestMapping(value="forget_password", method=RequestMethod.POST)
+	@RequestMapping(value="forget-password", method=RequestMethod.POST)
     public String forgetPasswordHandler(HttpServletRequest request, @RequestParam("email") String email) throws UnsupportedEncodingException
 	{
 		logger.info("forgetPasswordHandler");
 		String token = EncryptAES.encrypt((email + "~~" + System.currentTimeMillis()), RapplzConfig.getInstance().getSecurityKey());
 		Queue queue = QueueFactory.getQueue("send-email");
-	    queue.add(withUrl("/task/send_email").param("fromEmail", RapplzConfig.getInstance().getSenderEmailAddress())
+	    queue.add(withUrl("/task/send-email").param("fromEmail", RapplzConfig.getInstance().getSenderEmailAddress())
 	    										.param("fromName", "Rapplz")
 	    										.param("toEmail", email)
 	    										.param("toName", "")
 	    										.param("subject", "Rapplz - reset password")
-	    										.param("content", "http://" + request.getLocalAddr() + ":" + request.getServerPort() + "/access/reset_password.html?token=" + token));
-		return "redirect:forget_password_email_sent.html";
+	    										.param("content", "http://" + request.getLocalAddr() + ":" + request.getServerPort() + "/access/reset-password.html?token=" + token));
+		return "redirect:forget-password-email-sent.html";
     }
 	
-	@RequestMapping("forget_password_email_sent.html")
+	@RequestMapping("forget-password-email-sent.html")
     public String forgetPasswordEmailSentPage()
 	{
 		logger.info("Display forget password email sent page.");
-		return "forget_password_email_sent";
+		return "forget-password-email-sent";
     }
 
-	@RequestMapping("reset_password.html")
+	@RequestMapping("reset-password.html")
     public String resetPasswordPage(@RequestParam("token") String token, ModelMap model) throws UnsupportedEncodingException
 	{
 		logger.info("Display reset password page.");
@@ -157,16 +155,16 @@ public class AccessController extends MultiActionController
 						if(System.currentTimeMillis() - Long.valueOf(createdDate) <= 1000 * 60 * 60 *24)
 						{
 							model.addAttribute("token", token);
-							return "reset_password";
+							return "reset-password";
 						}						
 					}
 				}
 			}
 		}
-		return "redirect:reset_password_fail.html";
+		return "redirect:reset-password-fail.html";
     }
 	
-	@RequestMapping("reset_password")
+	@RequestMapping("reset-password")
     public String resetPasswordHandler(@RequestParam("token") String token, @RequestParam("password") String password, ModelMap model)
 	{
 		logger.info("Display sign out page.");
@@ -182,29 +180,29 @@ public class AccessController extends MultiActionController
 					try
 					{
 						userService.resetPassword(email, password);
-						return "redirect:reset_password_success.html";
+						return "redirect:reset-password-success.html";
 					}
 					catch (ApplicationServiceException e)
 					{
-						return "redirect:reset_password_fail.html";
+						return "redirect:reset-password-fail.html";
 					}
 				}
 			}
 		}
-		return "redirect:reset_password_fail.html";
+		return "redirect:reset-password-fail.html";
     }
 	
-	@RequestMapping("reset_password_success.html")
+	@RequestMapping("reset-password-success.html")
     public String resetPasswordSuccessPage()
 	{
 		logger.info("Display forget password success page.");
-		return "reset_password_success";
+		return "reset-password-success";
     }
 	
-	@RequestMapping("reset_password_fail.html")
+	@RequestMapping("reset-password-fail.html")
     public String resetPasswordFailPage()
 	{
 		logger.info("Display reset password fail page.");
-		return "reset_password_fail";
+		return "reset-password-fail";
     }
 }

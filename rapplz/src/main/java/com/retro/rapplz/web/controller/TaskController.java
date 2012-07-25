@@ -37,7 +37,7 @@ public class TaskController
 	@Autowired
 	private EmailService emailService;
 	
-	@RequestMapping("create_user")
+	@RequestMapping("create-user")
     public void createUserTask(HttpServletRequest request, HttpServletResponse response,
     							@RequestParam("accountType") String accountType,
     							@RequestParam("email") String email,
@@ -50,7 +50,7 @@ public class TaskController
 		{
 			User user = userService.createUser(AccountRole.DEFAULT, AccountType.DEFAULT, AccountStatus.DEFAULT, email, password, firstName, lastName);
 			Queue queue = QueueFactory.getQueue("send-email");
-		    queue.add(withUrl("/task/send_email").param("fromEmail", RapplzConfig.getInstance().getSenderEmailAddress())
+		    queue.add(withUrl("/task/send-email").param("fromEmail", RapplzConfig.getInstance().getSenderEmailAddress())
 		    										.param("fromName", "Rapplz")
 		    										.param("toEmail", email)
 		    										.param("toName", firstName)
@@ -64,7 +64,7 @@ public class TaskController
 		}
     }
 	
-	@RequestMapping("send_email")
+	@RequestMapping("send-email")
     public void sendEmailTask(HttpServletRequest request, HttpServletResponse response,
     							@RequestParam("fromEmail") String fromEmail,
     							@RequestParam("fromName") String fromName,

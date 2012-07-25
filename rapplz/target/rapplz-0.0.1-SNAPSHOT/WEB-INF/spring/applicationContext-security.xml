@@ -20,8 +20,8 @@
         <intercept-url pattern="/secure/extreme/**" access="hasRole('supervisor')"/>
         <intercept-url pattern="/secure/**" access="isAuthenticated()" />
         <intercept-url pattern="/**" access="permitAll" />
-        <form-login login-page="/access/sign_in.html" default-target-url="/access/sign_in_success" authentication-failure-url="/access/sign_in_failed" />
-        <logout logout-success-url="/access/sign_out_success.html" delete-cookies="JSESSIONID"/>
+        <form-login login-page="/access/sign-in.html" default-target-url="/access/sign-in-success" authentication-failure-url="/access/sign-in-fail" />
+        <logout logout-success-url="/access/sign-out-success.html" delete-cookies="JSESSIONID"/>
         <remember-me />
     </http>
     
