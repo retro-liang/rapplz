@@ -66,9 +66,8 @@ public class UserDaoImpl implements UserDao
 	@Override
 	public String activateUser(Long id)
 	{
-		String hql = "update User set active = :active where id = :id";
+		String hql = "update User u set u.accountStatus = (select s.id from AccountStatus s where s.name = 'ACTIVE' ) where u.id = :id";
 		org.hibernate.Query query = sessionFactory.getCurrentSession().createQuery(hql);
-		query.setString("active", "Y");
 		query.setLong("id", id);
 		int rowCount = query.executeUpdate();
 		System.out.println("Rows affected: " + rowCount);
@@ -76,11 +75,11 @@ public class UserDaoImpl implements UserDao
 	}
 
 	@Override
-	public String disableUser(Long id)
+	public String inactivateUser(Long id)
 	{
-		String hql = "update User set active = :active where id = :id";
+		String hql = "update User u set u.accountStatus = (select s.id from AccountStatus s where s.name = 'INACTIVE' ) where u.id = :id";
 		org.hibernate.Query query = sessionFactory.getCurrentSession().createQuery(hql);
-		query.setInteger("active", 0);
+		query.setInteger("active", 2);
 		query.setLong("id", id);
 		int rowCount = query.executeUpdate();
 		System.out.println("Rows affected: " + rowCount);

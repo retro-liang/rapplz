@@ -13,7 +13,7 @@ public interface UserDao
 	public User getUserByID(Long id);
 	public void resetPassword(String email, String password);
 	public String activateUser(Long id);
-	public String disableUser(Long id);
+	public String inactivateUser(Long id);
 	public void updateUser(User user);
 	public List<User> listUser();
 	public void removeUser(Long id);

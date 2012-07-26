@@ -76,18 +76,18 @@ public class AccessController extends MultiActionController
     }
 	
 	@RequestMapping(value="sign-up", method=RequestMethod.POST)
-    public String signUpHandler(HttpServletRequest request, @Valid User user, BindingResult result)
+    public @ResponseBody String signUpHandler(HttpServletRequest request, @Valid User user, BindingResult result)
 	{
 		logger.info("signUpHandler: " + request.getRemoteAddr());
 		if(result.hasErrors())
 		{
-			return "sign-up";
+			return result.getAllErrors().toString();
 		}
 		else
 		{
 			Queue queue = QueueFactory.getQueue("create-user");
 		    queue.add(withUrl("/task/create-user").param("accountType", "ROLE_USER").param("email", user.getEmail()).param("password", user.getPassword()).param("firstName", user.getFirstName()).param("lastName", user.getLastName()));
-			return "redirect:sign-up-success.html";
+			return "ok";
 		}
     }
 	
@@ -113,7 +113,7 @@ public class AccessController extends MultiActionController
     }
 
 	@RequestMapping(value="forget-password", method=RequestMethod.POST)
-    public String forgetPasswordHandler(HttpServletRequest request, @RequestParam("email") String email) throws UnsupportedEncodingException
+    public @ResponseBody String forgetPasswordHandler(HttpServletRequest request, @RequestParam("email") String email) throws UnsupportedEncodingException
 	{
 		logger.info("forgetPasswordHandler");
 		String token = EncryptAES.encrypt((email + "~~" + System.currentTimeMillis()), RapplzConfig.getInstance().getSecurityKey());
@@ -124,7 +124,7 @@ public class AccessController extends MultiActionController
 	    										.param("toName", "")
 	    										.param("subject", "Rapplz - reset password")
 	    										.param("content", "http://" + request.getLocalAddr() + ":" + request.getServerPort() + "/access/reset-password.html?token=" + token));
-		return "redirect:forget-password-email-sent.html";
+		return "ok";
     }
 	
 	@RequestMapping("forget-password-email-sent.html")
@@ -204,5 +204,12 @@ public class AccessController extends MultiActionController
 	{
 		logger.info("Display reset password fail page.");
 		return "reset-password-fail";
+    }
+	
+	@RequestMapping(value="activate-account")
+    public @ResponseBody String activateAccountHandler(HttpServletRequest request, @RequestParam("id") String email) throws UnsupportedEncodingException
+	{
+		String token = EncryptAES.encrypt((email + "~~" + System.currentTimeMillis()), RapplzConfig.getInstance().getSecurityKey());
+		return "ok";
     }
 }

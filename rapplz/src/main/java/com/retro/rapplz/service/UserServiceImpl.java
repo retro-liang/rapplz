@@ -85,11 +85,19 @@ public class UserServiceImpl implements UserService, UserDetailsService
 	
 	@Override
 	@Transactional
-	public void resetPassword(String email, String password)
+	public void resetPassword(String email, String password) throws ApplicationServiceException
 	{
 		logger.info("reset password: " + email);
 		UserDetails userDetail = loadUserByUsername(email);
 	    String encodedPassword = passwordEncoder.encodePassword(password, saltSource.getSalt(userDetail));
 		userDao.resetPassword(email, encodedPassword);
+	}
+	
+	@Override
+	@Transactional
+	public void activateUser(Long id) throws ApplicationServiceException
+	{
+		logger.info("activate user: " + id);
+		userDao.activateUser(id);
 	}
 }

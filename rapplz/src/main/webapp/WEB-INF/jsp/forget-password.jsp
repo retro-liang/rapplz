@@ -7,7 +7,7 @@
 
 		<div id="main">
 			
-			<h3>Login with your email and password</h3>
+			<h3>Enter your email</h3>
 			
 			<form action="/access/forget-password" method="POST">
 				<table>

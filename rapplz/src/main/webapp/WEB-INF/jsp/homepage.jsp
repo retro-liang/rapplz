@@ -88,14 +88,14 @@
 				event.preventDefault();
 				event.stopPropagation();
 				
-				var signInUrl = $("#sign-in-form").attr("action");
+				var url = $("#sign-in-form").attr("action");
 				var username = $("#j_username").val();
 				var password = $("#j_password").val();
 				var rememberMe = $("#remember-me").prop("checked");
 				
 				$.ajax
 				({
-					url: signInUrl,
+					url: url,
 					type: "POST",
 					data: 
 					{
@@ -110,6 +110,114 @@
 					success: function(data)
 					{
 						alert(data.email);
+					},
+					error: function(jqXHR, textStatus, errorThrown)
+					{
+						alert("error: " + errorThrown);
+					}
+				});
+			});
+			
+			$("#forget-password-button").click(function(event)
+			{
+				event.preventDefault();
+				event.stopPropagation();
+				$.colorbox({inline:true, href:"#forget-password-box"});
+			});
+			
+			$("#forget-password-submit").click(function(event)
+			{
+				event.preventDefault();
+				event.stopPropagation();
+				
+				var url = $("#forget-password-form").attr("action");
+				var email = $("#forget-password-email").val();
+				
+				$.ajax
+				({
+					url: url,
+					type: "POST",
+					data: 
+					{
+						email: email								
+					},
+					beforeSend: function (xhr)
+					{
+						xhr.setRequestHeader("X-Ajax-call", "true");
+			        },
+					success: function(data)
+					{
+						if(data == "ok")
+						{
+							$("#forget-password-email").val("");
+							$.colorbox({inline:true, href:"#forget-password-success-box"});
+						}
+						else
+						{
+							alert("failed: " + data);
+						}
+					},
+					error: function(jqXHR, textStatus, errorThrown)
+					{
+						alert("error: " + errorThrown);
+					}
+				});
+			});
+			
+			$("#sign-up-button").click(function(event)
+			{
+				event.preventDefault();
+				event.stopPropagation();
+				$.colorbox({inline:true, href:"#sign-up-box"});
+			});
+			
+			$("#sign-in-sign-up-button").click(function(event)
+			{
+				event.preventDefault();
+				event.stopPropagation();
+				$.colorbox({inline:true, href:"#sign-up-box"});
+			});
+			
+			$("#sign-up-submit").click(function(event)
+			{
+				event.preventDefault();
+				event.stopPropagation();
+				
+				var url = $("#sign-up-form").attr("action");
+				var firstName = $("#sign-up-first-name").val();
+				var lastName = $("#sign-up-last-name").val();
+				var email = $("#sign-up-email").val();
+				var password = $("#sign-up-password").val();
+				
+				$.ajax
+				({
+					url: url,
+					type: "POST",
+					data: 
+					{
+						firstName: firstName,
+						lastName: lastName, 
+						email: email,
+						password: password
+					},
+					beforeSend: function (xhr)
+					{
+						xhr.setRequestHeader("X-Ajax-call", "true");
+			        },
+					success: function(data)
+					{
+						if(data == "ok")
+						{
+							$("#sign-up-first-name").val("");
+							$("#sign-up-last-name").val("");
+							$("#sign-up-email").val("");
+							$("#sign-up-password").val("");
+							$.colorbox({inline:true, href:"#sign-up-success-box"});
+						}
+						else
+						{
+							alert("failed: " + data);
+						}
 					},
 					error: function(jqXHR, textStatus, errorThrown)
 					{
