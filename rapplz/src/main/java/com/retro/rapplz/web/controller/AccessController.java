@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,8 @@ import com.retro.rapplz.db.entity.User;
 import com.retro.rapplz.security.EncryptAES;
 import com.retro.rapplz.service.UserService;
 import com.retro.rapplz.service.exception.ApplicationServiceException;
+import com.retro.rapplz.util.UserInfoAssembler;
+import com.retro.rapplz.web.dto.UserInfo;
 
 @Controller
 @RequestMapping("/access")
@@ -38,6 +41,9 @@ public class AccessController extends MultiActionController
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private UserInfoAssembler userInfoAssembler;
+	
 	@RequestMapping("sign-in.html")
     public String signInPage(HttpServletRequest request)
 	{
@@ -46,17 +52,12 @@ public class AccessController extends MultiActionController
     }
 	
 	@RequestMapping("sign-in-success")
-    public @ResponseBody User signInSuccessHandler(HttpServletRequest request, ModelMap model, Principal principal)
+    public @ResponseBody UserInfo signInSuccessHandler(HttpServletRequest request, ModelMap model, Principal principal)
 	{
 		logger.info("signInSuccessHandler: " + request.getRemoteAddr());
-		String email = principal.getName();
-		User user = new User();
-		user.setEmail(email);
-		//model.addAttribute("firstName", firstName);
-		//model.addAttribute("lastName", lastName);
-		//model.addAttribute("user", user);
-		//return "redirect:/index.html";
-		return user;
+		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserInfo userInfo = userInfoAssembler.buildUserInfoFromUser(user);
+		return userInfo;
     }
 	
     @RequestMapping("sign-in-fail")
@@ -207,9 +208,34 @@ public class AccessController extends MultiActionController
     }
 	
 	@RequestMapping(value="activate-account")
-    public @ResponseBody String activateAccountHandler(HttpServletRequest request, @RequestParam("id") String email) throws UnsupportedEncodingException
+    public @ResponseBody String activateAccountHandler(HttpServletRequest request, @RequestParam("token") String token) throws UnsupportedEncodingException
 	{
-		String token = EncryptAES.encrypt((email + "~~" + System.currentTimeMillis()), RapplzConfig.getInstance().getSecurityKey());
-		return "ok";
+		String userId = EncryptAES.decrypt(token, RapplzConfig.getInstance().getSecurityKey());
+		try
+		{
+			userService.activateUser(Long.valueOf(userId));
+			return "ok";
+		}
+		catch(Exception e)
+		{
+			logger.severe("Activate user accound failed: " + e);
+		}
+		return "error";
+    }
+	
+	@RequestMapping(value="inactivate-account")
+    public @ResponseBody String inactivateAccountHandler(HttpServletRequest request, @RequestParam("token") String token) throws UnsupportedEncodingException
+	{
+		String userId = EncryptAES.decrypt(token, RapplzConfig.getInstance().getSecurityKey());
+		try
+		{
+			userService.inactivateUser(Long.valueOf(userId));
+			return "ok";
+		}
+		catch(Exception e)
+		{
+			logger.severe("Inactivate user accound failed: " + e);
+		}
+		return "error";
     }
 }

@@ -1,6 +1,8 @@
 package com.retro.rapplz.db.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,12 +19,17 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-@Table(name="user")
+@Table(name = "user")
 @NamedQueries
 ({
 	@NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
@@ -32,88 +39,91 @@ import org.hibernate.validator.constraints.NotBlank;
 	@NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
 	@NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password")
 })
-public class User extends BaseEntity implements Serializable
+public class User extends BaseEntity implements UserDetails, Serializable
 {
 	private static final long serialVersionUID = 3295552597219824938L;
 
 	@NotBlank
-	@Length(min=6, max=50)
+	@Length(min = 6, max = 50)
 	@Email
 	private String email;
-	
+
 	@NotBlank
-	@Length(min=6, max=40)
+	@Length(min = 6, max = 40)
 	private String password;
-	
+
 	@NotBlank
-	@Length(min=3, max=30)
+	@Length(min = 3, max = 30)
 	@Column(name = "first_name")
 	private String firstName;
-	
+
 	@NotBlank
-	@Length(min=3, max=30)
+	@Length(min = 3, max = 30)
 	@Column(name = "last_name")
 	private String lastName;
-	
+
 	@Column(name = "avatar")
 	private String avatar;
-	
+
 	@ManyToOne
-	@JoinColumn(name="account_type_id")
+	@JoinColumn(name = "account_type_id")
 	private AccountType accountType;
-	
+
 	@ManyToMany
-    @JoinTable
-    (
-    	name="user_account_role",
-        joinColumns={@JoinColumn(name="user_id")},
-        inverseJoinColumns={@JoinColumn(name="account_role_id")}
-    )
+	@JoinTable(name = "user_account_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "account_role_id") })
 	private Set<AccountRole> accountRoles = new HashSet<AccountRole>();
-	
+
 	@ManyToOne
-	@JoinColumn(name="account_status_id")
+	@JoinColumn(name = "account_status_id")
 	private AccountStatus accountStatus;
 	
-	@OneToMany(mappedBy="user")
-	private Set<Activity> activities = new HashSet<Activity>();
-	
-	@OneToMany(mappedBy="author")
-	private Set<AppComment> appComments = new HashSet<AppComment>();
-	
-	@OneToMany(mappedBy="author")
-	private Set<Review> reviews = new HashSet<Review>();
-	
-	@OneToMany(mappedBy="author")
-	private Set<ReviewComment> reviewComments = new HashSet<ReviewComment>();
-	
 	@ManyToMany
-    @JoinTable
-    (
-    	name="follower_following",
-        joinColumns={@JoinColumn(name="follower_user_id")},
-        inverseJoinColumns={@JoinColumn(name="following_user_id")}
-    )
+	@JoinTable(name = "user_app", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "app_id") })
+	@LazyCollection(LazyCollectionOption.EXTRA)
+	private Set<App> apps = new HashSet<App>();
+
+	@OneToMany(mappedBy = "user")
+	private Set<Activity> activities = new HashSet<Activity>();
+
+	@OneToMany(mappedBy = "author")
+	@LazyCollection(LazyCollectionOption.EXTRA)
+	private Set<AppComment> appComments = new HashSet<AppComment>();
+
+	@OneToMany(mappedBy = "author")
+	@LazyCollection(LazyCollectionOption.EXTRA)
+	private Set<Review> reviews = new HashSet<Review>();
+
+	@OneToMany(mappedBy = "author")
+	@LazyCollection(LazyCollectionOption.EXTRA)
+	private Set<ReviewComment> reviewComments = new HashSet<ReviewComment>();
+
+	@ManyToMany
+	@JoinTable(name = "follower_following", joinColumns = { @JoinColumn(name = "follower_user_id") }, inverseJoinColumns = { @JoinColumn(name = "following_user_id") })
 	@Cascade(CascadeType.ALL)
-    private Set<User> followers = new HashSet<User>();
-	
-	@ManyToMany(mappedBy="followers")
-    private Set<User> followings = new HashSet<User>();
-	
-	@OneToMany(mappedBy="fromUser")
+	@LazyCollection(LazyCollectionOption.EXTRA)
+	private Set<User> followers = new HashSet<User>();
+
+	@ManyToMany(mappedBy = "followers")
+	@LazyCollection(LazyCollectionOption.EXTRA)
+	private Set<User> followings = new HashSet<User>();
+
+	@OneToMany(mappedBy = "fromUser")
+	@LazyCollection(LazyCollectionOption.EXTRA)
 	private Set<Recommendation> sentRecommendation = new HashSet<Recommendation>();
-	
-	@OneToMany(mappedBy="toUser")
+
+	@OneToMany(mappedBy = "toUser")
+	@LazyCollection(LazyCollectionOption.EXTRA)
 	private Set<Recommendation> receivedRecommendation = new HashSet<Recommendation>();
-	
-	@OneToMany(mappedBy="author")
+
+	@OneToMany(mappedBy = "author")
+	@LazyCollection(LazyCollectionOption.EXTRA)
 	private Set<Tag> tags = new HashSet<Tag>();
-	
+
 	public User()
 	{
-		
+
 	}
-	
+
 	@Override
 	public int hashCode()
 	{
@@ -125,7 +135,8 @@ public class User extends BaseEntity implements Serializable
 	@Override
 	public boolean equals(Object object)
 	{
-		//Warning - this method won't work in the case the id fields are not set
+		// Warning - this method won't work in the case the id fields are not
+		// set
 		if (!(object instanceof User))
 		{
 			return false;
@@ -141,142 +152,225 @@ public class User extends BaseEntity implements Serializable
 	@Override
 	public String toString()
 	{
-		return "User[id=" + id + " email=" + email + " type=" + accountType + " status=" + accountStatus + "]";
+		return "User[id=" + id + " email=" + email + " type=" + accountType	+ " status=" + accountStatus + "]";
 	}
 
-	public String getEmail() {
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities()
+	{
+		Collection<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+		return authorities;
+	}
+
+	@Override
+	public String getUsername()
+	{
 		return email;
 	}
 
-	public void setEmail(String email) {
+	@Override
+	public boolean isAccountNonExpired()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled()
+	{
+		return true;
+	}
+
+	public String getEmail()
+	{
+		return email;
+	}
+
+	public void setEmail(String email)
+	{
 		this.email = email;
 	}
 
-	public String getPassword() {
+	public String getPassword()
+	{
 		return password;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(String password)
+	{
 		this.password = password;
 	}
 
-	public String getFirstName() {
+	public String getFirstName()
+	{
 		return firstName;
 	}
 
-	public void setFirstName(String firstName) {
+	public void setFirstName(String firstName)
+	{
 		this.firstName = firstName;
 	}
 
-	public String getLastName() {
+	public String getLastName()
+	{
 		return lastName;
 	}
 
-	public void setLastName(String lastName) {
+	public void setLastName(String lastName)
+	{
 		this.lastName = lastName;
 	}
 
-	public AccountType getAccountType() {
+	public AccountType getAccountType()
+	{
 		return accountType;
 	}
 
-	public void setAccountType(AccountType accountType) {
+	public void setAccountType(AccountType accountType)
+	{
 		this.accountType = accountType;
 	}
 
-	public AccountStatus getAccountStatus() {
+	public AccountStatus getAccountStatus()
+	{
 		return accountStatus;
 	}
 
-	public void setAccountStatus(AccountStatus accountStatus) {
+	public void setAccountStatus(AccountStatus accountStatus)
+	{
 		this.accountStatus = accountStatus;
 	}
 
-	public Set<Activity> getActivities() {
+	public Set<Activity> getActivities()
+	{
 		return activities;
 	}
 
-	public void setActivities(Set<Activity> activities) {
+	public void setActivities(Set<Activity> activities)
+	{
 		this.activities = activities;
 	}
 
-	public Set<User> getFollowers() {
+	public Set<User> getFollowers()
+	{
 		return followers;
 	}
 
-	public void setFollowers(Set<User> followers) {
+	public void setFollowers(Set<User> followers)
+	{
 		this.followers = followers;
 	}
 
-	public Set<User> getFollowings() {
+	public Set<User> getFollowings()
+	{
 		return followings;
 	}
 
-	public void setFollowings(Set<User> followings) {
+	public void setFollowings(Set<User> followings)
+	{
 		this.followings = followings;
 	}
 
-	public Set<Recommendation> getSentRecommendation() {
+	public Set<Recommendation> getSentRecommendation()
+	{
 		return sentRecommendation;
 	}
 
-	public void setSentRecommendation(Set<Recommendation> sentRecommendation) {
+	public void setSentRecommendation(Set<Recommendation> sentRecommendation)
+	{
 		this.sentRecommendation = sentRecommendation;
 	}
 
-	public Set<Recommendation> getReceivedRecommendation() {
+	public Set<Recommendation> getReceivedRecommendation()
+	{
 		return receivedRecommendation;
 	}
 
-	public void setReceivedRecommendation(Set<Recommendation> receivedRecommendation) {
+	public void setReceivedRecommendation(
+			Set<Recommendation> receivedRecommendation)
+	{
 		this.receivedRecommendation = receivedRecommendation;
 	}
 
-	public Set<Tag> getTags() {
+	public Set<Tag> getTags()
+	{
 		return tags;
 	}
 
-	public void setTags(Set<Tag> tags) {
+	public void setTags(Set<Tag> tags)
+	{
 		this.tags = tags;
 	}
 
-	public Set<AppComment> getAppComments() {
+	public Set<AppComment> getAppComments()
+	{
 		return appComments;
 	}
 
-	public void setAppComments(Set<AppComment> appComments) {
+	public void setAppComments(Set<AppComment> appComments)
+	{
 		this.appComments = appComments;
 	}
 
-	public Set<Review> getReviews() {
+	public Set<Review> getReviews()
+	{
 		return reviews;
 	}
 
-	public void setReviews(Set<Review> reviews) {
+	public void setReviews(Set<Review> reviews)
+	{
 		this.reviews = reviews;
 	}
 
-	public Set<ReviewComment> getReviewComments() {
+	public Set<ReviewComment> getReviewComments()
+	{
 		return reviewComments;
 	}
 
-	public void setReviewComments(Set<ReviewComment> reviewComments) {
+	public void setReviewComments(Set<ReviewComment> reviewComments)
+	{
 		this.reviewComments = reviewComments;
 	}
 
-	public String getAvatar() {
+	public String getAvatar()
+	{
 		return avatar;
 	}
 
-	public void setAvatar(String avatar) {
+	public void setAvatar(String avatar)
+	{
 		this.avatar = avatar;
 	}
 
-	public Set<AccountRole> getAccountRoles() {
+	public Set<AccountRole> getAccountRoles()
+	{
 		return accountRoles;
 	}
 
-	public void setAccountRoles(Set<AccountRole> accountRoles) {
+	public void setAccountRoles(Set<AccountRole> accountRoles)
+	{
 		this.accountRoles = accountRoles;
+	}
+
+	public Set<App> getApps()
+	{
+		return apps;
+	}
+
+	public void setApps(Set<App> apps)
+	{
+		this.apps = apps;
 	}
 }

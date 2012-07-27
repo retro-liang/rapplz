@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -11,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.retro.rapplz.db.entity.AccountRole;
 import com.retro.rapplz.db.entity.User;
-import com.retro.rapplz.service.UserServiceImpl;
 
 @Repository("userDao")
 @Transactional
@@ -39,7 +39,6 @@ public class UserDaoImpl implements UserDao
 	public User findByEmail(String email)
 	{
 		logger.info("findByEmail email: " + email);
-		logger.info("findByEmail sessionFactory: " + sessionFactory);
 		User user = (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "'").uniqueResult();
 		logger.info("findByEmail user: " + user);
 		return user;
@@ -129,5 +128,41 @@ public class UserDaoImpl implements UserDao
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	public int getUserAppCount(Long id)
+	{
+		String sqlQuery = "select count(id) from user_app where user_id = ?";
+		SQLQuery q = sessionFactory.getCurrentSession().createSQLQuery(sqlQuery);
+		q.setParameter(1, id);
+		return (Integer)q.uniqueResult();
+	}
+	
+	@Override
+	public int getUserRecommendationCount(Long id)
+	{
+		String sqlQuery = "select count(id) from recommendation where from_user_id = ?";
+		SQLQuery q = sessionFactory.getCurrentSession().createSQLQuery(sqlQuery);
+		q.setParameter(1, id);
+		return (Integer)q.uniqueResult();
+	}
+	
+	@Override
+	public int getUserFollowerCount(Long id)
+	{
+		String sqlQuery = "select count(id) from follower_following where following_user_id = ?";
+		SQLQuery q = sessionFactory.getCurrentSession().createSQLQuery(sqlQuery);
+		q.setParameter(1, id);
+		return (Integer)q.uniqueResult();
+	}
+	
+	@Override
+	public int getUserFollowingCount(Long id)
+	{
+		String sqlQuery = "select count(id) from follower_following where follower_user_id = ?";
+		SQLQuery q = sessionFactory.getCurrentSession().createSQLQuery(sqlQuery);
+		q.setParameter(1, id);
+		return (Integer)q.uniqueResult();
 	}
 }

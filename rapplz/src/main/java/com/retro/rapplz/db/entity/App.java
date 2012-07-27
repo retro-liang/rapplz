@@ -98,6 +98,9 @@ public class App extends BaseEntity
 	@OneToMany(mappedBy="app")
 	private Set<Tag> tags = new HashSet<Tag>();
 	
+	@ManyToMany(mappedBy="apps")	
+    private Set<User> users = new HashSet<User>();
+	
 	public App()
 	{
 		

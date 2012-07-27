@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS tag_name;
 DROP TABLE IF EXISTS review_comment;
 DROP TABLE IF EXISTS review;
 DROP TABLE IF EXISTS app_comment;
+DROP TABLE IF EXISTS user_app;
 DROP TABLE IF EXISTS recommendation;
 DROP TABLE IF EXISTS follower_following;
 DROP TABLE IF EXISTS activity;
@@ -173,6 +174,15 @@ CREATE TABLE IF NOT EXISTS activity
 	INDEX(user_id,activity_type,activity_result)
 )ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS user_app
+(
+	id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	user_id BIGINT UNSIGNED NOT NULL,
+	app_id BIGINT UNSIGNED NOT NULL,
+	FOREIGN KEY (user_id) REFERENCES user(id),
+	FOREIGN KEY (app_id) REFERENCES app(id)
+)ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS follower_following
 (
 	id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -195,8 +205,8 @@ CREATE TABLE IF NOT EXISTS recommendation
 	created_date TIMESTAMP NOT NULL DEFAULT NOW(),
 	modified_date DATETIME,
 	FOREIGN KEY (app_id) REFERENCES app(id),
-	FOREIGN KEY (from_user_id) REFERENCES app(id),
-	FOREIGN KEY (to_user_id) REFERENCES app(id),
+	FOREIGN KEY (from_user_id) REFERENCES user(id),
+	FOREIGN KEY (to_user_id) REFERENCES user(id),
 	INDEX(app_id,from_user_id,to_user_id)
 )ENGINE=InnoDB;
 

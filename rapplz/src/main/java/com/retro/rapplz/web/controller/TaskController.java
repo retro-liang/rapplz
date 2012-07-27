@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.dao.SaltSource;
-import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,9 +19,9 @@ import com.retro.rapplz.db.entity.AccountRole;
 import com.retro.rapplz.db.entity.AccountStatus;
 import com.retro.rapplz.db.entity.AccountType;
 import com.retro.rapplz.db.entity.User;
+import com.retro.rapplz.security.EncryptAES;
 import com.retro.rapplz.service.EmailService;
 import com.retro.rapplz.service.UserService;
-import com.retro.rapplz.util.UserAssembler;
 
 @Controller
 @RequestMapping("/task")
@@ -49,13 +47,14 @@ public class TaskController
 		try
 		{
 			User user = userService.createUser(AccountRole.DEFAULT, AccountType.DEFAULT, AccountStatus.DEFAULT, email, password, firstName, lastName);
+			String token = EncryptAES.encrypt(user.getId().toString(), RapplzConfig.getInstance().getSecurityKey());
 			Queue queue = QueueFactory.getQueue("send-email");
 		    queue.add(withUrl("/task/send-email").param("fromEmail", RapplzConfig.getInstance().getSenderEmailAddress())
 		    										.param("fromName", "Rapplz")
 		    										.param("toEmail", email)
 		    										.param("toName", firstName)
 		    										.param("subject", "Welcome to Rapplz")
-		    										.param("content", "Thank you for opening an account with us."));
+		    										.param("content", "Thank you for opening an account with us.\nPlease click the link below to activate your account:\n\nhttp://" + request.getLocalAddr() + ":" + request.getServerPort() + "/access/activate-account?token=" + token));
 		    response.getWriter().println(user + " has been created!");
 		}
 		catch(Exception e)

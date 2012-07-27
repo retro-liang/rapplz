@@ -109,7 +109,7 @@
 			        },
 					success: function(data)
 					{
-						alert(data.email);
+						alert(data.firstName + "-" + data.lastName + "-" + data.email);
 					},
 					error: function(jqXHR, textStatus, errorThrown)
 					{

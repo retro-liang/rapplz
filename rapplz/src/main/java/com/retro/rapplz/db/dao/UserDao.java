@@ -18,4 +18,8 @@ public interface UserDao
 	public List<User> listUser();
 	public void removeUser(Long id);
 	public Set<AccountRole> getAccountRolesByEmail(String email);
+	public int getUserAppCount(Long id);
+	public int getUserRecommendationCount(Long id);
+	public int getUserFollowerCount(Long id);
+	public int getUserFollowingCount(Long id);
 }

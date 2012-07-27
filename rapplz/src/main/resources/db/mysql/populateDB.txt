@@ -1,4 +1,5 @@
 -----------------------------------------------
+DELETE FROM user_app;
 DELETE FROM user_account_role;
 DELETE FROM user;
 DELETE FROM account_status;
@@ -66,10 +67,18 @@ INSERT INTO account_status(name) VALUES('ACTIVE');
 INSERT INTO account_status(name) VALUES('INACTIVE');
 INSERT INTO account_status(name) VALUES('PENDING');
 
-INSERT INTO user(account_type_id,account_status_id,email,password,first_name,last_name) VALUES(1,1,'test@rapplz.com','e10adc3949ba59abbe56e057f20f883e','testFirstName1','testLastName1');
-INSERT INTO user(account_type_id,account_status_id,email,password,first_name,last_name) VALUES(2,1,'test@google.com','e10adc3949ba59abbe56e057f20f883e','testFirstName2','testLastName2');
-INSERT INTO user(account_type_id,account_status_id,email,password,first_name,last_name) VALUES(3,1,'test@facebook.com','e10adc3949ba59abbe56e057f20f883e','testFirstName3','testLastName3');
+INSERT INTO user(account_type_id,account_status_id,email,password,first_name,last_name) VALUES(1,1,'test@rapplz.com','351c1f7399c93e0428063262742456ea0534a429','testFirstName1','testLastName1');
+INSERT INTO user(account_type_id,account_status_id,email,password,first_name,last_name) VALUES(2,1,'test@google.com','351c1f7399c93e0428063262742456ea0534a429','testFirstName2','testLastName2');
+INSERT INTO user(account_type_id,account_status_id,email,password,first_name,last_name) VALUES(3,1,'test@facebook.com','351c1f7399c93e0428063262742456ea0534a429','testFirstName3','testLastName3');
 
 INSERT INTO user_account_role(user_id,account_role_id) VALUES(1,2);
 INSERT INTO user_account_role(user_id,account_role_id) VALUES(2,1);
 INSERT INTO user_account_role(user_id,account_role_id) VALUES(3,1);
+
+INSERT INTO user_app(user_id,app_id) VALUES(1,1);
+INSERT INTO user_app(user_id,app_id) VALUES(1,2);
+
+INSERT INTO recommendation(app_id,from_user_id,to_user_id,message,created_date,modified_date) VALUES(1,1,2,'nice app',now(),now());
+
+INSERT INTO follower_following(follower_user_id,following_user_id) VALUES(2,1);
+INSERT INTO follower_following(follower_user_id,following_user_id) VALUES(3,1);
