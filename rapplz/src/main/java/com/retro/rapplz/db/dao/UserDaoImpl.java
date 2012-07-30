@@ -1,17 +1,21 @@
 package com.retro.rapplz.db.dao;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
 import org.hibernate.SQLQuery;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.retro.rapplz.db.entity.AccountRole;
+import com.retro.rapplz.db.entity.App;
 import com.retro.rapplz.db.entity.User;
+import com.retro.rapplz.service.exception.ApplicationServiceException;
 
 @Repository("userDao")
 @Transactional
@@ -135,8 +139,8 @@ public class UserDaoImpl implements UserDao
 	{
 		String sqlQuery = "select count(id) from user_app where user_id = ?";
 		SQLQuery q = sessionFactory.getCurrentSession().createSQLQuery(sqlQuery);
-		q.setParameter(1, id);
-		return (Integer)q.uniqueResult();
+		q.setParameter(0, id);
+		return ((BigInteger)q.uniqueResult()).intValue();
 	}
 	
 	@Override
@@ -144,8 +148,8 @@ public class UserDaoImpl implements UserDao
 	{
 		String sqlQuery = "select count(id) from recommendation where from_user_id = ?";
 		SQLQuery q = sessionFactory.getCurrentSession().createSQLQuery(sqlQuery);
-		q.setParameter(1, id);
-		return (Integer)q.uniqueResult();
+		q.setParameter(0, id);
+		return ((BigInteger)q.uniqueResult()).intValue();
 	}
 	
 	@Override
@@ -153,8 +157,8 @@ public class UserDaoImpl implements UserDao
 	{
 		String sqlQuery = "select count(id) from follower_following where following_user_id = ?";
 		SQLQuery q = sessionFactory.getCurrentSession().createSQLQuery(sqlQuery);
-		q.setParameter(1, id);
-		return (Integer)q.uniqueResult();
+		q.setParameter(0, id);
+		return ((BigInteger)q.uniqueResult()).intValue();
 	}
 	
 	@Override
@@ -162,7 +166,30 @@ public class UserDaoImpl implements UserDao
 	{
 		String sqlQuery = "select count(id) from follower_following where follower_user_id = ?";
 		SQLQuery q = sessionFactory.getCurrentSession().createSQLQuery(sqlQuery);
-		q.setParameter(1, id);
-		return (Integer)q.uniqueResult();
+		q.setParameter(0, id);
+		return ((BigInteger)q.uniqueResult()).intValue();
+	}
+	
+	public void have(Long userId, String rawId, String appName, String icon, String storeUrl) throws ApplicationServiceException
+	{
+		Session session = sessionFactory.getCurrentSession();
+		App app = (App)session.createQuery("select a from App a where a.rawId = '" + rawId + "'").uniqueResult();
+		if(app == null)
+		{
+			app = new App();
+			app.setRawId(rawId);
+			app.setName(appName);
+			app.setIconUrl(icon);
+			app.setAppStoreUrl(storeUrl);
+			session.save(app);
+		}
+		User user = (User)sessionFactory.getCurrentSession().get(User.class, userId);
+		user.getApps().add(app);
+		session.save(user);
+	}
+	
+	public void recommend(Long fromUserId, Long[] toUserIds, String rawId, String appName, String icon, String storeUrl) throws ApplicationServiceException
+	{
+		
 	}
 }

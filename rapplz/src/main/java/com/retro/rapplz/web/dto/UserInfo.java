@@ -7,14 +7,15 @@ public class UserInfo implements Serializable
 	private static final long serialVersionUID = -8368568975784154961L;
 	
 	private String id;
+	private String token;
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String avatar;
 	private String status;
+	private int appCount;
 	private int followerCount;
 	private int followingCount;
-	private int appCount;
 	private int recommendationCount;
 	
 	public UserInfo()
@@ -30,6 +31,16 @@ public class UserInfo implements Serializable
 	public void setId(String id)
 	{
 		this.id = id;
+	}
+
+	public String getToken()
+	{
+		return token;
+	}
+
+	public void setToken(String token)
+	{
+		this.token = token;
 	}
 
 	public String getFirstName()

@@ -4,7 +4,7 @@
 			<sec:authorize access="isAuthenticated()">
 			    <c:set var="authenticated" value="${true}" />
 			</sec:authorize>
-
+			
 			<div id="logo-container" class="float_left">
 				<a id="logo-link" href="<spring:url value="/" htmlEscape="true" />">
 					<img id="logo-image" src="/img/logo.png" alt="Logo" title="Logo" />
@@ -17,21 +17,26 @@
 			</div>
 
 			<div id="access-container" class="float_left">
+				<ul id="access-container-not-signed-in">
+					<li id="sign-in-container"><a id="sign-in-button" href="<spring:url value="/access/sign-in.html" htmlEscape="true" />">Sign In</a></li>
+					<li id="sign-up-container"><a id="sign-up-button" href="<spring:url value="/access/sign-up.html" htmlEscape="true" />">Sign Up</a></li>
+				</ul>
+				<ul id="access-container-signed-in">
+					<li id="welcome-container">Welcome <a id="user-link"></a></li>
+					<li id="sign-out-container"><a id="sign-out-link" href="<c:url value="/j_spring_security_logout" />" >Sign Out</a></li>
+				</ul>
+			</div>
+			
+			<script type="text/javascript">
 				<c:choose>
 					<c:when test="${!authenticated}">
-						<ul id="access-container-not-ssigned-in">
-							<li id="sign-in-container"><a id="sign-in-button" href="<spring:url value="/access/sign-in.html" htmlEscape="true" />">Sign In</a></li>
-							<li id="sign-up-container"><a id="sign-up-button" href="<spring:url value="/access/sign-up.html" htmlEscape="true" />">Sign Up</a></li>
-						</ul>
+						document.getElementById("access-container-signed-in").className += "hidden";
 					</c:when>
 					<c:otherwise>
-						<ul id="access-container-igned-in">
-							<li id="welcome-container">Welcome <a id="user-link">"${user.email}</a></li>
-							<li id="sign-out-container"><a id="sign-out-link" href="<c:url value="/j_spring_security_logout" />" >Sign Out</a></li>
-						</ul>
+						document.getElementById("access-container-not-signed-in").className += "none";
 					</c:otherwise>
 				</c:choose>
-			</div>
+			</script>
 
 		</div>
 		

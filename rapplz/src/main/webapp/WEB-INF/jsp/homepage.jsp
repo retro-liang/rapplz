@@ -10,6 +10,7 @@
 			<%@ include file="/WEB-INF/jsp/header.jsp" %>
 
 			<div class=main-container>
+				<%@ include file="/WEB-INF/jsp/right.jsp" %>
 			</div>		
 
 			<%@ include file="/WEB-INF/jsp/footer.jsp" %>
@@ -57,7 +58,7 @@
 						$.each(data.results, function(index, item)
 						{
 						    //alert(item.trackId + ': ' + item.trackName);
-						    result += "<tr><td><a target='_blank' href='" + item.artistViewUrl + "'><img src='" + item.artworkUrl60 + "' /></a></td><td><a target='_blank' href='" + item.artistViewUrl + "'>" + item.trackName + "</a></td><td>" + item.artistName + "</td><td>" + item.averageUserRating + "</td><td>" + item.userRatingCount + "</td><td><a href='/recommend'>Recommend</a></td></tr>";
+						    result += "<tr><td><a target='_blank' href='" + item.artistViewUrl + "'><img src='" + item.artworkUrl60 + "' /></a></td><td><a target='_blank' href='" + item.artistViewUrl + "'>" + item.trackName + "</a></td><td>" + item.artistName + "</td><td>" + item.averageUserRating + "</td><td>" + item.userRatingCount + "</td><td><a href='/have'>I Have</a></td><td><a href='/recommend'>Recommend</a></td></tr>";
 						});
 						$("#search-result").html(result);
 						$("div.holder").jPages({ 
@@ -109,7 +110,17 @@
 			        },
 					success: function(data)
 					{
-						alert(data.firstName + "-" + data.lastName + "-" + data.email);
+						$("#user-link").html(data.firstName + " " + data.lastName);
+						$("#user-link").attr("href", ("user/" + data.firstName + "-" + data.lastName + ".html?token=" + data.token));
+						$("#user-app-count").html(data.appCount);
+						$("#user-recommendation-count").html(data.recommendationCount);
+						$("#user-follower-count").html(data.followerCount);
+						$("#user-following-count").html(data.followingCount);
+						$("#user-details").attr("href", ("user/" + data.firstName + "-" + data.lastName + ".html?token=" + data.token));
+						$("#user-info").removeClass("hidden");
+						$("#access-container-not-signed-in").addClass("hidden");
+						$("#access-container-signed-in").removeClass("hidden");
+						$("#cboxClose").click();
 					},
 					error: function(jqXHR, textStatus, errorThrown)
 					{

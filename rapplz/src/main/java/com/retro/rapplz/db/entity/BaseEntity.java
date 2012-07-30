@@ -22,11 +22,11 @@ public abstract class BaseEntity implements Serializable
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_date")
-	private Date createdDate;
+	private Date createdDate = new Date();
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="modified_date")
-	private Date modifiedDate;
+	private Date modifiedDate = new Date();
 	
 	@Transient
 	protected Object[] jdoDetachedState;

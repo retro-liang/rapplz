@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.retro.rapplz.db.entity.AccountRole;
 import com.retro.rapplz.db.entity.User;
+import com.retro.rapplz.service.exception.ApplicationServiceException;
 
 public interface UserDao
 {
@@ -22,4 +23,6 @@ public interface UserDao
 	public int getUserRecommendationCount(Long id);
 	public int getUserFollowerCount(Long id);
 	public int getUserFollowingCount(Long id);
+	public void have(Long userId, String rawId, String appName, String icon, String storeUrl) throws ApplicationServiceException;
+	public void recommend(Long fromUserId, Long[] toUserIds, String rawId, String appName, String icon, String storeUrl) throws ApplicationServiceException;
 }
