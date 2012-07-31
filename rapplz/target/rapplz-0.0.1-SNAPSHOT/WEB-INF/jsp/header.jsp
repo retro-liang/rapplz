@@ -25,6 +25,7 @@
 					<li id="welcome-container">Welcome <a id="user-link"></a></li>
 					<li id="sign-out-container"><a id="sign-out-link" href="<c:url value="/j_spring_security_logout" />" >Sign Out</a></li>
 				</ul>
+				<input id="token" type="hidden" />
 			</div>
 			
 			<script type="text/javascript">

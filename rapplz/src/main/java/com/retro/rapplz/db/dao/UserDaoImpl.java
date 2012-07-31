@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.retro.rapplz.db.entity.AccountRole;
 import com.retro.rapplz.db.entity.App;
+import com.retro.rapplz.db.entity.OS;
 import com.retro.rapplz.db.entity.User;
 import com.retro.rapplz.service.exception.ApplicationServiceException;
 
@@ -170,13 +171,15 @@ public class UserDaoImpl implements UserDao
 		return ((BigInteger)q.uniqueResult()).intValue();
 	}
 	
-	public void have(Long userId, String rawId, String appName, String icon, String storeUrl) throws ApplicationServiceException
+	public void have(String osName, Long userId, String rawId, String appName, String icon, String storeUrl) throws ApplicationServiceException
 	{
 		Session session = sessionFactory.getCurrentSession();
+		OS os = (OS)session.createQuery("select o from OS o where o.name = '" + osName + "'").uniqueResult();
 		App app = (App)session.createQuery("select a from App a where a.rawId = '" + rawId + "'").uniqueResult();
 		if(app == null)
 		{
 			app = new App();
+			app.setOs(os);
 			app.setRawId(rawId);
 			app.setName(appName);
 			app.setIconUrl(icon);
@@ -188,7 +191,7 @@ public class UserDaoImpl implements UserDao
 		session.save(user);
 	}
 	
-	public void recommend(Long fromUserId, Long[] toUserIds, String rawId, String appName, String icon, String storeUrl) throws ApplicationServiceException
+	public void recommend(String osName, Long fromUserId, Long[] toUserIds, String rawId, String appName, String icon, String storeUrl) throws ApplicationServiceException
 	{
 		
 	}

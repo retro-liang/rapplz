@@ -39,6 +39,7 @@ public class RapplzController
 	
 	@RequestMapping("/have")
     public @ResponseBody String haveHandler(HttpServletRequest request, 
+    												@RequestParam("os") String os,
     												@RequestParam("token") String token,
     												@RequestParam("rawId") String rawId,
     												@RequestParam("name") String name,
@@ -49,7 +50,7 @@ public class RapplzController
 		Long userId = Long.valueOf(EncryptAES.decrypt(token, RapplzConfig.getInstance().getSecurityKey()));
 		try
 		{
-			userService.have(userId, rawId, name, icon, storeUrl);
+			userService.have(os, userId, rawId, name, icon, storeUrl);
 			return "ok";
 		}
 		catch (ApplicationServiceException e)
@@ -59,7 +60,8 @@ public class RapplzController
     }
 	
 	@RequestMapping("/recommend")
-    public @ResponseBody String recommendHandler(HttpServletRequest request, 
+    public @ResponseBody String recommendHandler(HttpServletRequest request,
+    												@RequestParam("os") String os,
     												@RequestParam("fromToken") String fromToken,
     												@RequestParam("toTokens") String[] toTokens,
     												@RequestParam("rawId") String rawId,
@@ -76,7 +78,7 @@ public class RapplzController
 		}
 		try
 		{
-			userService.recommend(fromUserId, toUserIds, rawId, name, icon, storeUrl);
+			userService.recommend(os, fromUserId, toUserIds, rawId, name, icon, storeUrl);
 			return "ok";
 		}
 		catch (ApplicationServiceException e)

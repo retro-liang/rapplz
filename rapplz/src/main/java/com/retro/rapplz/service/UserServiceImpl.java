@@ -138,15 +138,15 @@ public class UserServiceImpl implements UserService, UserDetailsService
 	
 	@Override
 	@Transactional
-	public void have(Long userId, String rawId, String appName, String icon, String storeUrl) throws ApplicationServiceException
+	public void have(String os, Long userId, String rawId, String appName, String icon, String storeUrl) throws ApplicationServiceException
 	{
-		userDao.have(userId, rawId, appName, icon, storeUrl);
+		userDao.have(os, userId, rawId, appName, icon, storeUrl);
 	}
 	
 	@Override
 	@Transactional
-	public void recommend(Long fromUserId, Long[] toUserIds, String rawId, String appName, String icon, String storeUrl) throws ApplicationServiceException
+	public void recommend(String os, Long fromUserId, Long[] toUserIds, String rawId, String appName, String icon, String storeUrl) throws ApplicationServiceException
 	{
-		userDao.recommend(fromUserId, toUserIds, rawId, appName, icon, storeUrl);
+		userDao.recommend(os, fromUserId, toUserIds, rawId, appName, icon, storeUrl);
 	}
 }

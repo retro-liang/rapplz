@@ -11,6 +11,7 @@
 
 			<div class=main-container>
 				<%@ include file="/WEB-INF/jsp/right.jsp" %>
+				<input id="os" value="IOS" type="hidden" />
 			</div>		
 
 			<%@ include file="/WEB-INF/jsp/footer.jsp" %>
@@ -21,16 +22,16 @@
 		<script type="text/javascript" src="/js/rapplz.js"></script>
 		
 		<script type="text/javascript">
-		$(document).ready(function(){
-			
-			$(".callbacks").colorbox({
-				onOpen:function(){ alert('onOpen: colorbox is about to open'); },
-				onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
-				onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
-				onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },
-				onClosed:function(){ alert('onClosed: colorbox has completely closed'); }
+			$(document).ready(function(){
+				
+				$(".callbacks").colorbox({
+					onOpen:function(){ alert('onOpen: colorbox is about to open'); },
+					onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
+					onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
+					onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },
+					onClosed:function(){ alert('onClosed: colorbox has completely closed'); }
+				});
 			});
-		});
 		
 			var iosAppSearchUrl = "http://itunes.apple.com/search";
 			
@@ -58,10 +59,19 @@
 						$.each(data.results, function(index, item)
 						{
 						    //alert(item.trackId + ': ' + item.trackName);
-						    result += "<tr><td><a target='_blank' href='" + item.artistViewUrl + "'><img src='" + item.artworkUrl60 + "' /></a></td><td><a target='_blank' href='" + item.artistViewUrl + "'>" + item.trackName + "</a></td><td>" + item.artistName + "</td><td>" + item.averageUserRating + "</td><td>" + item.userRatingCount + "</td><td><a href='/have'>I Have</a></td><td><a href='/recommend'>Recommend</a></td></tr>";
+						    result += "<tr>" +
+						    				"<td><a target='_blank' href='" + item.artistViewUrl + "'><img id='" + item.trackId + "_icon' src='" + item.artworkUrl60 + "' /></a></td>" +
+						    				"<td><a id='" + item.trackId + "_url' target='_blank' href='" + item.artistViewUrl + "'><span  id='" + item.trackId + "_name'>" + item.trackName + "</span></a></td>" +
+						    				"<td><span id='" + item.trackId + "_company'>" + item.artistName + "</span></td>" +
+						    				"<td>" + item.averageUserRating + "</td>" +
+						    				"<td>" + item.userRatingCount + "</td>" +
+						    				"<td><a id='" + item.trackId + "_have' href='javascript:void(0);' onclick='have(\"" + item.trackId + "\",\"" + item.trackName + "\",\"" + item.artworkUrl60 + "\",\"" + item.artistViewUrl + "\")'>I Have</a></td>" +
+						    				"<td><a id='" + item.trackId + "_recommend' href='javascript:void(0);' onclick='recommend(\"" + item.trackId + "\",\"" + item.trackName + "\",\"" + item.artworkUrl60 + "\",\"" + item.artistViewUrl + "\")'>I Have</a></td>" +
+						    			"</tr>";
 						});
 						$("#search-result").html(result);
-						$("div.holder").jPages({ 
+						$("div.holder").jPages
+						({
 				            containerID : "search-result",
 				            previous : "←",
 				            next : "→",
@@ -110,6 +120,7 @@
 			        },
 					success: function(data)
 					{
+						$("#token").val(data.token);
 						$("#user-link").html(data.firstName + " " + data.lastName);
 						$("#user-link").attr("href", ("user/" + data.firstName + "-" + data.lastName + ".html?token=" + data.token));
 						$("#user-app-count").html(data.appCount);
@@ -236,14 +247,66 @@
 					}
 				});
 			});
+			
+			function have(rawId, name, icon, storeUrl)
+			{
+				var os = $("#os").val();
+				var token = $("#token").val();
+				
+		    	$.ajax
+				({
+					url: "/have",
+					data: 
+					{
+						os: os,
+						token: token,
+						rawId: rawId,
+						name: name,
+						icon: icon,
+						storeUrl: storeUrl
+					},
+					success: function(data)
+					{
+						alert(data);
+						this.disabled = "disabled";
+					},
+					error: function(jqXHR, textStatus, errorThrown)
+					{
+						alert("error: " + errorThrown);
+					}
+				});
+			}
+			
+			function recommend(rawId, name, icon, storeUrl)
+			{
+				var os = $("#os").val();
+				var token = $("#token").val();
+				
+		    	$.ajax
+				({
+					url: "/have",
+					data: 
+					{
+						os: os,
+						token: token,
+						rawId: rawId,
+						name: name,
+						icon: icon,
+						storeUrl: storeUrl
+					},
+					success: function(data)
+					{
+						alert(data);
+						this.disabled = "disabled";
+					},
+					error: function(jqXHR, textStatus, errorThrown)
+					{
+						alert("error: " + errorThrown);
+					}
+				});
+			}
 		</script>
-		
-		<script>
-	    $(function(){
-	        
-	    });
-	    </script>
-		
+
 		<script type="text/javascript">
 			var _gaq = _gaq || [];
 			_gaq.push(['_setAccount', 'UA-30210796-1']);

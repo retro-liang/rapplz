@@ -22,4 +22,22 @@
 				</tr>
 			</table>
 		</div>
+		<div id="activity-box">
+		</div>
+		<div id="google-plus-box">
+		</div>
+		<div id="facebook-box">
+		</div>
+		<div id="ad-box">
+			<script type="text/javascript">
+				<!--
+					google_ad_client = "ca-pub-3748265501907091";
+					/* rapplz */
+					google_ad_slot = "8283218969";
+					google_ad_width = 300;
+					google_ad_height = 250;
+				//-->
+			</script>
+			<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+		</div>
 	</div>
