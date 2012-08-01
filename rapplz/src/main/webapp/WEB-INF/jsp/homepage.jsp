@@ -9,10 +9,15 @@
 
 			<%@ include file="/WEB-INF/jsp/header.jsp" %>
 
-			<div class=main-container>
-				<%@ include file="/WEB-INF/jsp/right.jsp" %>
-				<input id="os" value="IOS" type="hidden" />
-			</div>		
+			<div class="main-container">
+				<h1></h1>
+				<div id="left-column">
+					<input id="os" value="IOS" type="hidden" />
+				</div>
+				<div id="right-column">
+					<%@ include file="/WEB-INF/jsp/right.jsp" %>
+				</div>
+			</div>
 
 			<%@ include file="/WEB-INF/jsp/footer.jsp" %>
 

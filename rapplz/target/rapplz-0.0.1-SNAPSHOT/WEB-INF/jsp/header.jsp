@@ -5,18 +5,18 @@
 			    <c:set var="authenticated" value="${true}" />
 			</sec:authorize>
 			
-			<div id="logo-container" class="float_left">
+			<div id="logo-container">
 				<a id="logo-link" href="<spring:url value="/" htmlEscape="true" />">
 					<img id="logo-image" src="/img/logo.png" alt="Logo" title="Logo" />
 				</a>
 			</div>
 
-			<div id="app-search-container" class="float_left">
+			<div id="app-search-container">
 				<input id="app-search-box" name="app-search-box" type="text" />
 				<a id="app-search-button" href="<spring:url value="/recommend.html" htmlEscape="true" />">Recommend</a>
 			</div>
 
-			<div id="access-container" class="float_left">
+			<div id="access-container">
 				<ul id="access-container-not-signed-in">
 					<li id="sign-in-container"><a id="sign-in-button" href="<spring:url value="/access/sign-in.html" htmlEscape="true" />">Sign In</a></li>
 					<li id="sign-up-container"><a id="sign-up-button" href="<spring:url value="/access/sign-up.html" htmlEscape="true" />">Sign Up</a></li>

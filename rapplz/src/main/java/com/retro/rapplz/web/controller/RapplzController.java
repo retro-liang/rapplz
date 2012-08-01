@@ -26,14 +26,12 @@ public class RapplzController
 	@RequestMapping("/")
     public String homepage(HttpServletRequest request)
 	{
-		logger.info("homepage request: " + request.getRemoteAddr());
 		return "homepage";
     }
 	
 	@RequestMapping("/index.html")
     public String index(HttpServletRequest request)
 	{
-		logger.info("index request: " + request.getRemoteAddr());
 		return "homepage";
     }
 	
@@ -85,5 +83,41 @@ public class RapplzController
 		{
 			return "error: " + e;
 		}
+    }
+	
+	@RequestMapping("/site-map.html")
+    public String siteMap(HttpServletRequest request)
+	{
+		return "site-map";
+    }
+	
+	@RequestMapping("/advertise.html")
+    public String advertise(HttpServletRequest request)
+	{
+		return "advertise";
+    }
+	
+	@RequestMapping("/terms-of-service.html")
+    public String termsOfService(HttpServletRequest request)
+	{
+		return "terms-of-service";
+    }
+	
+	@RequestMapping("/privacy-policy.html")
+    public String privacyPolicy(HttpServletRequest request)
+	{
+		return "privacy-policy";
+    }
+	
+	@RequestMapping("/about-us.html")
+    public String aboutUs(HttpServletRequest request)
+	{
+		return "about-us";
+    }
+	
+	@RequestMapping("/contact-us.html")
+    public String contactUs(HttpServletRequest request)
+	{
+		return "contact-us";
     }
 }

@@ -9,11 +9,14 @@
 
 			<%@ include file="/WEB-INF/jsp/header.jsp" %>
 
-			<div class=main-container>
-				<div class="float-left">
-					<h1>About Us</h1>
+			<div class="main-container">
+				<h1>About Us</h1>
+				<div id="left-column">
+
 				</div>
-				<%@ include file="/WEB-INF/jsp/right.jsp" %>
+				<div id="right-column">
+					<%@ include file="/WEB-INF/jsp/right.jsp" %>
+				</div>
 			</div>		
 
 			<%@ include file="/WEB-INF/jsp/footer.jsp" %>

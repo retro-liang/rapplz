@@ -10,8 +10,8 @@
 			<%@ include file="/WEB-INF/jsp/header.jsp" %>
 
 			<div class=main-container>
-				<div class="float-left">
-					<h1>Contact Us</h1>
+				<h1>Contact Us</h1>
+				<div id="left-column">
 					<form>
 						<span>Subject: </span><input id="" type="text" />
 						<span>Message: </span><input id="" type="text" />
@@ -20,7 +20,9 @@
 						<a id="contact-submit" href="javascript:void(0);">Send</a>
 					</form>
 				</div>
-				<%@ include file="/WEB-INF/jsp/right.jsp" %>
+				<div id="right-column">
+					<%@ include file="/WEB-INF/jsp/right.jsp" %>
+				</div>
 			</div>		
 
 			<%@ include file="/WEB-INF/jsp/footer.jsp" %>
