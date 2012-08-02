@@ -22,6 +22,8 @@
 				</tr>
 			</table>
 		</div>
+		<div id="hot-apps-box">
+		</div>
 		<div id="activity-box">
 		</div>
 		<div id="google-plus-box">

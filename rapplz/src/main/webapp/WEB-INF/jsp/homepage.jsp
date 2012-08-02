@@ -11,7 +11,53 @@
 
 			<div class="main-container">
 				<h1></h1>
+				<div id="info-box">
+					<p></p>
+				</div>
 				<div id="left-column">
+					<div id="popular-apps-box" style="width: 650px;float: left;">
+						<div class="app-box" style="float: left;background-color: #444444;width: 300px;height: 150px;border-top-left-radius: 5px;border-top-right-radius: 5px;padding:0 5px;">
+							<div class="app-box-header" style="width: 100%;height: 30px;padding: 2px 5px;">
+								<div class="app-name" style="float: left;font-size: 13px;font-weight: bold;color: #ffffff;width: 90px;margin-top:5px;">Flipboard</div>
+								<div class="app-category" style="float: right;font-size: 12px;font-weigth: bold;color: #ffffff;width: 90px;text-align:right;padding-right:15px;margin-top:5px;">News</div>
+							</div>
+							<div class="app-box-middle" style="background-color: #FFFFFF;width: auto;height: 80px;padding: 1px 5px;">
+								<div class="app-icon" style="float: left;width: 60px;height: 60px;padding: 15px 1px;">
+									<img src="http://a5.mzstatic.com/us/r1000/071/Purple/v4/40/e6/38/40e63872-15d6-d66f-651d-30cca36be0ab/Icon.png" />
+								</div>
+								<div class="app-info" style="float: right;width: 60px;height: 90px;"></div>
+							</div>
+							<div class="app-box-footer" style="width: 100%;height: 30px;background-color: #ffffff;">
+								<ul style="height: 100%;width: 100%;float: left;">
+									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Have</a></li>
+									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Comment</a></li>
+									<li><a href="/recommend" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Recommend</a></li>
+								</ul>
+							</div>
+						</div>
+						<div style="height: 150px;width:8px;float:left;"></div>
+						<div class="app-box" style="float: left;background-color: #444444;width: 300px;height: 150px;border-top-left-radius: 5px;border-top-right-radius: 5px;padding:0 5px;">
+							<div class="app-box-header" style="width: 100%;height: 30px;padding: 2px 5px;">
+								<div class="app-name" style="float: left;font-size: 13px;font-weight: bold;color: #ffffff;width: 90px;margin-top:5px;">Flipboard</div>
+								<div class="app-category" style="float: right;font-size: 12px;font-weigth: bold;color: #ffffff;width: 90px;text-align:right;padding-right:15px;margin-top:5px;">News</div>
+							</div>
+							<div class="app-box-middle" style="background-color: #FFFFFF;width: auto;height: 80px;padding: 1px 5px;">
+								<div class="app-icon" style="float: left;width: 60px;height: 60px;padding: 15px 1px;">
+									<img src="http://a5.mzstatic.com/us/r1000/071/Purple/v4/40/e6/38/40e63872-15d6-d66f-651d-30cca36be0ab/Icon.png" />
+								</div>
+								<div class="app-info" style="float: right;width: 60px;height: 90px;"></div>
+							</div>
+							<div class="app-box-footer" style="width: 100%;height: 30px;background-color: #ffffff;">
+								<ul style="height: 100%;width: 100%;float: left;">
+									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Have</a></li>
+									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Comment</a></li>
+									<li><a href="/recommend" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Recommend</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="must-have-apps-box">
+					</div>
 					<input id="os" value="IOS" type="hidden" />
 				</div>
 				<div id="right-column">
@@ -70,8 +116,8 @@
 						    				"<td><span id='" + item.trackId + "_company'>" + item.artistName + "</span></td>" +
 						    				"<td>" + item.averageUserRating + "</td>" +
 						    				"<td>" + item.userRatingCount + "</td>" +
-						    				"<td><a id='" + item.trackId + "_have' href='javascript:void(0);' onclick='have(\"" + item.trackId + "\",\"" + item.trackName + "\",\"" + item.artworkUrl60 + "\",\"" + item.artistViewUrl + "\")'>I Have</a></td>" +
-						    				"<td><a id='" + item.trackId + "_recommend' href='javascript:void(0);' onclick='recommend(\"" + item.trackId + "\",\"" + item.trackName + "\",\"" + item.artworkUrl60 + "\",\"" + item.artistViewUrl + "\")'>I Have</a></td>" +
+						    				"<td><a class='button yellow' id='" + item.trackId + "_have' href='javascript:void(0);' onclick='have(\"" + item.trackId + "\",\"" + item.trackName + "\",\"" + item.artworkUrl60 + "\",\"" + item.artistViewUrl + "\")'>I Have</a></td>" +
+						    				"<td><a class='button blue' id='" + item.trackId + "_recommend' href='javascript:void(0);' onclick='recommend(\"" + item.trackId + "\",\"" + item.trackName + "\",\"" + item.artworkUrl60 + "\",\"" + item.artistViewUrl + "\")'>I Recommend</a></td>" +
 						    			"</tr>";
 						});
 						$("#search-result").html(result);

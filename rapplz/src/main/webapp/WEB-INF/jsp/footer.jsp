@@ -1,5 +1,5 @@
 		<div id="footer-container">
-			<div id="footer-logo"><img src="/img/footer-logo.png" alt="rapplz" title="rapplz" /></div>
+			<div id="footer-logo"><img src="/img/footer-logo.png" alt="Footer Logo" title="Footer Logo" /></div>
 			<div id="copyright">&copy; 2012 . All Rights Reserved</div>
 			<div id="link-box">
 				<ul>

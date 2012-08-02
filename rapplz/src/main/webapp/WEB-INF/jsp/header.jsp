@@ -12,33 +12,45 @@
 			</div>
 
 			<div id="app-search-container">
-				<input id="app-search-box" name="app-search-box" type="text" />
-				<a id="app-search-button" href="<spring:url value="/recommend.html" htmlEscape="true" />">Recommend</a>
+				<input id="app-search-box" name="app-search-box" type="text" class="input-box" />
+				<a id="app-search-button" href="<spring:url value="/recommend.html" htmlEscape="true" />" class="button blue">Recommend</a>
 			</div>
 
 			<div id="access-container">
 				<ul id="access-container-not-signed-in">
-					<li id="sign-in-container"><a id="sign-in-button" href="<spring:url value="/access/sign-in.html" htmlEscape="true" />">Sign In</a></li>
-					<li id="sign-up-container"><a id="sign-up-button" href="<spring:url value="/access/sign-up.html" htmlEscape="true" />">Sign Up</a></li>
+					<li id="sign-in-container"><a id="sign-in-button" href="<spring:url value="/access/sign-in.html" htmlEscape="true" />" class="link-button">Sign In</a></li>
+					<li id="sign-up-container"><a id="sign-up-button" href="<spring:url value="/access/sign-up.html" htmlEscape="true" />" class="link-button">Sign Up</a></li>
 				</ul>
 				<ul id="access-container-signed-in">
 					<li id="welcome-container">Welcome <a id="user-link"></a></li>
-					<li id="sign-out-container"><a id="sign-out-link" href="<c:url value="/j_spring_security_logout" />" >Sign Out</a></li>
+					<li id="sign-out-container"><a id="sign-out-link" href="<c:url value="/j_spring_security_logout" />" class="link-button">Sign Out</a></li>
 				</ul>
 				<input id="token" type="hidden" />
 			</div>
 			
-			<script type="text/javascript">
-				<c:choose>
-					<c:when test="${!authenticated}">
-						document.getElementById("access-container-signed-in").className += "hidden";
-					</c:when>
-					<c:otherwise>
-						document.getElementById("access-container-not-signed-in").className += "none";
-					</c:otherwise>
-				</c:choose>
-			</script>
-
+			
+			<c:choose>
+				<c:when test="${!authenticated}">
+					<script type="text/javascript">document.getElementById("access-container-signed-in").className += "hidden";</script>
+				</c:when>
+				<c:otherwise>
+					<script type="text/javascript">document.getElementById("access-container-not-signed-in").className += "none";</script>
+				</c:otherwise>
+			</c:choose>
+			
+		</div>
+		
+		<div id="sub-header" style="width: 100%;background-color: #333333;border-bottom: 1px solid #444444;border-top: 1px solid #383838;box-shadow: 0 2px 0 0 #262626, 0 -1px 0 0 #171717;display: block;height: 38px;margin: 0 auto 20px auto;">
+			<ul style="width: 500px;float: left;padding-left: 50px;padding-top: 12px;">
+				<li><a href="/app.html" style="float: left;font-size: 12px;font-weight: bold;text-shadow: 0 0 0 transparent, 0 1px rgba(29, 29, 29, 0.2);border-radius: 2px 2px 2px 2px;color: #C5C5C5;display: block;border-left: medium none;border-top: medium none;margin: 0 0;padding: 0 0.65em;text-decoration: none;">App</a></li>
+				<li><a href="/people.html" style="float: left;font-size: 12px;font-weight: bold;text-shadow: 0 0 0 transparent, 0 1px rgba(29, 29, 29, 0.2);border-radius: 2px 2px 2px 2px;color: #C5C5C5;display: block;border-left: medium none;border-top: medium none;margin: 0 0;padding: 0 0.65em;text-decoration: none;">People</a></li>
+				<li><a href="/news.html" style="float: left;font-size: 12px;font-weight: bold;border-radius: 2px 2px 2px 2px;color: #D1D4DA;display: block;border-left: medium none;border-top: medium none;margin: 0 0;padding: 0 0.65em;text-decoration: none;">News</a></li>
+				<li><a href="/review.html" style="float: left;font-size: 12px;font-weight: bold;border-radius: 2px 2px 2px 2px;color: #D1D4DA;display: block;border-left: medium none;border-top: medium none;margin: 0 0;padding: 0 0.65em;text-decoration: none;">Review</a></li>
+			</ul>
+			<div id="search-box" style="float: right;margin: 5px 20px;">
+				<input id="search-box" name="search-box" type="text" class="input-box" />
+				<a id="search-button" class="button blue" style="font-size: 12px;font-weight: normal;margin-top: 4px;" href="<spring:url value="/search.html" htmlEscape="true" />">Search</a>
+			</div>
 		</div>
 		
 		<div style="visibility:hidden;width:0px;height:0px;">
