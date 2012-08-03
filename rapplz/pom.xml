@@ -483,6 +483,13 @@
           </additionalProjectnatures>
         </configuration>
       </plugin>
+      
+      <!-- sonar -->
+      <plugin>
+	      <groupId>org.codehaus.mojo</groupId>
+	      <artifactId>sonar-maven-plugin</artifactId>
+	      <version>2.0</version>
+	    </plugin>
     </plugins>
 
     <!-- Required by m2e for import into eclipse. No effect on command line builds  -->

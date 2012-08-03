@@ -1,5 +1,6 @@
 package com.retro.rapplz.web.controller;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.retro.rapplz.config.RapplzConfig;
+import com.retro.rapplz.db.entity.App;
 import com.retro.rapplz.security.EncryptAES;
 import com.retro.rapplz.service.UserService;
 import com.retro.rapplz.service.exception.ApplicationServiceException;
@@ -35,8 +39,15 @@ public class RapplzController
 		return "homepage";
     }
 	
+	@RequestMapping("/load-apps")
+	public @ResponseBody List<App> loadAppsHandler()
+	{
+		MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+		return (List<App>)syncCache.get("apps");
+	}
+	
 	@RequestMapping("/have")
-    public @ResponseBody String haveHandler(HttpServletRequest request, 
+	public @ResponseBody String haveHandler(HttpServletRequest request, 
     												@RequestParam("os") String os,
     												@RequestParam("token") String token,
     												@RequestParam("rawId") String rawId,

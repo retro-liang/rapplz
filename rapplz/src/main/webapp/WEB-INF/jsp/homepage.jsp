@@ -16,7 +16,31 @@
 				</div>
 				<div id="left-column">
 					<div id="popular-apps-box" style="width: 650px;float: left;">
-						<div class="app-box" style="float: left;background-color: #444444;width: 300px;height: 150px;border-top-left-radius: 5px;border-top-right-radius: 5px;padding:0 5px;">
+						<div class="app-box" style="float: left;background-color: #444444;width: 300px;height: 150px;border-top-left-radius: 5px;border-top-right-radius: 5px;padding:0 5px;margin-right:10px;margin-bottom:10px;">
+							<div class="app-box-header" style="width: 100%;height: 30px;padding: 2px 5px;">
+								<div class="app-name" style="float: left;font-size: 13px;font-weight: bold;color: #ffffff;width: 90px;margin-top:5px;">Flipboard</div>
+								<div class="app-category" style="float: right;font-size: 12px;font-weigth: bold;color: #ffffff;width: 90px;text-align:right;padding-right:15px;margin-top:5px;">News</div>
+							</div>
+							<div class="app-box-middle" style="background-color: #FFFFFF;width: auto;height: 80px;padding: 1px 5px;">
+								<div class="app-icon" style="float: left;width: 60px;height: 60px;padding: 15px 1px;">
+									<img src="http://a5.mzstatic.com/us/r1000/071/Purple/v4/40/e6/38/40e63872-15d6-d66f-651d-30cca36be0ab/Icon.png" />
+								</div>
+								<div class="app-info" style="float: right;width: 200px;height: 90px;">
+									<div style="width: 100%;padding: 5px;font-size: 12px;">112 users have it</div>
+									<div style="width: 100%;padding: 5px;font-size: 12px;">465 users recommend it</div>
+									<div style="width: 100%;padding: 5px;font-size: 12px;color: #000000"><a href="#">App Detail</a></div>
+								</div>
+							</div>
+							<div class="app-box-footer" style="width: 100%;height: 30px;background-color: #ffffff;">
+								<ul style="height: 100%;width: 100%;float: left;">
+									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Have</a></li>
+									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Comment</a></li>
+									<li><a href="/recommend" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Recommend</a></li>
+								</ul>
+							</div>
+						</div>
+						
+						<div class="app-box" style="float: left;background-color: #444444;width: 300px;height: 150px;border-top-left-radius: 5px;border-top-right-radius: 5px;padding:0 5px;margin-right:10px;margin-bottom:10px;">
 							<div class="app-box-header" style="width: 100%;height: 30px;padding: 2px 5px;">
 								<div class="app-name" style="float: left;font-size: 13px;font-weight: bold;color: #ffffff;width: 90px;margin-top:5px;">Flipboard</div>
 								<div class="app-category" style="float: right;font-size: 12px;font-weigth: bold;color: #ffffff;width: 90px;text-align:right;padding-right:15px;margin-top:5px;">News</div>
@@ -35,8 +59,28 @@
 								</ul>
 							</div>
 						</div>
-						<div style="height: 150px;width:8px;float:left;"></div>
-						<div class="app-box" style="float: left;background-color: #444444;width: 300px;height: 150px;border-top-left-radius: 5px;border-top-right-radius: 5px;padding:0 5px;">
+						
+						<div class="app-box" style="float: left;background-color: #444444;width: 300px;height: 150px;border-top-left-radius: 5px;border-top-right-radius: 5px;padding:0 5px;margin-right:10px;margin-bottom:10px;">
+							<div class="app-box-header" style="width: 100%;height: 30px;padding: 2px 5px;">
+								<div class="app-name" style="float: left;font-size: 13px;font-weight: bold;color: #ffffff;width: 90px;margin-top:5px;">Flipboard</div>
+								<div class="app-category" style="float: right;font-size: 12px;font-weigth: bold;color: #ffffff;width: 90px;text-align:right;padding-right:15px;margin-top:5px;">News</div>
+							</div>
+							<div class="app-box-middle" style="background-color: #FFFFFF;width: auto;height: 80px;padding: 1px 5px;">
+								<div class="app-icon" style="float: left;width: 60px;height: 60px;padding: 15px 1px;">
+									<img src="http://a5.mzstatic.com/us/r1000/071/Purple/v4/40/e6/38/40e63872-15d6-d66f-651d-30cca36be0ab/Icon.png" />
+								</div>
+								<div class="app-info" style="float: right;width: 60px;height: 90px;"></div>
+							</div>
+							<div class="app-box-footer" style="width: 100%;height: 30px;background-color: #ffffff;">
+								<ul style="height: 100%;width: 100%;float: left;">
+									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Have</a></li>
+									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Comment</a></li>
+									<li><a href="/recommend" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Recommend</a></li>
+								</ul>
+							</div>
+						</div>
+						
+						<div class="app-box" style="float: left;background-color: #444444;width: 300px;height: 150px;border-top-left-radius: 5px;border-top-right-radius: 5px;padding:0 5px;margin-right:10px;margin-bottom:10px;">
 							<div class="app-box-header" style="width: 100%;height: 30px;padding: 2px 5px;">
 								<div class="app-name" style="float: left;font-size: 13px;font-weight: bold;color: #ffffff;width: 90px;margin-top:5px;">Flipboard</div>
 								<div class="app-category" style="float: right;font-size: 12px;font-weigth: bold;color: #ffffff;width: 90px;text-align:right;padding-right:15px;margin-top:5px;">News</div>
@@ -73,14 +117,32 @@
 		<script type="text/javascript" src="/js/rapplz.js"></script>
 		
 		<script type="text/javascript">
-			$(document).ready(function(){
-				
+			$(document).ready(function()
+			{				
 				$(".callbacks").colorbox({
 					onOpen:function(){ alert('onOpen: colorbox is about to open'); },
 					onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
 					onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
 					onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },
 					onClosed:function(){ alert('onClosed: colorbox has completely closed'); }
+				});
+				
+				$.ajax
+				({
+					url: "/cron/load-apps",
+					dataType: "json",
+					type: "GET",
+					success: function(data)
+					{alert(data);
+						$.each(data.results, function(index, item)
+						{
+							alert(item.name);
+						});
+					},
+					error: function(jqXHR, textStatus, errorThrown)
+					{
+						alert("error: " + errorThrown);
+					}
 				});
 			});
 		
@@ -172,7 +234,7 @@
 					success: function(data)
 					{
 						$("#token").val(data.token);
-						$("#user-link").html(data.firstName + " " + data.lastName);
+						$("#user-link").html(data.firstName);
 						$("#user-link").attr("href", ("user/" + data.firstName + "-" + data.lastName + ".html?token=" + data.token));
 						$("#user-app-count").html(data.appCount);
 						$("#user-recommendation-count").html(data.recommendationCount);

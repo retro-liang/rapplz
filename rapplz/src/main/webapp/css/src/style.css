@@ -1,10 +1,17 @@
 @charset "utf-8";
 /* CSS Document */
+@font-face {
+  font-family: 'Aldrich';
+  font-style: normal;
+  font-weight: normal;
+  src: url('/font/Aldrich-Regular.eot');
+  src: local('Aldrich'), local('Aldrich'), url('/font/Aldrich-Regular.ttf') format('truetype');
+}
 
 * {
 	padding: 0px;
 	margin: 0px;
-	font-family: 'Aldrich', sans-serif;
+	font-family: 'Aldrich', Arial, sans-serif;
 }
 
 .float_left {
@@ -34,10 +41,11 @@
     border-width: 1px 0 1px 1px;
     color: #333333;
     font-size: 13px;
-    height: 30px;
-    line-height: 30px;
+    height: 20px;
+    line-height: 20px;
     outline: medium none;
     padding: 0 8px;
+    margin-top: 5px;
 }
 
 .input-box:focus {
@@ -126,12 +134,14 @@ li {
 	background-color: #232323;
 	color: #E5E5E6;
 	height: 50px;
-	width: 100%;
+	width: 980px;
 	padding-top: 5px;
+	margin-left: 342px;
 	text-align: center;
 	border-top: 1px solid #4C4C4C;
 	border-bottom: 1px solid #000000;
     box-shadow: 0 4px 4px -4px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
 }
 
 #logo-container {
@@ -189,7 +199,7 @@ li {
 
 #right-column {
 	float: right;
-	margin: 0 16px 10px 0;
+	margin: 0 10px 10px 0;
     width: 300px;
 }
 
@@ -211,14 +221,14 @@ li {
     color: #CCCCCC;
     float: left;
     font-size: 11px;
-    margin: 20px 0 4px 10px;
+    margin: 20px 0 4px 50px;
     width: 200px;
 }
 
 #link-box {
     float: right;
     color: #CCCCCC;
-    margin: 4px 60px 9px 0;
+    margin: 4px 30px 9px 0;
     font-size: 11px;
 }
 
