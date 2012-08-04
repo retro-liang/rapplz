@@ -33,9 +33,9 @@
 							</div>
 							<div class="app-box-footer" style="width: 100%;height: 30px;background-color: #ffffff;">
 								<ul style="height: 100%;width: 100%;float: left;">
-									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Have</a></li>
-									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Comment</a></li>
-									<li><a href="/recommend" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Recommend</a></li>
+									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Have</a></li>
+									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Comment</a></li>
+									<li><a href="/recommend" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Recommend</a></li>
 								</ul>
 							</div>
 						</div>
@@ -53,9 +53,9 @@
 							</div>
 							<div class="app-box-footer" style="width: 100%;height: 30px;background-color: #ffffff;">
 								<ul style="height: 100%;width: 100%;float: left;">
-									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Have</a></li>
-									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Comment</a></li>
-									<li><a href="/recommend" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Recommend</a></li>
+									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Have</a></li>
+									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Comment</a></li>
+									<li><a href="/recommend" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Recommend</a></li>
 								</ul>
 							</div>
 						</div>
@@ -73,9 +73,9 @@
 							</div>
 							<div class="app-box-footer" style="width: 100%;height: 30px;background-color: #ffffff;">
 								<ul style="height: 100%;width: 100%;float: left;">
-									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Have</a></li>
-									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Comment</a></li>
-									<li><a href="/recommend" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Recommend</a></li>
+									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Have</a></li>
+									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Comment</a></li>
+									<li><a href="/recommend" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Recommend</a></li>
 								</ul>
 							</div>
 						</div>
@@ -93,9 +93,9 @@
 							</div>
 							<div class="app-box-footer" style="width: 100%;height: 30px;background-color: #ffffff;">
 								<ul style="height: 100%;width: 100%;float: left;">
-									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Have</a></li>
-									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Comment</a></li>
-									<li><a href="/recommend" class="link-button" style="float: left;font-size: 12px;margin: 3px;">Recommend</a></li>
+									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Have</a></li>
+									<li><a href="/have" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Comment</a></li>
+									<li><a href="/recommend" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Recommend</a></li>
 								</ul>
 							</div>
 						</div>
@@ -129,7 +129,7 @@
 				
 				$.ajax
 				({
-					url: "/cron/load-apps",
+					url: "/load-apps",
 					dataType: "json",
 					type: "GET",
 					success: function(data)

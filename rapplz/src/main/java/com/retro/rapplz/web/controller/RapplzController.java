@@ -40,10 +40,14 @@ public class RapplzController
     }
 	
 	@RequestMapping("/load-apps")
-	public @ResponseBody List<App> loadAppsHandler()
+	@ResponseBody
+	public List<App> loadAppsHandler()
 	{
+		logger.info("Loading apps from memcache...");
 		MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-		return (List<App>)syncCache.get("apps");
+		List<App> apps = (List<App>)syncCache.get("apps");
+		logger.info("Loaded [" + apps.size() + "] apps from memcache...");
+		return apps;
 	}
 	
 	@RequestMapping("/have")

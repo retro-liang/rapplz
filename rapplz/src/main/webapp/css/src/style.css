@@ -130,13 +130,11 @@ li {
 #header-container {
 	position: fixed;
 	top: 0;
-	left: 0;
 	background-color: #232323;
 	color: #E5E5E6;
 	height: 50px;
 	width: 980px;
 	padding-top: 5px;
-	margin-left: 342px;
 	text-align: center;
 	border-top: 1px solid #4C4C4C;
 	border-bottom: 1px solid #000000;
