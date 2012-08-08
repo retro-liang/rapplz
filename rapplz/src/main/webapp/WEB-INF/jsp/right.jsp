@@ -1,5 +1,5 @@
 	<div id="right-column">
-		<div id="user-info" class="hidden">
+		<div id="user-info">
 			<table>
 				<tr>
 					<td>User Apps:</td>

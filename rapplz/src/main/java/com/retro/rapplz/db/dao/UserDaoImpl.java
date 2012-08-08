@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.retro.rapplz.db.entity.AccountRole;
 import com.retro.rapplz.db.entity.App;
 import com.retro.rapplz.db.entity.OS;
+import com.retro.rapplz.db.entity.Recommendation;
 import com.retro.rapplz.db.entity.User;
 import com.retro.rapplz.service.exception.ApplicationServiceException;
 
@@ -193,6 +194,42 @@ public class UserDaoImpl implements UserDao
 	
 	public void recommend(String osName, Long fromUserId, Long[] toUserIds, String rawId, String appName, String icon, String storeUrl) throws ApplicationServiceException
 	{
-		
+		Session session = sessionFactory.getCurrentSession();
+		OS os = (OS)session.createQuery("select o from OS o where o.name = '" + osName + "'").uniqueResult();
+		App app = (App)session.createQuery("select a from App a where a.rawId = '" + rawId + "'").uniqueResult();
+		if(app == null)
+		{
+			app = new App();
+			app.setOs(os);
+			app.setRawId(rawId);
+			app.setName(appName);
+			app.setIconUrl(icon);
+			app.setAppStoreUrl(storeUrl);
+			session.save(app);
+		}
+		User user = (User)sessionFactory.getCurrentSession().get(User.class, fromUserId);
+		if(toUserIds == null)	//recommend to all
+		{
+			Recommendation recommendation = new Recommendation();
+			recommendation.setApp(app);
+			recommendation.setFromUser(user);
+			user.getSentRecommendation().add(recommendation);
+		}
+		else	//recommend to a subset of friends
+		{
+			for(Long toUserId : toUserIds)
+			{
+				User toUser = (User)session.createQuery("select u from User u where u.id = '" + toUserId + "'").uniqueResult();
+				if(toUser != null)
+				{
+					Recommendation recommendation = new Recommendation();
+					recommendation.setApp(app);
+					recommendation.setFromUser(user);
+					recommendation.setToUser(toUser);
+					user.getSentRecommendation().add(recommendation);
+				}
+			}
+		}
+		session.save(user);
 	}
 }

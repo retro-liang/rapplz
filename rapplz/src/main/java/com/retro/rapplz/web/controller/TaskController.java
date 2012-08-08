@@ -59,7 +59,7 @@ public class TaskController
 		}
 		catch(Exception e)
 		{
-			logger.severe("Create user taks failed: " + e);
+			logger.severe("Create user task failed: " + e);
 		}
     }
 	
@@ -79,7 +79,66 @@ public class TaskController
 		}
 		catch(Exception e)
 		{
-			logger.severe("Send email taks failed: " + e);
+			logger.severe("Send email task failed: " + e);
+		}
+	}
+	
+	@RequestMapping("have-app")
+    public void haveAppTask(HttpServletRequest request, HttpServletResponse response,
+    							@RequestParam("os") String os,
+    							@RequestParam("userId") Long userId,
+    							@RequestParam("rawId") String rawId,
+    							@RequestParam("name") String name,
+    							@RequestParam("icon") String icon,
+    							@RequestParam("storeUrl") String storeUrl)
+	{
+		try
+		{
+			userService.have(os, userId, rawId, name, icon, storeUrl);
+			response.getWriter().println("Added app [" + name + "] to user [" + userId + "] app list successfully.");
+		}
+		catch(Exception e)
+		{
+			logger.severe("Have app task failed: " + e);
+		}
+	}
+	
+	@RequestMapping("recommend-app")
+    public void recommendAppTask(HttpServletRequest request, HttpServletResponse response,
+    							@RequestParam("os") String os,
+    							@RequestParam("fromUserId") Long fromUserId,
+    							@RequestParam("toUserIds") Long[] toUserIds,
+    							@RequestParam("rawId") String rawId,
+    							@RequestParam("name") String name,
+    							@RequestParam("icon") String icon,
+    							@RequestParam("storeUrl") String storeUrl)
+	{
+		try
+		{
+			userService.recommend(os, fromUserId, toUserIds, rawId, name, icon, storeUrl);
+			if(toUserIds != null && toUserIds.length > 0)
+			{
+				User fromUser = userService.getUser(fromUserId);
+				if(fromUser != null)
+				{
+					for(Long toUserId : toUserIds)
+					{
+						User toUser = userService.getUser(toUserId);
+						Queue queue = QueueFactory.getQueue("send-email");
+					    queue.add(withUrl("/task/send-email").param("fromEmail", RapplzConfig.getInstance().getSenderEmailAddress())
+					    										.param("fromName", "Rapplz")
+					    										.param("toEmail", toUser.getEmail())
+					    										.param("toName", toUser.getFirstName())
+					    										.param("subject", "Rapplz app recommendation from " + fromUser.getFirstName())
+					    										.param("content", "Your friend " + fromUser.getFirstName() + " from Rapplz has just recommeded you an app: " + name + "\nClick the link below to check it out:\n\nhttp://" + request.getLocalAddr() + ":" + request.getServerPort() + "/app/" + name.replaceAll(" ", "-")));
+					}
+				}
+			}
+			response.getWriter().println("Added app [" + name + "] to user [" + fromUserId + "] recommendation list successfully.");
+		}
+		catch(Exception e)
+		{
+			logger.severe("Recommend app task failed: " + e);
 		}
 	}
 }

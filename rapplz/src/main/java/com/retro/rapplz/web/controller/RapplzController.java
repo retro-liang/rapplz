@@ -1,5 +1,8 @@
 package com.retro.rapplz.web.controller;
 
+import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -13,11 +16,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
 import com.retro.rapplz.config.RapplzConfig;
 import com.retro.rapplz.db.entity.App;
 import com.retro.rapplz.security.EncryptAES;
 import com.retro.rapplz.service.UserService;
 import com.retro.rapplz.service.exception.ApplicationServiceException;
+import com.retro.rapplz.web.dto.AppInfo;
+import com.retro.rapplz.web.util.AppInfoAssembler;
 
 @Controller
 public class RapplzController
@@ -26,6 +33,9 @@ public class RapplzController
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private AppInfoAssembler appInfoAssembler;
 	
 	@RequestMapping("/")
     public String homepage(HttpServletRequest request)
@@ -41,12 +51,20 @@ public class RapplzController
 	
 	@RequestMapping("/load-apps")
 	@ResponseBody
-	public List<App> loadAppsHandler()
+	public List<AppInfo> loadAppsHandler()
 	{
+		List<AppInfo> apps = new ArrayList<AppInfo>();
 		logger.info("Loading apps from memcache...");
 		MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-		List<App> apps = (List<App>)syncCache.get("apps");
-		logger.info("Loaded [" + apps.size() + "] apps from memcache...");
+		List<App> cachedApps = (List<App>)syncCache.get("apps");
+		if(cachedApps != null)
+		{
+			for(App app : cachedApps)
+			{
+				apps.add(appInfoAssembler.buildAppInfoFromApp(app));
+			}
+			logger.info("Loaded [" + apps.size() + "] apps from memcache...");
+		}
 		return apps;
 	}
 	
@@ -61,15 +79,9 @@ public class RapplzController
 	{
 		logger.info("have request: " + request.getRemoteAddr());
 		Long userId = Long.valueOf(EncryptAES.decrypt(token, RapplzConfig.getInstance().getSecurityKey()));
-		try
-		{
-			userService.have(os, userId, rawId, name, icon, storeUrl);
-			return "ok";
-		}
-		catch (ApplicationServiceException e)
-		{
-			return "error: " + e;
-		}
+		Queue queue = QueueFactory.getQueue("have-app");
+		queue.add(withUrl("/task/have-app").param("os", os).param("userId", userId.toString()).param("rawId", rawId).param("name", name).param("icon", icon).param("storeUrl", storeUrl));
+		return "ok";
     }
 	
 	@RequestMapping("/recommend")
@@ -89,15 +101,9 @@ public class RapplzController
 		{
 			toUserIds[i] = Long.valueOf(EncryptAES.decrypt(toTokens[i], RapplzConfig.getInstance().getSecurityKey()));
 		}
-		try
-		{
-			userService.recommend(os, fromUserId, toUserIds, rawId, name, icon, storeUrl);
-			return "ok";
-		}
-		catch (ApplicationServiceException e)
-		{
-			return "error: " + e;
-		}
+		Queue queue = QueueFactory.getQueue("recommend-app");
+		queue.add(withUrl("/task/recommend-app").param("os", os).param("fromUserId", fromUserId.toString()).param("toUserIds", toUserIds.toString()).param("rawId", rawId).param("name", name).param("icon", icon).param("storeUrl", storeUrl));
+		return "ok";
     }
 	
 	@RequestMapping("/site-map.html")

@@ -28,12 +28,12 @@ import com.retro.rapplz.db.entity.User;
 import com.retro.rapplz.security.EncryptAES;
 import com.retro.rapplz.service.UserService;
 import com.retro.rapplz.service.exception.ApplicationServiceException;
-import com.retro.rapplz.util.UserInfoAssembler;
 import com.retro.rapplz.web.dto.UserInfo;
+import com.retro.rapplz.web.util.UserInfoAssembler;
 
 @Controller
 @RequestMapping("/access")
-@SessionAttributes("user")
+@SessionAttributes("userInfo")
 public class AccessController extends MultiActionController
 {
 	private static final Logger logger = Logger.getLogger(AccessController.class.getName());

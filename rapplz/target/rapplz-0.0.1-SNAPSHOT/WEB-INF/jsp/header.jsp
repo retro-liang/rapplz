@@ -25,13 +25,16 @@
 					<li id="welcome-container"><a id="user-link" class="link-button"></a></li>
 					<li id="sign-out-container"><a id="sign-out-link" href="<c:url value="/j_spring_security_logout" />" class="link-button">Sign Out</a></li>
 				</ul>
-				<input id="token" type="hidden" />
+				<input id="token" type="hidden" value="${userInfo.token}" />
 			</div>
 			
 			
 			<c:choose>
 				<c:when test="${!authenticated}">
-					<script type="text/javascript">document.getElementById("access-container-signed-in").className += "hidden";</script>
+					<script type="text/javascript">
+						document.getElementById("access-container-signed-in").className += "hidden";
+						document.getElementById("user-info").className += "hidden";
+					</script>
 				</c:when>
 				<c:otherwise>
 					<script type="text/javascript">document.getElementById("access-container-not-signed-in").className += "hidden";</script>

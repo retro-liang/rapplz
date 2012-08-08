@@ -62,6 +62,13 @@ public class UserServiceImpl implements UserService, UserDetailsService
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
+	public User getUser(Long id) throws ApplicationServiceException
+	{
+		return userDao.getUserByID(id);
+	}
+	
+	@Override
 	@Transactional
 	public User createUser(String accountRoleName, String accountTypeName, String accountStatusName, String email, String password, String firstName, String lastName) throws ApplicationServiceException
 	{
