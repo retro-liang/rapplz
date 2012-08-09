@@ -13,7 +13,6 @@ public class AppInfo implements Serializable
 	private String rawId;
 	private String name;
 	private Set<Category> categories;
-	private String company;
 	private String icon;
 	private int haveCount;
 	private int recommendationCount;
@@ -41,16 +40,6 @@ public class AppInfo implements Serializable
 	public void setName(String name)
 	{
 		this.name = name;
-	}
-
-	public String getCompany()
-	{
-		return company;
-	}
-
-	public void setCompany(String company)
-	{
-		this.company = company;
 	}
 
 	public String getIcon()

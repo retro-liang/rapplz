@@ -12,51 +12,26 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+
 @SuppressWarnings("serial")
 @MappedSuperclass
+@ToString(exclude={"jdoDetachedState", "createdDate"})
+@EqualsAndHashCode(exclude={"jdoDetachedState", "createdDate"})
 public abstract class BaseEntity implements Serializable 
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Getter
 	protected Long id;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_date")
-	private Date createdDate = new Date();
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="modified_date")
-	private Date modifiedDate = new Date();
+	@Getter
+	private final Date createdDate = new Date();
 	
 	@Transient
 	protected Object[] jdoDetachedState;
-	
-	public BaseEntity()
-	{
-		
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	public Date getModifiedDate() {
-		return modifiedDate;
-	}
-
-	public void setModifiedDate(Date modifiedDate) {
-		this.modifiedDate = modifiedDate;
-	}
 }

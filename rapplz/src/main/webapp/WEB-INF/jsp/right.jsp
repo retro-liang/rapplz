@@ -22,6 +22,15 @@
 				</tr>
 			</table>
 		</div>
+		
+		<c:choose>
+			<c:when test="${!authenticated}">
+				<script type="text/javascript">
+					document.getElementById("user-info").className += "hidden";
+				</script>
+			</c:when>
+		</c:choose>
+			
 		<div id="hot-apps-box">
 		</div>
 		<div id="activity-box">

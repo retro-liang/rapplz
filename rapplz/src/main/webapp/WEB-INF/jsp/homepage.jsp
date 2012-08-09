@@ -54,11 +54,10 @@
 					{
 						$.each(data, function(index, item)
 						{
-							alert(item.id);
 							$("#popular-apps-box").append('<div class="app-box" style="float: left;background-color: #444444;width: 300px;height: 150px;border-top-left-radius: 5px;border-top-right-radius: 5px;padding:0 5px;margin-right:10px;margin-bottom:10px;">' +
 																'<div class="app-box-header" style="width: 100%;height: 30px;padding: 2px 5px;">' +
-																'<div class="app-name" style="float: left;font-size: 13px;font-weight: bold;color: #ffffff;width: 200px;margin-top:5px;">' + item.name + '</div>' +
-																'<div class="app-category" style="float: right;font-size: 12px;font-weigth: bold;color: #ffffff;width: 90px;text-align:right;padding-right:15px;margin-top:5px;">' + item.categories + '</div>' +
+																'<div class="app-name" style="float: left;font-size: 13px;font-weight: bold;color: #ffffff;width: auto;margin-top:5px;">' + item.name + '</div>' +
+																'<div class="app-category" style="float: right;font-size: 12px;font-weigth: bold;color: #ffffff;width: auto;text-align:right;padding-right:15px;margin-top:5px;">' + item.categories + '</div>' +
 															'</div>' +
 															'<div class="app-box-middle" style="background-color: #FFFFFF;width: auto;height: 80px;padding: 1px 5px;">' +
 																'<div class="app-icon" style="float: left;width: 60px;height: 60px;padding: 15px 1px;">' +
@@ -119,8 +118,8 @@
 						    				"<td><span id='" + item.trackId + "_company'>" + item.artistName + "</span></td>" +
 						    				"<td>" + item.averageUserRating + "</td>" +
 						    				"<td>" + item.userRatingCount + "</td>" +
-						    				"<td><a class='button yellow' id='" + item.trackId + "_have' href='javascript:void(0);' onclick='have(\"" + item.trackId + "\",\"" + item.trackName + "\",\"" + item.artworkUrl60 + "\",\"" + item.artistViewUrl + "\")'>I Have</a></td>" +
-						    				"<td><a class='button blue' id='" + item.trackId + "_recommend' href='javascript:void(0);' onclick='recommend(\"" + item.trackId + "\",\"" + item.trackName + "\",\"" + item.artworkUrl60 + "\",\"" + item.artistViewUrl + "\")'>I Recommend</a></td>" +
+						    				"<td><a class='button yellow' id='" + item.trackId + "_have' href='javascript:void(0);' onclick='have(\"" + item.trackId + "\",\"" + item.trackName + "\",\"" + item.artworkUrl60 + "\",\"" + item.trackViewUrl + "\",\"" + item.supportedDevices + "\",\"" + item.primaryGenreName + "\")'>I Have</a></td>" +
+						    				"<td><a class='button blue' id='" + item.trackId + "_recommend' href='javascript:void(0);' onclick='recommend(\"" + item.trackId + "\",\"" + item.trackName + "\",\"" + item.artworkUrl60 + "\",\"" + item.trackViewUrl + "\",\"" + item.supportedDevices + "\",\"" + item.primaryGenreName + "\")'>I Recommend</a></td>" +
 						    			"</tr>";
 						});
 						$("#search-result").html(result);
@@ -302,33 +301,41 @@
 				});
 			});
 			
-			function have(rawId, name, icon, storeUrl)
-			{
+			function have(rawId, name, icon, storeUrl, device, category)
+			{alert(rawId + "-" + name + "-" + icon + "-" + storeUrl + "-" + device + "-" + category);
 				var os = $("#os").val();
 				var token = $("#token").val();
-				
-		    	$.ajax
-				({
-					url: "/have",
-					data: 
-					{
-						os: os,
-						token: token,
-						rawId: rawId,
-						name: name,
-						icon: icon,
-						storeUrl: storeUrl
-					},
-					success: function(data)
-					{
-						alert(data);
-						this.disabled = "disabled";
-					},
-					error: function(jqXHR, textStatus, errorThrown)
-					{
-						alert("error: " + errorThrown);
-					}
-				});
+				if(token != "")
+				{
+					$.ajax
+					({
+						url: "/have",
+						data: 
+						{
+							os: os,
+							token: token,
+							rawId: rawId,
+							name: name,
+							icon: icon,
+							storeUrl: storeUrl,
+							device: device,
+							category: category
+						},
+						success: function(data)
+						{
+							alert(data);
+							this.disabled = "disabled";
+						},
+						error: function(jqXHR, textStatus, errorThrown)
+						{
+							alert("error: " + errorThrown);
+						}
+					});	
+				}
+				else
+				{
+					$.colorbox({inline:true, href:"#sign-in-box"});
+				}
 			}
 			
 			function recommend(rawId, name, icon, storeUrl)
@@ -336,28 +343,35 @@
 				var os = $("#os").val();
 				var token = $("#token").val();
 				
-		    	$.ajax
-				({
-					url: "/have",
-					data: 
-					{
-						os: os,
-						token: token,
-						rawId: rawId,
-						name: name,
-						icon: icon,
-						storeUrl: storeUrl
-					},
-					success: function(data)
-					{
-						alert(data);
-						this.disabled = "disabled";
-					},
-					error: function(jqXHR, textStatus, errorThrown)
-					{
-						alert("error: " + errorThrown);
-					}
-				});
+				if(token != "")
+				{
+					$.ajax
+					({
+						url: "/have",
+						data: 
+						{
+							os: os,
+							token: token,
+							rawId: rawId,
+							name: name,
+							icon: icon,
+							storeUrl: storeUrl
+						},
+						success: function(data)
+						{
+							alert(data);
+							this.disabled = "disabled";
+						},
+						error: function(jqXHR, textStatus, errorThrown)
+						{
+							alert("error: " + errorThrown);
+						}
+					});
+				}
+				else
+				{
+					$.colorbox({inline:true, href:"#sign-in-box"});
+				}
 			}
 		</script>
 

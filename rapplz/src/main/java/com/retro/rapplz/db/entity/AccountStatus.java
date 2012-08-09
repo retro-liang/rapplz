@@ -9,6 +9,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 @SuppressWarnings("serial")
 @Entity
 @Table(name="account_status")
@@ -18,6 +22,9 @@ import javax.persistence.Table;
 	@NamedQuery(name = "AccountStatus.findById", query = "SELECT s FROM AccountStatus s WHERE s.id = :id"),
 	@NamedQuery(name = "AccountStatus.findByName", query = "SELECT s FROM AccountStatus s WHERE s.name = :name")
 })
+@Data
+@EqualsAndHashCode(callSuper=true, exclude={"users"})
+@ToString(callSuper=true, includeFieldNames=true, exclude={"users"})
 public class AccountStatus extends BaseEntity
 {
 	public static final String DEFAULT = "PENDING";
@@ -25,25 +32,4 @@ public class AccountStatus extends BaseEntity
 	
 	@OneToMany(mappedBy="accountStatus")
     private Set<User> users = new HashSet<User>();
-	
-	public AccountStatus()
-	{
-		
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Set<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(Set<User> users) {
-		this.users = users;
-	}
 }

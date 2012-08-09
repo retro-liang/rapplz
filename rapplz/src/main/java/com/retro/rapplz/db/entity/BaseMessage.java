@@ -5,37 +5,27 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 @SuppressWarnings("serial")
 @MappedSuperclass
+@ToString(callSuper=true, exclude={"jdoDetachedState"})
+@EqualsAndHashCode(callSuper=true, exclude={"jdoDetachedState", "content"})
 public class BaseMessage extends BaseEntity
 {
 	@ManyToOne
 	@JoinColumn(name="author_user_id")
+	@Getter
+	@Setter
 	private User author;
 	
+	@Getter
+	@Setter
 	private String content;
 	
 	@Transient
 	protected Object[] jdoDetachedState;
-	
-	public BaseMessage()
-	{
-		
-	}
-
-	public User getAuthor() {
-		return author;
-	}
-
-	public void setAuthor(User author) {
-		this.author = author;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
 }

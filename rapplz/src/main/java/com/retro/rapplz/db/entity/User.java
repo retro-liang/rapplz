@@ -17,6 +17,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.LazyCollection;
@@ -39,6 +43,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 	@NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
 	@NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password")
 })
+@Data
+@EqualsAndHashCode(callSuper=true, exclude={"password", "avatar", "accountType", "accountRoles", "accountStatus", "apps", "activities", "appComments", "reviews", "reviewComments", "followers", "followings", "sentRecommendations", "receivedRecommendations", "tags"})
+@ToString(callSuper=true, includeFieldNames=true, exclude={"password", "lastName", "avatar", "apps", "activities", "appComments", "reviews", "reviewComments", "followers", "followings", "sentRecommendations", "receivedRecommendations", "tags"})
 public class User extends BaseEntity implements UserDetails, Serializable
 {
 	private static final long serialVersionUID = 3295552597219824938L;
@@ -109,51 +116,15 @@ public class User extends BaseEntity implements UserDetails, Serializable
 
 	@OneToMany(mappedBy = "fromUser")
 	@LazyCollection(LazyCollectionOption.EXTRA)
-	private Set<Recommendation> sentRecommendation = new HashSet<Recommendation>();
+	private Set<Recommendation> sentRecommendations = new HashSet<Recommendation>();
 
 	@OneToMany(mappedBy = "toUser")
 	@LazyCollection(LazyCollectionOption.EXTRA)
-	private Set<Recommendation> receivedRecommendation = new HashSet<Recommendation>();
+	private Set<Recommendation> receivedRecommendations = new HashSet<Recommendation>();
 
 	@OneToMany(mappedBy = "author")
 	@LazyCollection(LazyCollectionOption.EXTRA)
 	private Set<Tag> tags = new HashSet<Tag>();
-
-	public User()
-	{
-
-	}
-
-	@Override
-	public int hashCode()
-	{
-		int hash = 0;
-		hash += (id != null ? id.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object object)
-	{
-		// Warning - this method won't work in the case the id fields are not
-		// set
-		if (!(object instanceof User))
-		{
-			return false;
-		}
-		User other = (User) object;
-		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)))
-		{
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public String toString()
-	{
-		return "User[id=" + id + " email=" + email + " type=" + accountType	+ " status=" + accountStatus + "]";
-	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities()
@@ -191,186 +162,5 @@ public class User extends BaseEntity implements UserDetails, Serializable
 	public boolean isEnabled()
 	{
 		return true;
-	}
-
-	public String getEmail()
-	{
-		return email;
-	}
-
-	public void setEmail(String email)
-	{
-		this.email = email;
-	}
-
-	public String getPassword()
-	{
-		return password;
-	}
-
-	public void setPassword(String password)
-	{
-		this.password = password;
-	}
-
-	public String getFirstName()
-	{
-		return firstName;
-	}
-
-	public void setFirstName(String firstName)
-	{
-		this.firstName = firstName;
-	}
-
-	public String getLastName()
-	{
-		return lastName;
-	}
-
-	public void setLastName(String lastName)
-	{
-		this.lastName = lastName;
-	}
-
-	public AccountType getAccountType()
-	{
-		return accountType;
-	}
-
-	public void setAccountType(AccountType accountType)
-	{
-		this.accountType = accountType;
-	}
-
-	public AccountStatus getAccountStatus()
-	{
-		return accountStatus;
-	}
-
-	public void setAccountStatus(AccountStatus accountStatus)
-	{
-		this.accountStatus = accountStatus;
-	}
-
-	public Set<Activity> getActivities()
-	{
-		return activities;
-	}
-
-	public void setActivities(Set<Activity> activities)
-	{
-		this.activities = activities;
-	}
-
-	public Set<User> getFollowers()
-	{
-		return followers;
-	}
-
-	public void setFollowers(Set<User> followers)
-	{
-		this.followers = followers;
-	}
-
-	public Set<User> getFollowings()
-	{
-		return followings;
-	}
-
-	public void setFollowings(Set<User> followings)
-	{
-		this.followings = followings;
-	}
-
-	public Set<Recommendation> getSentRecommendation()
-	{
-		return sentRecommendation;
-	}
-
-	public void setSentRecommendation(Set<Recommendation> sentRecommendation)
-	{
-		this.sentRecommendation = sentRecommendation;
-	}
-
-	public Set<Recommendation> getReceivedRecommendation()
-	{
-		return receivedRecommendation;
-	}
-
-	public void setReceivedRecommendation(
-			Set<Recommendation> receivedRecommendation)
-	{
-		this.receivedRecommendation = receivedRecommendation;
-	}
-
-	public Set<Tag> getTags()
-	{
-		return tags;
-	}
-
-	public void setTags(Set<Tag> tags)
-	{
-		this.tags = tags;
-	}
-
-	public Set<AppComment> getAppComments()
-	{
-		return appComments;
-	}
-
-	public void setAppComments(Set<AppComment> appComments)
-	{
-		this.appComments = appComments;
-	}
-
-	public Set<Review> getReviews()
-	{
-		return reviews;
-	}
-
-	public void setReviews(Set<Review> reviews)
-	{
-		this.reviews = reviews;
-	}
-
-	public Set<ReviewComment> getReviewComments()
-	{
-		return reviewComments;
-	}
-
-	public void setReviewComments(Set<ReviewComment> reviewComments)
-	{
-		this.reviewComments = reviewComments;
-	}
-
-	public String getAvatar()
-	{
-		return avatar;
-	}
-
-	public void setAvatar(String avatar)
-	{
-		this.avatar = avatar;
-	}
-
-	public Set<AccountRole> getAccountRoles()
-	{
-		return accountRoles;
-	}
-
-	public void setAccountRoles(Set<AccountRole> accountRoles)
-	{
-		this.accountRoles = accountRoles;
-	}
-
-	public Set<App> getApps()
-	{
-		return apps;
-	}
-
-	public void setApps(Set<App> apps)
-	{
-		this.apps = apps;
 	}
 }

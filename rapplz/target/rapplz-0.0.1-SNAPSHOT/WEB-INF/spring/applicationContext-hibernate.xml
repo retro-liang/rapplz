@@ -43,7 +43,6 @@
 				<value>com.retro.rapplz.db.entity.App</value>
 				<value>com.retro.rapplz.db.entity.Device</value>
 				<value>com.retro.rapplz.db.entity.Category</value>
-				<value>com.retro.rapplz.db.entity.Screenshot</value>
 				<value>com.retro.rapplz.db.entity.AccountType</value>
 				<value>com.retro.rapplz.db.entity.AccountRole</value>
 				<value>com.retro.rapplz.db.entity.AccountStatus</value>

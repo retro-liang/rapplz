@@ -5,9 +5,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 @SuppressWarnings("serial")
 @Entity
 @Table(name="follower_following")
+@Data
+@EqualsAndHashCode(callSuper=true)
+@ToString(callSuper=true, includeFieldNames=true)
 public class Follow extends BaseEntity
 {
 	@ManyToOne
@@ -17,25 +24,4 @@ public class Follow extends BaseEntity
 	@ManyToOne
 	@JoinColumn(name="following_user_id")
 	public User following;
-	
-	public Follow()
-	{
-		
-	}
-
-	public User getFollower() {
-		return follower;
-	}
-
-	public void setFollower(User follower) {
-		this.follower = follower;
-	}
-
-	public User getFollowing() {
-		return following;
-	}
-
-	public void setFollowing(User following) {
-		this.following = following;
-	}
 }

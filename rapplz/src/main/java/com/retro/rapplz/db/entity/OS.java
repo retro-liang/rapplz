@@ -7,34 +7,20 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 @SuppressWarnings("serial")
 @Entity
 @Table(name="os")
+@Data
+@EqualsAndHashCode(callSuper=true, exclude={"apps"})
+@ToString(callSuper=true, includeFieldNames=true, exclude={"apps"})
 public class OS extends BaseEntity
 {
 	private String name;
 	
 	@OneToMany(mappedBy="os")
-	private Set<App> app = new HashSet<App>();
-	
-	public OS()
-	{
-		
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Set<App> getApp() {
-		return app;
-	}
-
-	public void setApp(Set<App> app) {
-		this.app = app;
-	}
+	private Set<App> apps = new HashSet<App>();
 }

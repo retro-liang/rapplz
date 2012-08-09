@@ -75,12 +75,14 @@ public class RapplzController
     												@RequestParam("rawId") String rawId,
     												@RequestParam("name") String name,
     												@RequestParam("icon") String icon,
-    												@RequestParam("storeUrl") String storeUrl)
+    												@RequestParam("storeUrl") String storeUrl,
+    												@RequestParam("device") String device,
+    												@RequestParam("category") String category)
 	{
 		logger.info("have request: " + request.getRemoteAddr());
 		Long userId = Long.valueOf(EncryptAES.decrypt(token, RapplzConfig.getInstance().getSecurityKey()));
 		Queue queue = QueueFactory.getQueue("have-app");
-		queue.add(withUrl("/task/have-app").param("os", os).param("userId", userId.toString()).param("rawId", rawId).param("name", name).param("icon", icon).param("storeUrl", storeUrl));
+		queue.add(withUrl("/task/have-app").param("os", os).param("userId", userId.toString()).param("rawId", rawId).param("name", name).param("icon", icon).param("storeUrl", storeUrl).param("device", device).param("category", category));
 		return "ok";
     }
 	
@@ -92,7 +94,9 @@ public class RapplzController
     												@RequestParam("rawId") String rawId,
     												@RequestParam("name") String name,
     												@RequestParam("icon") String icon,
-    												@RequestParam("storeUrl") String storeUrl)
+    												@RequestParam("storeUrl") String storeUrl,
+    												@RequestParam("device") String device,
+    												@RequestParam("category") String category)
 	{
 		logger.info("recommend request: " + request.getRemoteAddr());
 		Long fromUserId = Long.valueOf(EncryptAES.decrypt(fromToken, RapplzConfig.getInstance().getSecurityKey()));
@@ -102,7 +106,7 @@ public class RapplzController
 			toUserIds[i] = Long.valueOf(EncryptAES.decrypt(toTokens[i], RapplzConfig.getInstance().getSecurityKey()));
 		}
 		Queue queue = QueueFactory.getQueue("recommend-app");
-		queue.add(withUrl("/task/recommend-app").param("os", os).param("fromUserId", fromUserId.toString()).param("toUserIds", toUserIds.toString()).param("rawId", rawId).param("name", name).param("icon", icon).param("storeUrl", storeUrl));
+		queue.add(withUrl("/task/recommend-app").param("os", os).param("fromUserId", fromUserId.toString()).param("toUserIds", toUserIds.toString()).param("rawId", rawId).param("name", name).param("icon", icon).param("storeUrl", storeUrl).param("device", device).param("category", category));
 		return "ok";
     }
 	

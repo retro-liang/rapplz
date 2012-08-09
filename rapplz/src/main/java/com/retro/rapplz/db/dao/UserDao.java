@@ -23,6 +23,6 @@ public interface UserDao
 	public int getUserRecommendationCount(Long id);
 	public int getUserFollowerCount(Long id);
 	public int getUserFollowingCount(Long id);
-	public void have(String osName, Long userId, String rawId, String appName, String icon, String storeUrl) throws ApplicationServiceException;
-	public void recommend(String osName, Long fromUserId, Long[] toUserIds, String rawId, String appName, String icon, String storeUrl) throws ApplicationServiceException;
+	public void have(String osName, Long userId, String rawId, String appName, String icon, String storeUrl, String[] deviceNames, String categoryName) throws ApplicationServiceException;
+	public void recommend(String osName, Long fromUserId, Long[] toUserIds, String rawId, String appName, String icon, String storeUrl, String[] deviceNames, String categoryName) throws ApplicationServiceException;
 }

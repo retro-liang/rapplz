@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.retro.rapplz.db.entity.AccountRole;
 import com.retro.rapplz.db.entity.App;
+import com.retro.rapplz.db.entity.Category;
+import com.retro.rapplz.db.entity.Device;
 import com.retro.rapplz.db.entity.OS;
 import com.retro.rapplz.db.entity.Recommendation;
 import com.retro.rapplz.db.entity.User;
@@ -172,64 +174,125 @@ public class UserDaoImpl implements UserDao
 		return ((BigInteger)q.uniqueResult()).intValue();
 	}
 	
-	public void have(String osName, Long userId, String rawId, String appName, String icon, String storeUrl) throws ApplicationServiceException
+	public void have(String osName, Long userId, String rawId, String appName, String icon, String storeUrl, String[] deviceNames, String categoryName) throws ApplicationServiceException
 	{
 		Session session = sessionFactory.getCurrentSession();
 		OS os = (OS)session.createQuery("select o from OS o where o.name = '" + osName + "'").uniqueResult();
-		App app = (App)session.createQuery("select a from App a where a.rawId = '" + rawId + "'").uniqueResult();
-		if(app == null)
+		if(os != null)
 		{
-			app = new App();
-			app.setOs(os);
-			app.setRawId(rawId);
-			app.setName(appName);
-			app.setIconUrl(icon);
-			app.setAppStoreUrl(storeUrl);
-			session.save(app);
+			User user = (User)sessionFactory.getCurrentSession().get(User.class, userId);
+			if(user != null)
+			{
+				App app = (App)session.createQuery("select a from App a where a.rawId = '" + rawId + "'").uniqueResult();
+				if(app == null)
+				{
+					app = new App();
+					app.setOs(os);
+					app.setRawId(rawId);
+					app.setName(appName);
+					app.setIconUrl(icon);
+				}
+				
+				if(deviceNames != null && deviceNames.length > 0)
+				{
+					for(String deviceName : deviceNames)
+					{
+						Device device = (Device)session.createQuery("select d from Device d where d.name like '" + deviceName + "'").uniqueResult();
+						if(device == null)
+						{
+							device = new Device();
+							device.setName(deviceName);
+							session.save(device);
+						}
+						app.getDevices().add(device);
+					}
+				}
+				
+				Category category = (Category)session.createQuery("select c from Category c where c.name like '" + categoryName + "'").uniqueResult();
+				if(category == null)
+				{
+					category = new Category();
+					category.setName(categoryName);
+					session.save(category);
+				}
+				app.getCategories().add(category);
+				
+				session.save(app);
+				user.getApps().add(app);
+				session.save(user);
+			}
 		}
-		User user = (User)sessionFactory.getCurrentSession().get(User.class, userId);
-		user.getApps().add(app);
-		session.save(user);
 	}
 	
-	public void recommend(String osName, Long fromUserId, Long[] toUserIds, String rawId, String appName, String icon, String storeUrl) throws ApplicationServiceException
+	public void recommend(String osName, Long fromUserId, Long[] toUserIds, String rawId, String appName, String icon, String storeUrl, String[] deviceNames, String categoryName) throws ApplicationServiceException
 	{
 		Session session = sessionFactory.getCurrentSession();
 		OS os = (OS)session.createQuery("select o from OS o where o.name = '" + osName + "'").uniqueResult();
-		App app = (App)session.createQuery("select a from App a where a.rawId = '" + rawId + "'").uniqueResult();
-		if(app == null)
+		if(os != null)
 		{
-			app = new App();
-			app.setOs(os);
-			app.setRawId(rawId);
-			app.setName(appName);
-			app.setIconUrl(icon);
-			app.setAppStoreUrl(storeUrl);
-			session.save(app);
-		}
-		User user = (User)sessionFactory.getCurrentSession().get(User.class, fromUserId);
-		if(toUserIds == null)	//recommend to all
-		{
-			Recommendation recommendation = new Recommendation();
-			recommendation.setApp(app);
-			recommendation.setFromUser(user);
-			user.getSentRecommendation().add(recommendation);
-		}
-		else	//recommend to a subset of friends
-		{
-			for(Long toUserId : toUserIds)
+			User user = (User)sessionFactory.getCurrentSession().get(User.class, fromUserId);
+			if(user != null)
 			{
-				User toUser = (User)session.createQuery("select u from User u where u.id = '" + toUserId + "'").uniqueResult();
-				if(toUser != null)
+				App app = (App)session.createQuery("select a from App a where a.rawId = '" + rawId + "'").uniqueResult();
+				if(app == null)
+				{
+					app = new App();
+					app.setOs(os);
+					app.setRawId(rawId);
+					app.setName(appName);
+					app.setIconUrl(icon);
+				}
+				
+				if(deviceNames != null && deviceNames.length > 0)
+				{
+					for(String deviceName : deviceNames)
+					{
+						Device device = (Device)session.createQuery("select d from Device d where d.name like '" + deviceName + "'").uniqueResult();
+						if(device == null)
+						{
+							device = new Device();
+							device.setName(deviceName);
+							session.save(device);
+						}
+						app.getDevices().add(device);
+					}
+				}
+				
+				Category category = (Category)session.createQuery("select c from Category c where c.name like '" + categoryName + "'").uniqueResult();
+				if(category == null)
+				{
+					category = new Category();
+					category.setName(categoryName);
+					session.save(category);
+				}
+				app.getCategories().add(category);
+				
+				session.save(app);
+				
+				if(toUserIds == null)	//recommend to all
 				{
 					Recommendation recommendation = new Recommendation();
 					recommendation.setApp(app);
 					recommendation.setFromUser(user);
-					recommendation.setToUser(toUser);
-					user.getSentRecommendation().add(recommendation);
+					user.getSentRecommendations().add(recommendation);
 				}
+				else	//recommend to a subset of friends
+				{
+					for(Long toUserId : toUserIds)
+					{
+						User toUser = (User)session.createQuery("select u from User u where u.id = '" + toUserId + "'").uniqueResult();
+						if(toUser != null)
+						{
+							Recommendation recommendation = new Recommendation();
+							recommendation.setApp(app);
+							recommendation.setFromUser(user);
+							recommendation.setToUser(toUser);
+							user.getSentRecommendations().add(recommendation);
+						}
+					}
+				}
+				session.save(user);
 			}
 		}
-		session.save(user);
 	}
 }

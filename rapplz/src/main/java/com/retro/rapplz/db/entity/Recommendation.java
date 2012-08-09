@@ -5,9 +5,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 @SuppressWarnings("serial")
 @Entity
 @Table(name="recommendation")
+@Data
+@EqualsAndHashCode(callSuper=true, exclude={"message"})
+@ToString(callSuper=true, includeFieldNames=true, exclude={"message"})
 public class Recommendation extends BaseEntity
 {
 	@ManyToOne
@@ -23,41 +30,4 @@ public class Recommendation extends BaseEntity
 	private User toUser;
 	
 	private String message;
-	
-	public Recommendation()
-	{
-		
-	}
-
-	public App getApp() {
-		return app;
-	}
-
-	public void setApp(App app) {
-		this.app = app;
-	}
-
-	public User getFromUser() {
-		return fromUser;
-	}
-
-	public void setFromUser(User fromUser) {
-		this.fromUser = fromUser;
-	}
-
-	public User getToUser() {
-		return toUser;
-	}
-
-	public void setToUser(User toUser) {
-		this.toUser = toUser;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
 }

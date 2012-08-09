@@ -33,7 +33,6 @@
 				<c:when test="${!authenticated}">
 					<script type="text/javascript">
 						document.getElementById("access-container-signed-in").className += "hidden";
-						document.getElementById("user-info").className += "hidden";
 					</script>
 				</c:when>
 				<c:otherwise>

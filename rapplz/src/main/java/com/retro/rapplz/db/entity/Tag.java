@@ -5,9 +5,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 @SuppressWarnings("serial")
 @Entity
 @Table(name="tag")
+@Data
+@EqualsAndHashCode(callSuper=true)
+@ToString(callSuper=true, includeFieldNames=true)
 public class Tag extends BaseEntity
 {
 	@ManyToOne
@@ -21,33 +28,4 @@ public class Tag extends BaseEntity
 	@ManyToOne
 	@JoinColumn(name="app_id")
 	private App app;
-	
-	public Tag()
-	{
-		
-	}
-
-	public TagName getTagName() {
-		return tagName;
-	}
-
-	public void setTagName(TagName tagName) {
-		this.tagName = tagName;
-	}
-
-	public User getAuthor() {
-		return author;
-	}
-
-	public void setAuthor(User author) {
-		this.author = author;
-	}
-
-	public App getApp() {
-		return app;
-	}
-
-	public void setApp(App app) {
-		this.app = app;
-	}
 }

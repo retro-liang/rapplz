@@ -8,9 +8,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 @SuppressWarnings("serial")
 @Entity
 @Table(name="activity")
+@Data
+@EqualsAndHashCode(callSuper=true, exclude={"content"})
+@ToString(callSuper=true, includeFieldNames=true, exclude={"content"})
 public class Activity extends BaseEntity
 {
 	@ManyToOne
@@ -26,41 +33,4 @@ public class Activity extends BaseEntity
 	private ActivityResult activityResult;
 	
 	private String content;
-	
-	public Activity()
-	{
-		
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public ActivityType getActivityType() {
-		return activityType;
-	}
-
-	public void setActivityType(ActivityType activityType) {
-		this.activityType = activityType;
-	}
-
-	public ActivityResult getActivityResult() {
-		return activityResult;
-	}
-
-	public void setActivityResult(ActivityResult activityResult) {
-		this.activityResult = activityResult;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
 }

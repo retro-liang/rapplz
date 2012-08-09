@@ -27,7 +27,6 @@ private static final Logger logger = Logger.getLogger(UserInfoAssembler.class.ge
 		appInfo.setRawId(app.getRawId());
 		appInfo.setName(app.getName());
 		//appInfo.setCategories(app.getCategories());
-		appInfo.setCompany(app.getCompanyName());
 		appInfo.setIcon(app.getIconUrl());
 		return appInfo;
 	}

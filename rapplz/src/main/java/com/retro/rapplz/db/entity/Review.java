@@ -9,9 +9,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 @SuppressWarnings("serial")
 @Entity
 @Table(name="review")
+@Data
+@EqualsAndHashCode(callSuper=true, exclude={"reviewComments"})
+@ToString(callSuper=true, includeFieldNames=true, exclude={"reviewComments"})
 public class Review extends BaseMessage
 {
 	@ManyToOne
@@ -20,25 +27,4 @@ public class Review extends BaseMessage
 	
 	@OneToMany(mappedBy="review")
 	private Set<ReviewComment> reviewComments = new HashSet<ReviewComment>();
-	
-	public Review()
-	{
-		
-	}
-
-	public App getApp() {
-		return app;
-	}
-
-	public void setApp(App app) {
-		this.app = app;
-	}
-
-	public Set<ReviewComment> getReviewComments() {
-		return reviewComments;
-	}
-
-	public void setReviewComments(Set<ReviewComment> reviewComments) {
-		this.reviewComments = reviewComments;
-	}
 }

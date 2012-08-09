@@ -295,6 +295,14 @@
 		<version>1.9.0</version>
 		<scope>test</scope>
 	</dependency>
+	
+	<!-- Lombok -->
+	<dependency>
+		<groupId>org.projectlombok</groupId>
+		<artifactId>lombok</artifactId>
+		<version>0.11.2</version>
+		<scope>provided</scope>
+	</dependency>
 
   </dependencies>
 
