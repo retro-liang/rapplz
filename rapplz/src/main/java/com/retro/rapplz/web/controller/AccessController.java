@@ -52,11 +52,12 @@ public class AccessController extends MultiActionController
     }
 	
 	@RequestMapping("sign-in-success")
-    public @ResponseBody UserInfo signInSuccessHandler(HttpServletRequest request, ModelMap model, Principal principal)
+    public @ResponseBody UserInfo signInSuccessHandler(HttpServletRequest request, ModelMap modelMap, Principal principal)
 	{
 		logger.info("signInSuccessHandler: " + request.getRemoteAddr());
 		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserInfo userInfo = userInfoAssembler.buildUserInfoFromUser(user);
+		modelMap.addAttribute(userInfo);
 		return userInfo;
     }
 	

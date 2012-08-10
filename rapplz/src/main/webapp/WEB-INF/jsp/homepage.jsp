@@ -112,15 +112,25 @@
 						$.each(data.results, function(index, item)
 						{
 						    //alert(item.trackId + ': ' + item.trackName);
-						    result += "<tr>" +
-						    				"<td><a target='_blank' href='" + item.artistViewUrl + "'><img id='" + item.trackId + "_icon' src='" + item.artworkUrl60 + "' /></a></td>" +
-						    				"<td><a id='" + item.trackId + "_url' target='_blank' href='" + item.artistViewUrl + "'><span  id='" + item.trackId + "_name'>" + item.trackName + "</span></a></td>" +
-						    				"<td><span id='" + item.trackId + "_company'>" + item.artistName + "</span></td>" +
-						    				"<td>" + item.averageUserRating + "</td>" +
-						    				"<td>" + item.userRatingCount + "</td>" +
-						    				"<td><a class='button yellow' id='" + item.trackId + "_have' href='javascript:void(0);' onclick='have(\"" + item.trackId + "\",\"" + item.trackName + "\",\"" + item.artworkUrl60 + "\",\"" + item.trackViewUrl + "\",\"" + item.supportedDevices + "\",\"" + item.primaryGenreName + "\")'>I Have</a></td>" +
-						    				"<td><a class='button blue' id='" + item.trackId + "_recommend' href='javascript:void(0);' onclick='recommend(\"" + item.trackId + "\",\"" + item.trackName + "\",\"" + item.artworkUrl60 + "\",\"" + item.trackViewUrl + "\",\"" + item.supportedDevices + "\",\"" + item.primaryGenreName + "\")'>I Recommend</a></td>" +
-						    			"</tr>";
+						    //result += "<tr>" +
+						    				//"<td><a target='_blank' href='" + item.artistViewUrl + "'><img id='" + item.trackId + "_icon' src='" + item.artworkUrl60 + "' /></a></td>" +
+						    				//"<td><a id='" + item.trackId + "_url' target='_blank' href='" + item.artistViewUrl + "'><span  id='" + item.trackId + "_name'>" + item.trackName + "</span></a></td>" +
+						    				//"<td><span id='" + item.trackId + "_company'>" + item.artistName + "</span></td>" +
+						    				//"<td>" + item.averageUserRating + "</td>" +
+						    				//"<td>" + item.userRatingCount + "</td>" +
+						    				//"<td><a class='button yellow' id='" + item.trackId + "_have' href='javascript:void(0);' onclick='have(\"" + item.trackId + "\",\"" + item.trackName + "\",\"" + item.artworkUrl60 + "\",\"" + item.trackViewUrl + "\",\"" + item.supportedDevices + "\",\"" + item.primaryGenreName + "\")'>I Have</a></td>" +
+						    				//"<td><a class='button blue' id='" + item.trackId + "_recommend' href='javascript:void(0);' onclick='recommend(\"" + item.trackId + "\",\"" + item.trackName + "\",\"" + item.artworkUrl60 + "\",\"" + item.trackViewUrl + "\",\"" + item.supportedDevices + "\",\"" + item.primaryGenreName + "\")'>I Recommend</a></td>" +
+						    			//"</tr>";
+						    result += '<li style="padding: 10px;overflow: auto;">' +
+											'<a target="_blank" href="' + item.artistViewUrl + '" style=" float: left;margin: 0 15px 0 0;"><img src="' + item.artworkUrl60 + '" ></a>' +
+											'<h3 style="font: bold 20px/1.5 Helvetica, Verdana, sans-serif;"><a target="_blank" id="' + item.trackId + '_url" href="' + item.artistViewUrl + '"><span id="' + item.trackId + '_name">' + item.trackName + '</span></a></h3>' +
+											'<p style="font: 200 12px/1.5 Georgia, Times New Roman, serif;">' + item.averageUserRating + '</p>' +
+											'<p style="font: 200 12px/1.5 Georgia, Times New Roman, serif;">' + item.userRatingCount + '</p>' +
+											'<p style="font: 200 12px/1.5 Georgia, Times New Roman, serif;">' +
+												'<a class="" id="' + item.trackId + '_have" href="javascript:void(0);" onclick="have(\'' + item.trackId + '\',\'' + item.trackName + '\',\'' + item.artworkUrl60 + '\',\'' + item.supportedDevices + '\',\'' + item.primaryGenreName + '\')">I Have</a>' +
+												'<a class="" id="' + item.trackId + '_recommend" href="javascript:void(0);" onclick="recommend(\'' + item.trackId + '\',\'' + item.trackName + '\',\'' + item.artworkUrl60 + '\',\'' + item.supportedDevices + '\',\'' + item.primaryGenreName + '\')">I Recommend</a>' +
+											'</p>' +
+										'</li>';
 						});
 						$("#search-result").html(result);
 						$("div.holder").jPages
@@ -301,8 +311,8 @@
 				});
 			});
 			
-			function have(rawId, name, icon, storeUrl, device, category)
-			{alert(rawId + "-" + name + "-" + icon + "-" + storeUrl + "-" + device + "-" + category);
+			function have(rawId, name, icon, device, category)
+			{
 				var os = $("#os").val();
 				var token = $("#token").val();
 				if(token != "")
@@ -317,7 +327,6 @@
 							rawId: rawId,
 							name: name,
 							icon: icon,
-							storeUrl: storeUrl,
 							device: device,
 							category: category
 						},
@@ -338,7 +347,7 @@
 				}
 			}
 			
-			function recommend(rawId, name, icon, storeUrl)
+			function recommend(rawId, name, icon, device, category)
 			{
 				var os = $("#os").val();
 				var token = $("#token").val();
@@ -347,15 +356,17 @@
 				{
 					$.ajax
 					({
-						url: "/have",
+						url: "/recommend",
 						data: 
 						{
 							os: os,
-							token: token,
+							fromToken: token,
+							toTokens: [],
 							rawId: rawId,
 							name: name,
 							icon: icon,
-							storeUrl: storeUrl
+							device: device,
+							category: category
 						},
 						success: function(data)
 						{

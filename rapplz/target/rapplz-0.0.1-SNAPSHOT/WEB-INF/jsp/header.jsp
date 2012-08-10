@@ -22,7 +22,7 @@
 					<li id="sign-up-container"><a id="sign-up-button" href="<spring:url value="/access/sign-up.html" htmlEscape="true" />" class="link-button">Sign Up</a></li>
 				</ul>
 				<ul id="access-container-signed-in">
-					<li id="welcome-container"><a id="user-link" class="link-button"></a></li>
+					<li id="welcome-container"><a id="user-link" class="link-button">${userInfo.firstName}</a></li>
 					<li id="sign-out-container"><a id="sign-out-link" href="<c:url value="/j_spring_security_logout" />" class="link-button">Sign Out</a></li>
 				</ul>
 				<input id="token" type="hidden" value="${userInfo.token}" />
@@ -42,7 +42,7 @@
 			
 		</div>
 		
-		<div id="sub-header" style="width: 100%;background-color: #333333;border-bottom: 1px solid #444444;border-top: 1px solid #383838;box-shadow: 0 2px 0 0 #262626, 0 -1px 0 0 #171717;display: block;height: 38px;margin: 55px auto 5px auto;">
+		<div id="sub-header" style="width: auto;background-color: #333333;border-bottom: 1px solid #444444;border-top: 1px solid #383838;box-shadow: 0 2px 0 0 #262626, 0 -1px 0 0 #171717;display: block;height: 38px;margin: 55px auto 5px auto;">
 			<ul style="width: 500px;float: left;padding-left: 50px;padding-top: 12px;">
 				<li><a href="/app.html" style="float: left;font-size: 12px;font-weight: bold;text-shadow: 0 0 0 transparent, 0 1px rgba(29, 29, 29, 0.2);border-radius: 2px 2px 2px 2px;color: #C5C5C5;display: block;border-left: medium none;border-top: medium none;margin: 0 0;padding: 0 0.65em;text-decoration: none;">App</a></li>
 				<li><a href="/people.html" style="float: left;font-size: 12px;font-weight: bold;text-shadow: 0 0 0 transparent, 0 1px rgba(29, 29, 29, 0.2);border-radius: 2px 2px 2px 2px;color: #C5C5C5;display: block;border-left: medium none;border-top: medium none;margin: 0 0;padding: 0 0.65em;text-decoration: none;">People</a></li>
@@ -55,7 +55,7 @@
 			</div>
 		</div>
 		
-		<div id="top-ad-box" style="width: 100%;margin: 5px auto 10px auto;padding-left: 100px;">
+		<div id="top-ad-box" style="width: auto;margin: 5px auto 10px auto;padding-left: 100px;">
 			<script type="text/javascript"><!--
 			google_ad_client = "ca-pub-3748265501907091";
 			/* rapplz-top */
@@ -70,23 +70,9 @@
 		</div>
 		
 		<div style="visibility:hidden;width:0px;height:0px;">
-			<div id="search-result-box">
-			<table>
-	            <thead>
-	            	<tr>
-	            		<th></th>
-	            		<th>Name</th>
-	            		<th>Company</th>
-	            		<th>Rating</th>
-	            		<th>Votes</th>
-	            	</tr>
-	            </thead>
-	            <tbody id="search-result">
-	            	
-				</tbody>
-			</table>
-			
-			<div class="holder" style="margin:0px;"></div>
+			<div id="search-result-box" style="margin: 20px;">
+				<ul id="search-result" style="list-style-type: none;width: 500px;"></ul>
+				<div class="holder" style="margin:0px;"></div>
 			</div>
 		</div>
 		

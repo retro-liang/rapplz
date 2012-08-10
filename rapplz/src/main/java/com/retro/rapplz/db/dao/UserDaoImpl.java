@@ -6,23 +6,15 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import org.hibernate.SQLQuery;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.retro.rapplz.db.entity.AccountRole;
-import com.retro.rapplz.db.entity.App;
-import com.retro.rapplz.db.entity.Category;
-import com.retro.rapplz.db.entity.Device;
-import com.retro.rapplz.db.entity.OS;
-import com.retro.rapplz.db.entity.Recommendation;
 import com.retro.rapplz.db.entity.User;
-import com.retro.rapplz.service.exception.ApplicationServiceException;
 
+@SuppressWarnings("unchecked")
 @Repository("userDao")
-@Transactional
 public class UserDaoImpl implements UserDao
 {
 	private static final Logger logger = Logger.getLogger(UserDaoImpl.class.getName());
@@ -31,20 +23,7 @@ public class UserDaoImpl implements UserDao
 	private SessionFactory sessionFactory;
 
 	@Override
-	public void addUser(User user)
-	{
-		try
-		{
-			sessionFactory.getCurrentSession().save(user);
-		}
-		catch (Exception e)
-		{
-			System.out.println(e);
-		}
-	}
-
-	@Override
-	public User findByEmail(String email)
+	public User getUserByEmail(String email)
 	{
 		logger.info("findByEmail email: " + email);
 		User user = (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "'").uniqueResult();
@@ -53,7 +32,7 @@ public class UserDaoImpl implements UserDao
 	}
 
 	@Override
-	public User getUserByID(Long id)
+	public User getUser(Long id)
 	{
 
 		User user = (User)sessionFactory.getCurrentSession().createQuery("select u from User u where id = '" + id + "'").uniqueResult();
@@ -94,26 +73,20 @@ public class UserDaoImpl implements UserDao
 	}
 
 	@Override
-	public void updateUser(User user)
+	public void save(User user)
 	{
-		try
-		{
-			sessionFactory.getCurrentSession().update(user);
-		}
-		catch (Exception e)
-		{
-			System.out.println(e);
-		}
+		sessionFactory.getCurrentSession().save(user);
 	}
 
 	@Override
-	public List<User> listUser()
+	@SuppressWarnings("unchecked")
+	public List<User> getUsers()
 	{
 		return (List<User>)sessionFactory.getCurrentSession().createQuery("from User").list();
 	}
 
 	@Override
-	public void removeUser(Long id)
+	public void remove(Long id)
 	{
 		User user = (User) sessionFactory.getCurrentSession().load(
 		User.class, id);
@@ -172,127 +145,5 @@ public class UserDaoImpl implements UserDao
 		SQLQuery q = sessionFactory.getCurrentSession().createSQLQuery(sqlQuery);
 		q.setParameter(0, id);
 		return ((BigInteger)q.uniqueResult()).intValue();
-	}
-	
-	public void have(String osName, Long userId, String rawId, String appName, String icon, String storeUrl, String[] deviceNames, String categoryName) throws ApplicationServiceException
-	{
-		Session session = sessionFactory.getCurrentSession();
-		OS os = (OS)session.createQuery("select o from OS o where o.name = '" + osName + "'").uniqueResult();
-		if(os != null)
-		{
-			User user = (User)sessionFactory.getCurrentSession().get(User.class, userId);
-			if(user != null)
-			{
-				App app = (App)session.createQuery("select a from App a where a.rawId = '" + rawId + "'").uniqueResult();
-				if(app == null)
-				{
-					app = new App();
-					app.setOs(os);
-					app.setRawId(rawId);
-					app.setName(appName);
-					app.setIconUrl(icon);
-				}
-				
-				if(deviceNames != null && deviceNames.length > 0)
-				{
-					for(String deviceName : deviceNames)
-					{
-						Device device = (Device)session.createQuery("select d from Device d where d.name like '" + deviceName + "'").uniqueResult();
-						if(device == null)
-						{
-							device = new Device();
-							device.setName(deviceName);
-							session.save(device);
-						}
-						app.getDevices().add(device);
-					}
-				}
-				
-				Category category = (Category)session.createQuery("select c from Category c where c.name like '" + categoryName + "'").uniqueResult();
-				if(category == null)
-				{
-					category = new Category();
-					category.setName(categoryName);
-					session.save(category);
-				}
-				app.getCategories().add(category);
-				
-				session.save(app);
-				user.getApps().add(app);
-				session.save(user);
-			}
-		}
-	}
-	
-	public void recommend(String osName, Long fromUserId, Long[] toUserIds, String rawId, String appName, String icon, String storeUrl, String[] deviceNames, String categoryName) throws ApplicationServiceException
-	{
-		Session session = sessionFactory.getCurrentSession();
-		OS os = (OS)session.createQuery("select o from OS o where o.name = '" + osName + "'").uniqueResult();
-		if(os != null)
-		{
-			User user = (User)sessionFactory.getCurrentSession().get(User.class, fromUserId);
-			if(user != null)
-			{
-				App app = (App)session.createQuery("select a from App a where a.rawId = '" + rawId + "'").uniqueResult();
-				if(app == null)
-				{
-					app = new App();
-					app.setOs(os);
-					app.setRawId(rawId);
-					app.setName(appName);
-					app.setIconUrl(icon);
-				}
-				
-				if(deviceNames != null && deviceNames.length > 0)
-				{
-					for(String deviceName : deviceNames)
-					{
-						Device device = (Device)session.createQuery("select d from Device d where d.name like '" + deviceName + "'").uniqueResult();
-						if(device == null)
-						{
-							device = new Device();
-							device.setName(deviceName);
-							session.save(device);
-						}
-						app.getDevices().add(device);
-					}
-				}
-				
-				Category category = (Category)session.createQuery("select c from Category c where c.name like '" + categoryName + "'").uniqueResult();
-				if(category == null)
-				{
-					category = new Category();
-					category.setName(categoryName);
-					session.save(category);
-				}
-				app.getCategories().add(category);
-				
-				session.save(app);
-				
-				if(toUserIds == null)	//recommend to all
-				{
-					Recommendation recommendation = new Recommendation();
-					recommendation.setApp(app);
-					recommendation.setFromUser(user);
-					user.getSentRecommendations().add(recommendation);
-				}
-				else	//recommend to a subset of friends
-				{
-					for(Long toUserId : toUserIds)
-					{
-						User toUser = (User)session.createQuery("select u from User u where u.id = '" + toUserId + "'").uniqueResult();
-						if(toUser != null)
-						{
-							Recommendation recommendation = new Recommendation();
-							recommendation.setApp(app);
-							recommendation.setFromUser(user);
-							recommendation.setToUser(toUser);
-							user.getSentRecommendations().add(recommendation);
-						}
-					}
-				}
-				session.save(user);
-			}
-		}
 	}
 }

@@ -90,13 +90,12 @@ public class TaskController
     							@RequestParam("rawId") String rawId,
     							@RequestParam("name") String name,
     							@RequestParam("icon") String icon,
-    							@RequestParam("storeUrl") String storeUrl,
-								@RequestParam("device") String device,
+    							@RequestParam("device") String device,
 								@RequestParam("category") String category)
 	{
 		try
 		{
-			userService.have(os, userId, rawId, name, icon, storeUrl, device.split(","), category);
+			userService.have(os, userId, rawId, name, icon, device.split(","), category);
 			response.getWriter().println("Added app [" + name + "] to user [" + userId + "] app list successfully.");
 		}
 		catch(Exception e)
@@ -113,13 +112,12 @@ public class TaskController
     							@RequestParam("rawId") String rawId,
     							@RequestParam("name") String name,
     							@RequestParam("icon") String icon,
-    							@RequestParam("storeUrl") String storeUrl,
-								@RequestParam("device") String device,
+    							@RequestParam("device") String device,
 								@RequestParam("category") String category)
 	{
 		try
 		{
-			userService.recommend(os, fromUserId, toUserIds, rawId, name, icon, storeUrl, device.split(","), category);
+			userService.recommend(os, fromUserId, toUserIds, rawId, name, icon, device.split(","), category);
 			if(toUserIds != null && toUserIds.length > 0)
 			{
 				User fromUser = userService.getUser(fromUserId);

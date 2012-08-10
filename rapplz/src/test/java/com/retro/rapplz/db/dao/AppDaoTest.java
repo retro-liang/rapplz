@@ -63,7 +63,7 @@ public class AppDaoTest //extends AbstractTransactionalJUnit4SpringContextTests
     	List<App> apps = dao.getApps();
     	System.out.println("app list size: " + apps.size());
     	
-    	dao.removeApp(1l);
+    	dao.remove(1l);
     	apps = dao.getApps();
     	System.out.println("app list size: " + apps.size());
     	
@@ -72,7 +72,7 @@ public class AppDaoTest //extends AbstractTransactionalJUnit4SpringContextTests
         app.setName( "new-app1" );
         
         // Add an app to the database
-        app = dao.saveApp(app);
+        app = dao.save(app);
         System.out.println(app.getId());
         // Load the app into another object
         Assert.assertNotNull("The app that was created was unable to be loaded from the database", app);
@@ -81,13 +81,13 @@ public class AppDaoTest //extends AbstractTransactionalJUnit4SpringContextTests
         Assert.assertEquals( "Names do not match", "new-app1", app.getName() );
         
         // Remove the app from the database
-        dao.removeApp(app.getId());
+        dao.remove(app.getId());
         
         apps = dao.getApps();
     	System.out.println("app list size: " + apps.size());
         
         // Assert that the app is no longer in the database
-    	App nullApp = dao.loadApp(app.getId());
+    	App nullApp = dao.getApp(app.getId());
         Assert.assertNull("The app should have been deleted but it was not", nullApp);
         System.out.println("App: " + app);
     }

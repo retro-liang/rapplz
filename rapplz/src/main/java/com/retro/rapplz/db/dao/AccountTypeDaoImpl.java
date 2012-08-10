@@ -7,12 +7,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.retro.rapplz.db.entity.AccountType;
 
 @Repository("AccountTypeDao")
-@Transactional
 public class AccountTypeDaoImpl implements AccountTypeDao
 {
 	@Autowired

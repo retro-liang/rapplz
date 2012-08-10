@@ -4,7 +4,6 @@ import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.retro.rapplz.config.RapplzConfig;
 import com.retro.rapplz.db.entity.User;
@@ -21,7 +20,6 @@ public class UserInfoAssembler
 	@Autowired
 	private UserService userService;
 	
-	@Transactional(readOnly = true)
 	public UserInfo buildUserInfoFromUser(User user)
 	{
 		UserInfo userInfo = new UserInfo();
@@ -34,10 +32,7 @@ public class UserInfoAssembler
 		userInfo.setStatus(user.getAccountStatus().getName());
 		try
 		{
-			userInfo.setAppCount(userService.getUserAppCount(user.getId()));
-			userInfo.setRecommendationCount(userService.getUserRecommendationCount(user.getId()));
-			userInfo.setFollowerCount(userService.getUserFollowerCount(user.getId()));
-			userInfo.setFollowingCount(userService.getUserFollowingCount(user.getId()));
+			userInfo = userService.loadUserInfo(userInfo);
 		}
 		catch (ApplicationServiceException e)
 		{

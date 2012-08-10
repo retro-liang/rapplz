@@ -61,7 +61,7 @@ public class TestController
 	public String userHandler(HttpServletRequest request)
 	{
 		logger.info("user request: " + request.getAttributeNames());
-		List<User> users = userDao.listUser();
+		List<User> users = userDao.getUsers();
 		logger.info("user: " + users);
 		return "welcome";
     }

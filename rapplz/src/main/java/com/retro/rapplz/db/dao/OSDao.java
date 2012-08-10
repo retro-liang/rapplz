@@ -2,17 +2,17 @@ package com.retro.rapplz.db.dao;
 
 import java.util.List;
 
-import org.springframework.dao.DataAccessException;
-
 import com.retro.rapplz.db.entity.OS;
 
 public interface OSDao
 {
-	public OS loadOS(Long id) throws DataAccessException;
+	public OS getOS(Long id);
+	
+	public OS getOSByName(String name);
 
-	public List<OS> getOSs() throws DataAccessException;
+	public List<OS> getOSs();
 	
-	public OS saveOS(OS os) throws DataAccessException;
+	public void save(OS os);
 	
-	public void removeOS(Long id) throws DataAccessException;
+	public void remove(Long id);
 }

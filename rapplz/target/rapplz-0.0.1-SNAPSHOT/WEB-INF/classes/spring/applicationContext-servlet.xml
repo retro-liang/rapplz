@@ -52,7 +52,6 @@
 	        - is to propagate all exceptions to the servlet container: this will happen 
 	        - here with all other types of exceptions.
 	-->
-	<!-- 
 	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
 	        <property name="exceptionMappings">
 	                <props>
@@ -62,7 +61,6 @@
 	                </props>
 	        </property>
 	</bean>
-	 -->
 	
 	<!--
 	        - This view resolver delegates to the InternalResourceViewResolver and BeanNameViewResolver,

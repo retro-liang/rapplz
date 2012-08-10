@@ -5,64 +5,48 @@ import java.util.List;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.retro.rapplz.db.entity.App;
 
 @Repository("appDao")
-@Transactional
 public class AppDaoImpl implements AppDao
 {
 	@Autowired
 	private SessionFactory sessionFactory;
 	
 	@Override
-	public App loadApp(Long id)
+	public App getApp(Long id)
 	{
 		return (App)sessionFactory.getCurrentSession().get(App.class, id);
 	}
 
+	public App getAppByName(String name)
+	{
+		return (App)sessionFactory.getCurrentSession().createQuery("select a from App a where a.name like '%" + name + "%'").uniqueResult();
+	}
+	
 	@Override
-	@Transactional(readOnly = true)
+	public App getAppByRawId(String rawId)
+	{
+		return (App)sessionFactory.getCurrentSession().createQuery("select a from App a where a.rawId like '" + rawId + "'").uniqueResult();
+	}
+	
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<App> getApps()
 	{
 		return sessionFactory.getCurrentSession().createQuery("from App app order by app.name").list();
-		/*Session session = null;
-		try
-		{
-			session = sessionFactory.openSession();
-			List<App> apps = session.createQuery("from App app order by app.name").list();
-			System.out.println("apps: " + apps);
-			return apps;
-		}
-		finally
-		{
-			//session.clear();
-			//sessionFactory.close();
-			session.close();
-		}*/
 	}
 
 	@Override
-	public App saveApp(App app)
+	public void save(App app)
 	{
-		// Note: Hibernate3's merge operation does not reassociate the object
-        // with the current Hibernate Session. Instead, it will always copy the
-        // state over to a registered representation of the entity. In case of a
-        // new entity, it will register a copy as well, but will not update the
-        // id of the passed-in object. To still update the ids of the original
-        // objects too, we need to register Spring's
-        // IdTransferringMergeEventListener on our SessionFactory.
-		
-		return (App)sessionFactory.getCurrentSession().merge(app);
+		sessionFactory.getCurrentSession().save(app);
 	}
 
 	@Override
-	public void removeApp(Long id)
+	public void remove(Long id)
 	{
-		App app = loadApp(id);
-		sessionFactory.getCurrentSession().delete(app);
-	
+		sessionFactory.getCurrentSession().delete(id);
 	}
 }
