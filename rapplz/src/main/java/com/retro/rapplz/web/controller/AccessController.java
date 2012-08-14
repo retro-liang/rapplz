@@ -24,6 +24,9 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.retro.rapplz.config.RapplzConfig;
+import com.retro.rapplz.db.entity.AccountRole;
+import com.retro.rapplz.db.entity.AccountStatus;
+import com.retro.rapplz.db.entity.AccountType;
 import com.retro.rapplz.db.entity.User;
 import com.retro.rapplz.security.EncryptAES;
 import com.retro.rapplz.service.UserService;
@@ -67,6 +70,37 @@ public class AccessController extends MultiActionController
 		logger.info("Sign in fail.");
 		model.addAttribute("signInFailMessage", "Sign in fail, your email or password are not correct.");
 		return "redirect:sign-in.html";
+    }
+    
+    @RequestMapping("federal-sign-in")
+    public @ResponseBody UserInfo federalSignInHandler(HttpServletRequest request,
+    													ModelMap modelMap,
+    													@RequestParam("type") String type,
+    													@RequestParam("id") String id,
+    													@RequestParam("email") String email,
+    													@RequestParam("firstName") String firstName,
+    													@RequestParam("lastName") String lastName,
+    													@RequestParam("avatar") String avatar)
+	{
+		logger.info("federalSignInHandler: " + request.getRemoteAddr());
+		SecurityContextHolder.getContext().getAuthentication().setAuthenticated(true);
+		try
+		{
+			User user = userService.getUserByFederalId(id);
+			if(user == null)
+			{
+				logger.info("Creating new user...");
+				user = userService.createUser(AccountRole.DEFAULT, type, AccountStatus.DEFAULT, email, "", firstName, lastName, id, avatar);
+			}
+			UserInfo userInfo = userInfoAssembler.buildUserInfoFromUser(user);
+			modelMap.addAttribute(userInfo);
+			return userInfo;
+		}
+		catch (ApplicationServiceException e)
+		{
+			logger.severe("Federal sign in failed: " + e);
+			return null;
+		}
     }
 	
 	@RequestMapping("sign-up.html")

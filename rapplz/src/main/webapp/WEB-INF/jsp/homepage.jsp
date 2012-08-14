@@ -183,18 +183,7 @@
 			        },
 					success: function(data)
 					{
-						$("#token").val(data.token);
-						$("#user-link").html(data.firstName);
-						$("#user-link").attr("href", ("user/" + data.firstName + "-" + data.lastName + ".html?token=" + data.token));
-						$("#user-app-count").html(data.appCount);
-						$("#user-recommendation-count").html(data.recommendationCount);
-						$("#user-follower-count").html(data.followerCount);
-						$("#user-following-count").html(data.followingCount);
-						$("#user-details").attr("href", ("user/" + data.firstName + "-" + data.lastName + ".html?token=" + data.token));
-						$("#user-info").removeClass("hidden");
-						$("#access-container-not-signed-in").addClass("hidden");
-						$("#access-container-signed-in").removeClass("hidden");
-						$("#cboxClose").click();
+						signInSuccessHandler(data);
 					},
 					error: function(jqXHR, textStatus, errorThrown)
 					{
@@ -202,6 +191,23 @@
 					}
 				});
 			});
+			
+			function signInSuccessHandler(data)
+			{
+				$("#token").val(data.token);
+				$("#user-link").html(data.firstName);
+				$("#user-link").attr("href", ("user/" + data.firstName + "-" + data.lastName + ".html?token=" + data.token));
+				$("#user-app-count").html(data.appCount);
+				$("#user-recommendation-count").html(data.recommendationCount);
+				$("#user-follower-count").html(data.followerCount);
+				$("#user-following-count").html(data.followingCount);
+				$("#user-details").attr("href", ("user/" + data.firstName + "-" + data.lastName + ".html?token=" + data.token));
+				$("#user-info").removeClass("hidden");
+				$("#access-container-not-signed-in").addClass("hidden");
+				$("#access-container-signed-in").removeClass("hidden");
+				$("#cboxClose").click();
+				return false;
+			}
 			
 			$("#forget-password-button").click(function(event)
 			{
@@ -383,6 +389,79 @@
 				{
 					$.colorbox({inline:true, href:"#sign-in-box"});
 				}
+			}
+		</script>
+		
+		<script src="https://apis.google.com/js/client.js"></script>
+		
+		<script>
+			var clientId = '929855298687.apps.googleusercontent.com';
+			var apiKey = 'AIzaSyB7wu0K1GW6v-AQFMaYqc324wTw-AX85xI';
+			var scopes = ['https://www.googleapis.com/auth/userinfo.profile','https://www.googleapis.com/auth/userinfo.email','https://www.googleapis.com/auth/plus.me'];
+	      
+			function googleSignIn()
+			{
+				gapi.client.setApiKey(apiKey);
+				gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: false}, googleAuthHandler);
+			    return false;
+			}
+			
+			function googleAuthHandler(authResult)
+			{
+				if(authResult && !authResult.error)
+				{
+					gapi.client.load('oauth2', 'v2', function()
+					{
+						var request = gapi.client.oauth2.userinfo.get();
+						request.execute(function(data)
+						{
+							if(data && !data.error)
+							{
+								alert("login success: " + data.id + "-" + data.email + "-" + data.given_name + "-" + data.family_name + "-" + data.picture);
+								var avatar = data.picture;
+								if(!avatar)
+								{
+									avatar = "";
+								}
+								federalSignIn("GOOGLE", data.id, data.email, data.given_name, data.family_name, avatar);
+							}
+							else
+							{
+								alert("Error: " + data.error.message);
+							}
+						});
+					});
+				}
+				else
+				{
+					alert("Authorization Error: " + data.error.message);
+				}
+			}
+			
+			function federalSignIn(type, id, email, firstName, lastName, avatar)
+			{
+				$.ajax
+				({
+					url: "/access/federal-sign-in",
+					data: 
+					{
+						type: type,
+						id: id,
+						email: email,
+						firstName: firstName,
+						lastName: lastName,
+						avatar: avatar
+					},
+					success: function(data)
+					{
+						alert(data);
+						signInSuccessHandler(data);
+					},
+					error: function(jqXHR, textStatus, errorThrown)
+					{
+						alert("error: " + errorThrown);
+					}
+				});
 			}
 		</script>
 

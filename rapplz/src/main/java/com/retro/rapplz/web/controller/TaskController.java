@@ -46,7 +46,7 @@ public class TaskController
 		logger.info("createUserTask: " + email);
 		try
 		{
-			User user = userService.createUser(AccountRole.DEFAULT, AccountType.DEFAULT, AccountStatus.DEFAULT, email, password, firstName, lastName);
+			User user = userService.createUser(AccountRole.DEFAULT, AccountType.DEFAULT, AccountStatus.DEFAULT, email, password, firstName, lastName, "", "");
 			String token = EncryptAES.encrypt(user.getId().toString(), RapplzConfig.getInstance().getSecurityKey());
 			Queue queue = QueueFactory.getQueue("send-email");
 		    queue.add(withUrl("/task/send-email").param("fromEmail", RapplzConfig.getInstance().getSenderEmailAddress())

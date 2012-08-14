@@ -10,6 +10,7 @@ public interface UserDao
 {
 	public User getUser(Long id);
 	public User getUserByEmail(String email);
+	public User getUserByFederalId(String id);
 	public List<User> getUsers();
 	public Set<AccountRole> getAccountRolesByEmail(String email);
 	public int getUserAppCount(Long id);

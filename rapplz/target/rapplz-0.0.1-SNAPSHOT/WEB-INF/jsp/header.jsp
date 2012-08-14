@@ -82,8 +82,11 @@
 					<div class="app-name" style="font-size: 12px;font-weight: bold;color: #ffffff;width: auto;margin-top:5px;">Sign In</div>
 				</div>
 				<div class="sign-in-box-body" style="background-color: #FFFFFF;padding: 1px 5px;font-size: 12px;font-weight:bold;margin:0 5px;height: 150px;">
+					<div id="google_login">
+						<a href="javascript:void(0);" onclick="googleSignIn();" id="google-sign-in">Sign In with Google Account</a>
+					</div>
 					<div id="facebook_login">
-						<p>Sign In with Your Facebook Account</p>
+						<p>Sign In with Your Google Account</p>
 						<a href="/services/facebook/authorize" target="fb_auth" onclick="window.open('/services/facebook/authorize','fb_auth','width=580,height=400'); $.mq.send('user:facebook_connect');" class="btn_facebook fire_event" message="facebook_connect" id="facebook_account_auth">Connect with Facebook</a>
 					</div>
 					<form id="sign-in-form" action="/j_spring_security_check" method="POST">

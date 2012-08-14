@@ -72,7 +72,7 @@ public class AppDaoTest //extends AbstractTransactionalJUnit4SpringContextTests
         app.setName( "new-app1" );
         
         // Add an app to the database
-        app = dao.save(app);
+        dao.save(app);
         System.out.println(app.getId());
         // Load the app into another object
         Assert.assertNotNull("The app that was created was unable to be loaded from the database", app);

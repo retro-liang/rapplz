@@ -35,8 +35,13 @@ public class UserDaoImpl implements UserDao
 	public User getUser(Long id)
 	{
 
-		User user = (User)sessionFactory.getCurrentSession().createQuery("select u from User u where id = '" + id + "'").uniqueResult();
-		return user;
+		return (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.id = '" + id + "'").uniqueResult();
+	}
+	
+	@Override
+	public User getUserByFederalId(String id)
+	{
+		return (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.federalId = '" + id + "'").uniqueResult();
 	}
 	
 	@Override

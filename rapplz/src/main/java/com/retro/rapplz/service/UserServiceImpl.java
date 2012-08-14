@@ -92,8 +92,15 @@ public class UserServiceImpl implements UserService, UserDetailsService
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
+	public User getUserByFederalId(String id) throws ApplicationServiceException
+	{
+		return userDao.getUserByFederalId(id);
+	}
+	
+	@Override
 	@Transactional
-	public User createUser(String accountRoleName, String accountTypeName, String accountStatusName, String email, String password, String firstName, String lastName) throws ApplicationServiceException
+	public User createUser(String accountRoleName, String accountTypeName, String accountStatusName, String email, String password, String firstName, String lastName, String federalId, String avatar) throws ApplicationServiceException
 	{
 		logger.info("createUser: " + email);
 		User user = new User();
@@ -101,7 +108,12 @@ public class UserServiceImpl implements UserService, UserDetailsService
 		user.setLastName(lastName);
 		user.setEmail(email);
 		user.setPassword(password);
-		user.setPassword(passwordEncoder.encodePassword(password, saltSource.getSalt(user)));
+		user.setFederalId(federalId);
+		user.setAvatar(avatar);
+		if(federalId != null && !federalId.trim().equals(""))
+		{
+			user.setPassword(passwordEncoder.encodePassword(password, saltSource.getSalt(user)));
+		}
 		AccountRole accountRole = accountRoleDao.getAccountRoleByName(accountRoleName);
 		AccountType accountType = accountTypeDao.getAccountTypeByName(accountTypeName);
 		AccountStatus accountStatus = accountStatusDao.getAccountStatusByName(accountStatusName);

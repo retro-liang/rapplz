@@ -28,6 +28,11 @@ import lombok.ToString;
 public class AccountType extends BaseEntity
 {
 	public static final String DEFAULT = "RAPPLZ";
+	public static final String RAPPLZ = "RAPPLZ";
+	public static final String GOOGLE = "GOOGLE";
+	public static final String FACEBOOK = "FACEBOOK";
+	public static final String TWITTER = "TWITTER";
+	
 	private String name = DEFAULT;
 	
 	@OneToMany(mappedBy="accountType")

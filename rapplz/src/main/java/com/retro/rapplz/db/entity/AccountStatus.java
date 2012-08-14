@@ -28,6 +28,10 @@ import lombok.ToString;
 public class AccountStatus extends BaseEntity
 {
 	public static final String DEFAULT = "PENDING";
+	public static final String PENDING = "PENDING";
+	public static final String ACTIVE = "ACTIVE";
+	public static final String INACTIVE = "INACTIVE";
+	
 	private String name = DEFAULT;
 	
 	@OneToMany(mappedBy="accountStatus")

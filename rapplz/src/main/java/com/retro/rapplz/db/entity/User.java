@@ -49,6 +49,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class User extends BaseEntity implements UserDetails, Serializable
 {
 	private static final long serialVersionUID = 3295552597219824938L;
+	
+	@Column(name = "federal_id")
+	private String federalId;
 
 	@NotBlank
 	@Length(min = 6, max = 50)
