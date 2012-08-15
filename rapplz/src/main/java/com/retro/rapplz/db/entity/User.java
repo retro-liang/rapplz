@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -58,8 +59,6 @@ public class User extends BaseEntity implements UserDetails, Serializable
 	@Email
 	private String email;
 
-	@NotBlank
-	@Length(min = 6, max = 40)
 	private String password;
 
 	@NotBlank
@@ -79,8 +78,9 @@ public class User extends BaseEntity implements UserDetails, Serializable
 	@JoinColumn(name = "account_type_id")
 	private AccountType accountType;
 
-	@ManyToMany
-	@JoinTable(name = "user_account_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "account_role_id") })
+	@ManyToMany(fetch = FetchType.EAGER)
+	@Cascade({CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable(name = "user_account_role", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "account_role_id")})
 	private Set<AccountRole> accountRoles = new HashSet<AccountRole>();
 
 	@ManyToOne
@@ -88,7 +88,7 @@ public class User extends BaseEntity implements UserDetails, Serializable
 	private AccountStatus accountStatus;
 	
 	@ManyToMany
-	@JoinTable(name = "user_app", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "app_id") })
+	@JoinTable(name = "user_app", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "app_id")})
 	@LazyCollection(LazyCollectionOption.EXTRA)
 	private Set<App> apps = new HashSet<App>();
 

@@ -17,4 +17,8 @@ public interface AppDao
 	public void save(App app);
 	
 	public void remove(Long id);
+	
+	public int getAppHaveCount(Long id);
+	
+	public int getAppRecommendationCount(Long id);
 }

@@ -183,7 +183,11 @@
 			        },
 					success: function(data)
 					{
-						signInSuccessHandler(data);
+						alert(data.token);
+						if(data.token && data.token != "")
+						{
+							signInSuccessHandler(data);	
+						}
 					},
 					error: function(jqXHR, textStatus, errorThrown)
 					{
@@ -357,6 +361,7 @@
 			{
 				var os = $("#os").val();
 				var token = $("#token").val();
+				var toTokens = [""];
 				
 				if(token != "")
 				{
@@ -367,7 +372,7 @@
 						{
 							os: os,
 							fromToken: token,
-							toTokens: [],
+							toTokens: toTokens,
 							rawId: rawId,
 							name: name,
 							icon: icon,

@@ -11,9 +11,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-
 @SuppressWarnings("serial")
 @Entity
 @Table(name="category")
@@ -24,11 +21,6 @@ public class Category extends BaseEntity
 {
 	private String name;
 	
-	@ManyToMany
-	(
-        mappedBy = "categories",
-        targetEntity = App.class
-    )
-	@Cascade(CascadeType.SAVE_UPDATE)
+	@ManyToMany(mappedBy="categories")
 	private Set<App> apps = new HashSet<App>();
 }

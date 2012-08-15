@@ -129,7 +129,6 @@ CREATE TABLE IF NOT EXISTS user
 	last_name VARCHAR(30),
 	avatar VARCHAR(80),
 	created_date TIMESTAMP NOT NULL DEFAULT NOW(),
-	UNIQUE(email),
 	FOREIGN KEY (account_type_id) REFERENCES account_type(id),
 	FOREIGN KEY (account_status_id) REFERENCES account_status(id),
 	INDEX(email,first_name)

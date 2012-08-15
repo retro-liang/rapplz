@@ -2,7 +2,6 @@ package com.retro.rapplz.web.controller;
 
 import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -19,11 +18,9 @@ import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.retro.rapplz.config.RapplzConfig;
-import com.retro.rapplz.db.entity.App;
 import com.retro.rapplz.security.EncryptAES;
 import com.retro.rapplz.service.UserService;
 import com.retro.rapplz.web.dto.AppInfo;
-import com.retro.rapplz.web.util.AppInfoAssembler;
 
 @Controller
 public class RapplzController
@@ -32,9 +29,6 @@ public class RapplzController
 	
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private AppInfoAssembler appInfoAssembler;
 	
 	@RequestMapping("/")
     public String homepage(HttpServletRequest request)
@@ -52,19 +46,9 @@ public class RapplzController
 	@ResponseBody
 	public List<AppInfo> loadAppsHandler()
 	{
-		List<AppInfo> apps = new ArrayList<AppInfo>();
 		logger.info("Loading apps from memcache...");
 		MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-		List<App> cachedApps = (List<App>)syncCache.get("apps");
-		if(cachedApps != null)
-		{
-			for(App app : cachedApps)
-			{
-				apps.add(appInfoAssembler.buildAppInfoFromApp(app));
-			}
-			logger.info("Loaded [" + apps.size() + "] apps from memcache...");
-		}
-		return apps;
+		return (List<AppInfo>)syncCache.get("apps");
 	}
 	
 	@RequestMapping("/have")
@@ -97,13 +81,22 @@ public class RapplzController
 	{
 		logger.info("recommend request: " + request.getRemoteAddr());
 		Long fromUserId = Long.valueOf(EncryptAES.decrypt(fromToken, RapplzConfig.getInstance().getSecurityKey()));
-		Long[] toUserIds = new Long[toTokens.length];
-		for(int i = 0; i < toTokens.length; i++)
+		logger.info("totokens: " + toTokens + "-" + toTokens.length);
+		String toUserIds = "";
+		if(toTokens != null && toTokens.length > 0)
 		{
-			toUserIds[i] = Long.valueOf(EncryptAES.decrypt(toTokens[i], RapplzConfig.getInstance().getSecurityKey()));
+			Long[] ids = new Long[toTokens.length];
+			for(int i = 0; i < toTokens.length; i++)
+			{
+				if(toTokens[i] != null && !toTokens[i].trim().equals(""))
+				{
+					ids[i] = Long.valueOf(EncryptAES.decrypt(toTokens[i], RapplzConfig.getInstance().getSecurityKey()));
+				}			
+			}
+			toUserIds = ids.toString();
 		}
 		Queue queue = QueueFactory.getQueue("recommend-app");
-		queue.add(withUrl("/task/recommend-app").param("os", os).param("fromUserId", fromUserId.toString()).param("toUserIds", toUserIds.toString()).param("rawId", rawId).param("name", name).param("icon", icon).param("device", device).param("category", category));
+		queue.add(withUrl("/task/recommend-app").param("os", os).param("fromUserId", fromUserId.toString()).param("toUserIds", toUserIds).param("rawId", rawId).param("name", name).param("icon", icon).param("device", device).param("category", category));
 		return "ok";
     }
 	

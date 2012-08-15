@@ -26,8 +26,43 @@ public class UserDaoImpl implements UserDao
 	public User getUserByEmail(String email)
 	{
 		logger.info("findByEmail email: " + email);
-		User user = (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "'").uniqueResult();
-		logger.info("findByEmail user: " + user);
+		return (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "'").uniqueResult();
+	}
+	
+	@Override
+	public User getRapplzUserByEmail(String email)
+	{
+		logger.info("getRapplzUserByEmail email: " + email);
+		return (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "' and u.accountType = 1").uniqueResult();
+	}
+	
+	@Override
+	public User getGoogleUserByEmail(String email)
+	{
+		logger.info("getGoogleUserByEmail email: " + email);
+		return (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "' and u.accountType = 2").uniqueResult();
+	}
+	
+	@Override
+	public User getFacebookUserByEmail(String email)
+	{
+		logger.info("getFacebookUserByEmail email: " + email);
+		return (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "' and u.accountType = 3").uniqueResult();
+	}
+	
+	@Override
+	public User getTwitterUserByEmail(String email)
+	{
+		logger.info("getTwitterUserByEmail email: " + email);
+		return (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "' and u.accountType = 4").uniqueResult();
+	}
+	
+	
+	@Override
+	public User getUserByEmailAccountType(String email, String accountType)
+	{
+		logger.info("getUserByEmailAccountType email: " + email);
+		User user = (User)sessionFactory.getCurrentSession().createQuery("select u from User u left join AccountType at on u.accountType = at.id where u.email = '" + email + "' and at.name='" + accountType + "'").uniqueResult();
 		return user;
 	}
 

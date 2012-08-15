@@ -10,6 +10,11 @@ public interface UserDao
 {
 	public User getUser(Long id);
 	public User getUserByEmail(String email);
+	public User getRapplzUserByEmail(String email);
+	public User getGoogleUserByEmail(String email);
+	public User getFacebookUserByEmail(String email);
+	public User getTwitterUserByEmail(String email);
+	public User getUserByEmailAccountType(String email, String accountType);
 	public User getUserByFederalId(String id);
 	public List<User> getUsers();
 	public Set<AccountRole> getAccountRolesByEmail(String email);

@@ -459,6 +459,7 @@
       			<!-- <jvmFlag>-javaagent:${env.JREBEL_HOME}\jrebel.jar</jvmFlag> -->
 	    	</jvmFlags>
 	    	<address>localhost</address>
+	    	<port>8050</port>
 	    	<monitorPort>8082</monitorPort>
 		</configuration>
       </plugin>

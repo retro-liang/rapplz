@@ -35,6 +35,6 @@ public class AccountRole extends BaseEntity implements Serializable
 	
 	private String name = DEFAULT;
 	
-	@ManyToMany(mappedBy="accountRoles")	
+	@ManyToMany(mappedBy="accountRoles")
     private Set<User> users = new HashSet<User>();
 }

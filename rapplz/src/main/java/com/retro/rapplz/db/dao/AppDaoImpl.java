@@ -1,7 +1,9 @@
 package com.retro.rapplz.db.dao;
 
+import java.math.BigInteger;
 import java.util.List;
 
+import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -48,5 +50,22 @@ public class AppDaoImpl implements AppDao
 	public void remove(Long id)
 	{
 		sessionFactory.getCurrentSession().delete(id);
+	}
+	
+	@Override
+	public int getAppHaveCount(Long id)
+	{
+		String sqlQuery = "select count(id) from user_app where app_id = ?";
+		SQLQuery q = sessionFactory.getCurrentSession().createSQLQuery(sqlQuery);
+		q.setParameter(0, id);
+		return ((BigInteger)q.uniqueResult()).intValue();
+	}
+	
+	public int getAppRecommendationCount(Long id)
+	{
+		String sqlQuery = "select count(id) from recommendation where from_user_id = ?";
+		SQLQuery q = sessionFactory.getCurrentSession().createSQLQuery(sqlQuery);
+		q.setParameter(0, id);
+		return ((BigInteger)q.uniqueResult()).intValue();
 	}
 }

@@ -26,7 +26,6 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.retro.rapplz.config.RapplzConfig;
 import com.retro.rapplz.db.entity.AccountRole;
 import com.retro.rapplz.db.entity.AccountStatus;
-import com.retro.rapplz.db.entity.AccountType;
 import com.retro.rapplz.db.entity.User;
 import com.retro.rapplz.security.EncryptAES;
 import com.retro.rapplz.service.UserService;

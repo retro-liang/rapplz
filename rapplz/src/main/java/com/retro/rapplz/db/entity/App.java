@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -37,26 +38,13 @@ public class App extends BaseEntity
 	private OS os;
 
 	@ManyToMany
-	@JoinTable
-    (
-        name="app_device",
-        joinColumns={@JoinColumn(name="app_id")},
-        inverseJoinColumns={@JoinColumn(name="device_id")}
-    )
-	@Cascade(CascadeType.ALL)
+	@Cascade({CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable(name = "app_device", joinColumns = {@JoinColumn(name = "app_id")}, inverseJoinColumns = {@JoinColumn(name = "device_id")})
 	private Set<Device> devices = new HashSet<Device>();
 	
-	@ManyToMany
-	(
-		targetEntity=Category.class
-	)
-    @JoinTable
-    (
-        name="app_category",
-        joinColumns=@JoinColumn(name="app_id"),
-        inverseJoinColumns=@JoinColumn(name="category_id")
-    )
-	@Cascade(CascadeType.SAVE_UPDATE)
+	@ManyToMany(fetch = FetchType.EAGER)
+	@Cascade({CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable(name = "app_category", joinColumns = {@JoinColumn(name = "app_id")}, inverseJoinColumns = {@JoinColumn(name = "category_id")})
 	private Set<Category> categories = new HashSet<Category>();
 	
 	@Column(name = "icon_url")

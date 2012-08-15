@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
-import com.retro.rapplz.db.entity.App;
 import com.retro.rapplz.service.AppService;
+import com.retro.rapplz.web.dto.AppInfo;
 
 @Controller
 @RequestMapping("/cron")
@@ -25,16 +25,18 @@ public class CronController
 	private AppService appService;
 	
 	@RequestMapping("load-apps")
-    public void createUserTask(HttpServletRequest request, HttpServletResponse response)
+    public void loadAppsHandler(HttpServletRequest request, HttpServletResponse response)
 	{
 		logger.info("Cron job request from : " + request.getRemoteAddr());
 		try
 		{
 			long start = System.currentTimeMillis();
-			List<App> apps = appService.loadApps();
+			List<AppInfo> appInfo = appService.loadAppInfos();
+			logger.info("test category1: " + appInfo.get(0).getCategoryNames());
 			MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-			syncCache.put("apps", apps);
-			logger.info("Retrieved [" + apps.size() + "] apps in " + (System.currentTimeMillis() - start) + " milliseconds.");
+			syncCache.put("apps", appInfo);
+			logger.info("test category2: " + appInfo.get(0).getCategoryNames());
+			logger.info("Retrieved [" + appInfo.size() + "] apps in " + (System.currentTimeMillis() - start) + " milliseconds.");
 		}
 		catch(Exception e)
 		{

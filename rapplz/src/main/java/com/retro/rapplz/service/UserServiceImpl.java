@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService, UserDetailsService
 	public User loadUserByUsername(String email) throws UsernameNotFoundException, DataAccessException
 	{
 		logger.info("loadUserByUsername: " + email);
-		User user = userDao.getUserByEmail(email);
+		User user = userDao.getRapplzUserByEmail(email);
 		if (user == null)
 		{
 			throw new UsernameNotFoundException("user not found");
@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService, UserDetailsService
 		user.setPassword(password);
 		user.setFederalId(federalId);
 		user.setAvatar(avatar);
-		if(federalId != null && !federalId.trim().equals(""))
+		if(federalId == null || federalId.trim().equals(""))	//rapplz user
 		{
 			user.setPassword(passwordEncoder.encodePassword(password, saltSource.getSalt(user)));
 		}

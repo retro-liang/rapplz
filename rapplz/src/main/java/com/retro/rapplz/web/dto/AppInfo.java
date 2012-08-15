@@ -1,9 +1,6 @@
 package com.retro.rapplz.web.dto;
 
 import java.io.Serializable;
-import java.util.Set;
-
-import com.retro.rapplz.db.entity.Category;
 
 public class AppInfo implements Serializable
 {
@@ -12,7 +9,7 @@ public class AppInfo implements Serializable
 	private String id;
 	private String rawId;
 	private String name;
-	private Set<Category> categories;
+	private String[] categoryNames;
 	private String icon;
 	private int haveCount;
 	private int recommendationCount;
@@ -52,14 +49,12 @@ public class AppInfo implements Serializable
 		this.icon = icon;
 	}
 
-	public Set<Category> getCategories()
-	{
-		return categories;
+	public String[] getCategoryNames() {
+		return categoryNames;
 	}
 
-	public void setCategories(Set<Category> categories)
-	{
-		this.categories = categories;
+	public void setCategoryNames(String[] categoryNames) {
+		this.categoryNames = categoryNames;
 	}
 
 	public String getRawId()
