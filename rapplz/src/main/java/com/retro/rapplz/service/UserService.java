@@ -18,5 +18,5 @@ public interface UserService
 	public int getUserFollowingCount(Long id) throws ApplicationServiceException;
 	public UserInfo loadUserInfo(UserInfo userInfo) throws ApplicationServiceException;
 	public void have(String osName, Long userId, String rawId, String appName, String icon, String[] deviceNames, String categoryName) throws ApplicationServiceException;
-	public void recommend(String osName, Long fromUserId, Long[] toUserIds, String rawId, String appName, String icon, String[] deviceNames, String categoryName) throws ApplicationServiceException;
+	public void recommend(String osName, Long fromUserId, String[] toUserIds, String rawId, String appName, String icon, String[] deviceNames, String categoryName) throws ApplicationServiceException;
 }

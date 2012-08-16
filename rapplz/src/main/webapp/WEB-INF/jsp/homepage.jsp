@@ -57,7 +57,7 @@
 							$("#popular-apps-box").append('<div class="app-box" style="float: left;background-color: #444444;width: 300px;height: 150px;border-top-left-radius: 5px;border-top-right-radius: 5px;padding:0 5px;margin-right:10px;margin-bottom:10px;">' +
 																'<div class="app-box-header" style="width: 100%;height: 30px;padding: 2px 5px;">' +
 																'<div class="app-name" style="float: left;font-size: 13px;font-weight: bold;color: #ffffff;width: auto;margin-top:5px;">' + item.name + '</div>' +
-																'<div class="app-category" style="float: right;font-size: 12px;font-weigth: bold;color: #ffffff;width: auto;text-align:right;padding-right:15px;margin-top:5px;">' + item.categories + '</div>' +
+																'<div class="app-category" style="float: right;font-size: 12px;font-weigth: bold;color: #ffffff;width: auto;text-align:right;padding-right:15px;margin-top:5px;">' + item.categoryNames + '</div>' +
 															'</div>' +
 															'<div class="app-box-middle" style="background-color: #FFFFFF;width: auto;height: 80px;padding: 1px 5px;">' +
 																'<div class="app-icon" style="float: left;width: 60px;height: 60px;padding: 15px 1px;">' +
@@ -107,29 +107,25 @@
 					},
 					success: function(data)
 					{
-						//alert("success: " + data.resultCount);
 						var result = "";
 						$.each(data.results, function(index, item)
 						{
-						    //alert(item.trackId + ': ' + item.trackName);
-						    //result += "<tr>" +
-						    				//"<td><a target='_blank' href='" + item.artistViewUrl + "'><img id='" + item.trackId + "_icon' src='" + item.artworkUrl60 + "' /></a></td>" +
-						    				//"<td><a id='" + item.trackId + "_url' target='_blank' href='" + item.artistViewUrl + "'><span  id='" + item.trackId + "_name'>" + item.trackName + "</span></a></td>" +
-						    				//"<td><span id='" + item.trackId + "_company'>" + item.artistName + "</span></td>" +
-						    				//"<td>" + item.averageUserRating + "</td>" +
-						    				//"<td>" + item.userRatingCount + "</td>" +
-						    				//"<td><a class='button yellow' id='" + item.trackId + "_have' href='javascript:void(0);' onclick='have(\"" + item.trackId + "\",\"" + item.trackName + "\",\"" + item.artworkUrl60 + "\",\"" + item.trackViewUrl + "\",\"" + item.supportedDevices + "\",\"" + item.primaryGenreName + "\")'>I Have</a></td>" +
-						    				//"<td><a class='button blue' id='" + item.trackId + "_recommend' href='javascript:void(0);' onclick='recommend(\"" + item.trackId + "\",\"" + item.trackName + "\",\"" + item.artworkUrl60 + "\",\"" + item.trackViewUrl + "\",\"" + item.supportedDevices + "\",\"" + item.primaryGenreName + "\")'>I Recommend</a></td>" +
-						    			//"</tr>";
-						    result += '<li style="padding: 10px;overflow: auto;">' +
-											'<a target="_blank" href="' + item.artistViewUrl + '" style=" float: left;margin: 0 15px 0 0;"><img src="' + item.artworkUrl60 + '" ></a>' +
-											'<h3 style="font: bold 20px/1.5 Helvetica, Verdana, sans-serif;"><a target="_blank" id="' + item.trackId + '_url" href="' + item.artistViewUrl + '"><span id="' + item.trackId + '_name">' + item.trackName + '</span></a></h3>' +
-											'<p style="font: 200 12px/1.5 Georgia, Times New Roman, serif;">' + item.averageUserRating + '</p>' +
-											'<p style="font: 200 12px/1.5 Georgia, Times New Roman, serif;">' + item.userRatingCount + '</p>' +
-											'<p style="font: 200 12px/1.5 Georgia, Times New Roman, serif;">' +
-												'<a class="" id="' + item.trackId + '_have" href="javascript:void(0);" onclick="have(\'' + item.trackId + '\',\'' + item.trackName + '\',\'' + item.artworkUrl60 + '\',\'' + item.supportedDevices + '\',\'' + item.primaryGenreName + '\')">I Have</a>' +
-												'<a class="" id="' + item.trackId + '_recommend" href="javascript:void(0);" onclick="recommend(\'' + item.trackId + '\',\'' + item.trackName + '\',\'' + item.artworkUrl60 + '\',\'' + item.supportedDevices + '\',\'' + item.primaryGenreName + '\')">I Recommend</a>' +
-											'</p>' +
+						    result += '<li style="padding: 30px;">' +
+											'<a style="clear:left;float: left;margin: 10px;height: 60px;width: 60px;" target="_blank" href="' + item.artistViewUrl + '">' +
+												'<img src="' + item.artworkUrl60 + '" >' +
+											'</a>' +
+											'<div style="float: left;height: 60px;width: 500px;">' +
+												'<h3 style="margin: 15px 3px 5px 0;font-size: 15px;width: auto;clear: right;"><a style="color:#222222;" target="_blank" id="' + item.trackId + '_url" href="' + item.artistViewUrl + '"><span id="' + item.trackId + '_name">' + item.trackName + '</span></a></h3>' +
+												'<div style="float: left;margin: 5px 0 0 0;width: auto;clear: right;">' +
+													'<p style="font-size: 12px;float: left;">App store rating: ' + item.averageUserRating + ' (' + item.userRatingCount + ' ratings)</p>' +
+												'</div>' +
+												'<div style="float: right;margin: 5px;width: auto;clear: right;">' +
+													'<p style="font-size: 12px;float: left;">' +
+														'<a class="link-button" style="margin-right:10px;" id="' + item.trackId + '_have" href="javascript:void(0);" onclick="have(\'' + item.trackId + '\',\'' + item.trackName + '\',\'' + item.artworkUrl60 + '\',\'' + item.supportedDevices + '\',\'' + item.primaryGenreName + '\')">I Have</a>' +
+														'<a class="link-button" id="' + item.trackId + '_recommend" href="javascript:void(0);" onclick="recommend(\'' + item.trackId + '\',\'' + item.trackName + '\',\'' + item.artworkUrl60 + '\',\'' + item.supportedDevices + '\',\'' + item.primaryGenreName + '\')">I Recommend</a>' +
+													'</p>' +
+												'</div>' +
+											'</div>' +
 										'</li>';
 						});
 						$("#search-result").html(result);
@@ -141,7 +137,18 @@
 				            perPage : 5,
 				            delay : 0
 				        });
-						$.colorbox({inline:true, href:"#search-result-box", width:"50%", height:"50%"});
+						$.colorbox
+						({
+							inline: true,
+							href: "#search-result-box",
+							width: "680px",
+							height: "500px",
+							onCleanup: function()
+							{
+								$("#search-result").html("");
+								$(".holder").html("");
+							}
+						});
 					},
 					error: function(jqXHR, textStatus, errorThrown)
 					{
@@ -161,6 +168,8 @@
 			{
 				event.preventDefault();
 				event.stopPropagation();
+				
+				$("#login_error_message").html("");
 				
 				var url = $("#sign-in-form").attr("action");
 				var username = $("#j_username").val();
@@ -183,10 +192,13 @@
 			        },
 					success: function(data)
 					{
-						alert(data.token);
 						if(data.token && data.token != "")
 						{
 							signInSuccessHandler(data);	
+						}
+						else
+						{
+							$("#login_error_message").html("Sign in failed.");
 						}
 					},
 					error: function(jqXHR, textStatus, errorThrown)
@@ -361,7 +373,7 @@
 			{
 				var os = $("#os").val();
 				var token = $("#token").val();
-				var toTokens = [""];
+				var toTokens = "";
 				
 				if(token != "")
 				{

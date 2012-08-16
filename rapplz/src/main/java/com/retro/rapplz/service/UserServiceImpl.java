@@ -248,7 +248,7 @@ public class UserServiceImpl implements UserService, UserDetailsService
 	
 	@Override
 	@Transactional
-	public void recommend(String osName, Long fromUserId, Long[] toUserIds, String rawId, String appName, String icon, String[] deviceNames, String categoryName) throws ApplicationServiceException
+	public void recommend(String osName, Long fromUserId, String[] toUserIds, String rawId, String appName, String icon, String[] deviceNames, String categoryName) throws ApplicationServiceException
 	{
 		OS os = osDao.getOSByName(osName);
 		if(os != null)
@@ -292,7 +292,7 @@ public class UserServiceImpl implements UserService, UserDetailsService
 				
 				appDao.save(app);
 				
-				if(toUserIds == null)	//recommend to all
+				if(toUserIds == null || toUserIds.length == 0)	//recommend to all
 				{
 					Recommendation recommendation = new Recommendation();
 					recommendation.setApp(app);
@@ -302,9 +302,9 @@ public class UserServiceImpl implements UserService, UserDetailsService
 				}
 				else	//recommend to a subset of friends
 				{
-					for(Long toUserId : toUserIds)
+					for(String toUserId : toUserIds)
 					{
-						User toUser = userDao.getUser(toUserId);
+						User toUser = userDao.getUser(Long.valueOf(toUserId));
 						if(toUser != null)
 						{
 							Recommendation recommendation = new Recommendation();

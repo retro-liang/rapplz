@@ -70,46 +70,60 @@
 		</div>
 		
 		<div style="visibility:hidden;width:0px;height:0px;">
-			<div id="search-result-box" style="margin: 20px;">
-				<ul id="search-result" style="list-style-type: none;width: 500px;"></ul>
-				<div class="holder" style="margin:0px;"></div>
+			<div id="search-result-box" style="margin: 0px;">
+				<ul id="search-result" style="list-style-type: none;width: auto;min-height: 100px;"></ul>
+				<div class="holder" style="margin: 0px;clear: left;"></div>
 			</div>
 		</div>
 		
 		<div style="display: none;width:0px;height:0px;">
-			<div id="sign-in-box" style="background-color: #3399DD;border-top-left-radius: 5px;border-top-right-radius: 5px;height: 220px;width: 350px;">
-				<div class="sign-in-box-header" style="height: 30px;padding: 2px 5px;">
-					<div class="app-name" style="font-size: 12px;font-weight: bold;color: #ffffff;width: auto;margin-top:5px;">Sign In</div>
+			<div id="sign-in-box" style="padding: 10px;width: 320px;">
+				<div class="sign-in-box-header" style="width: 100%;height: 30px;padding: 2px 5px;">
+					<h3>Sign In</h3>
 				</div>
-				<div class="sign-in-box-body" style="background-color: #FFFFFF;padding: 1px 5px;font-size: 12px;font-weight:bold;margin:0 5px;height: 150px;">
-					<div id="google_login">
-						<a href="javascript:void(0);" onclick="googleSignIn();" id="google-sign-in">Sign In with Google Account</a>
+				<div class="sign-in-box-body" style="padding: 1px 5px;font-size: 14px;width: 100%;">
+					<div id="federal-sign-in-box">
+						<p>
+							<a href="javascript:void(0);" onclick="googleSignIn();" id="google-sign-in" style="color: #000000;">
+								<span class="logo"><img src="/img/g1.png" border="0" height="25px" /></span>
+								<span style="padding: 0 0 3px 0">Sign in with Google</span>
+							</a>
+						</p>
+						<p>
+							<a href="javascript:void(0);" onclick="googleSignIn();" id="google-sign-in" style="color: #000000;">
+								<span class="logo"><img src="/img/f1.png" border="0" height="25px" /></span>
+								<span style="padding: 0 0 3px 0">Sign in with Facebook</span>
+							</a>
+						</p>
 					</div>
-					<div id="facebook_login">
-						<p>Sign In with Your Google Account</p>
-						<a href="/services/facebook/authorize" target="fb_auth" onclick="window.open('/services/facebook/authorize','fb_auth','width=580,height=400'); $.mq.send('user:facebook_connect');" class="btn_facebook fire_event" message="facebook_connect" id="facebook_account_auth">Connect with Facebook</a>
-					</div>
-					<form id="sign-in-form" action="/j_spring_security_check" method="POST">
-						<p>Sign In with Your Account</p>
-						<div class="form_field email">
-							<label style="width: 120px;float: left;margin: 1px 3px;font-size:12px;">Email Address:</label>
-							<input type="email" id="j_username" name="j_username" tabindex="0" value="" style="width: 150px;float: right;margin: 1px 3px;" />
-						</div>
-						<div class="form_field password">
-							<label style="width: 120px;float: left;margin: 1px 3px;font-size:12px;">Password:</label>
-							<input type="password" id="j_password" name="j_password" tabindex="0" style="width: 150px;float: right;margin: 1px 3px;" />
-							<p style="width: 150px;float: right;margin: 1px 3px;clear:both;"><a id="forget-password-button" href="<spring:url value="/access/forget-password.html" htmlEscape="true" />">Forget password?</a></p>
-						</div>
-						<div class="form_field rememberMe" style="clear: both;width: 100%;height: 20px;float: left;">
-							<label style="width: 110px;float: left;margin: 1px 3px;">Remember Me</label>
-							<input type="checkbox" id="remember-me" name="_spring_security_remember_me" tabindex="0" style="float: left;" />
-							<a id="sign-in-submit" href="javascript:void(0);" class="button blue" style="width: 50px;float: right;">Sign In</a>
-						</div>
+					<div class="horizontal-divider"></div>
+					<form id="sign-in-form" action="/j_spring_security_check" method="POST" style="margin: 20px 0 0 0;">
+						<table style="font-size: 14px;width: 100%;">
+							<tr>
+								<td>Email Address:</td>
+								<td><input type="email" id="j_username" name="j_username" tabindex="0" value="" class="input-box" /></td>
+							</tr>
+							<tr>
+								<td>Password:</td>
+								<td><input type="password" id="j_password" name="j_password" tabindex="0" class="input-box" /></td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td colspan="2"><label style="float: left;">Remember Me</label><input id="_spring_security_remember_me" name="_spring_security_remember_me" type="checkbox" tabindex="0" style="float: left;margin: 0 0 0 5px;" /></td>
+							</tr>
+							<tr>
+								<td colspan="2"><a id="sign-in-submit" href="javascript:void(0);" class="button blue" style="float: right;">Sign In</a></td>
+							</tr>
+						</table>
 					</form>
-					<div class="error_message" id="login_error_message"></div>
+					<div class="error_message" id="login_error_message" style="height: 10px;font-weight: bold;color: #ff0000;"></div>
 				</div>
-				<div class="modal_footer" style="height: 30px;padding: 5px">
-					<p style="color: #ffffff;font-size: 12px;padding: 2px;width: 150px;float: left;'">Don't have an account?</p><a id="sign-in-sign-up-button" href="/access/sign-up.html" class="button yellow" style="color: #ffffff;font-size: 12px;float: right;width: 100px;">Sign up now!</a>
+				<div class="horizontal-divider"></div>
+				<div class="modal_footer" style="width: 100%;height: 30px;padding: 5px;margin: 15px 0 0 0;">
+					<p style="color: #000000;font-size: 12px;padding: 2px;float: left;'">Don't have an account?</p><a id="sign-in-sign-up-button" href="/access/sign-up.html" class="button yellow" style="color: #ffffff;font-size: 12px;float: right;">Sign up now!</a>
 				</div>
 			</div>
 		</div>
@@ -137,29 +151,36 @@
 			</div>
 		</div>
 		
-		<div style="display: none;width:0px;height:0px;">
-			<div id="sign-up-box">
+		<div style="display: none;width: 0px;height: 0px;">
+			<div id="sign-up-box" style="padding: 10px;width: 320px;">
 				<h3>Sign Up</h3>
 				<form id="sign-up-form" action="/access/sign-up" method="POST">
-					<table>
+					<table style="font-size: 14px;width: 100%;">
 						<tr>
 							<td>First Name:</td>
-							<td><input id="sign-up-first-name" name="sign-up-first-name" type="text" /></td>
+							<td><input id="sign-up-first-name" name="sign-up-first-name" type="text" class="input-box" /></td>
 						</tr>
 						<tr>
 							<td>Last Name:</td>
-							<td><input id="sign-up-last-name" name="sign-up-last-name" type="text" /></td>
+							<td><input id="sign-up-last-name" name="sign-up-last-name" type="text" class="input-box" /></td>
 						</tr>
 						<tr>
 							<td>Email Address:</td>
-							<td><input id="sign-up-email" name="sign-up-email" type="text" /></td>
+							<td><input id="sign-up-email" name="sign-up-email" type="text" class="input-box" /></td>
 						</tr>
 						<tr>
 							<td>Password:</td>
-							<td><input id="sign-up-password" name="sign-up-password" type="text" /></td>
+							<td><input id="sign-up-password" name="sign-up-password" type="text" class="input-box" /></td>
 						</tr>
 						<tr>
-							<td colspan="2"><a id="sign-up-submit" href="javascript:void(0);">Sign Up</a></td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>							
+						</tr>
+						<tr>
+							<td colspan="2"><label style="float: left;">Receive news letters?</label><input id="sign-up-news-letter" name="sign-up-news-letter" type="checkbox" style="float: left;margin: 0 0 0 5px;" /></td>
+						</tr>
+						<tr>
+							<td colspan="2"><a id="sign-up-submit" href="javascript:void(0);" class="button yellow" style="float: right;">Sign Up</a></td>
 						</tr>
 					</table>
 				</form>

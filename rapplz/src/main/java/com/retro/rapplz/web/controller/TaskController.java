@@ -108,7 +108,7 @@ public class TaskController
     public void recommendAppTask(HttpServletRequest request, HttpServletResponse response,
     							@RequestParam("os") String os,
     							@RequestParam("fromUserId") Long fromUserId,
-    							@RequestParam("toUserIds") Long[] toUserIds,
+    							@RequestParam("toUserIds") String toUserIds,
     							@RequestParam("rawId") String rawId,
     							@RequestParam("name") String name,
     							@RequestParam("icon") String icon,
@@ -117,22 +117,29 @@ public class TaskController
 	{
 		try
 		{
-			userService.recommend(os, fromUserId, toUserIds, rawId, name, icon, device.split(","), category);
-			if(toUserIds != null && toUserIds.length > 0)
+			if(toUserIds == null || toUserIds.trim().equals(""))
 			{
+				userService.recommend(os, fromUserId, null, rawId, name, icon, device.split(","), category);
+			}
+			else
+			{
+				userService.recommend(os, fromUserId, toUserIds.trim().split(","), rawId, name, icon, device.split(","), category);
 				User fromUser = userService.getUser(fromUserId);
 				if(fromUser != null)
 				{
-					for(Long toUserId : toUserIds)
+					for(String toUserId : toUserIds.split(","))
 					{
-						User toUser = userService.getUser(toUserId);
-						Queue queue = QueueFactory.getQueue("send-email");
-					    queue.add(withUrl("/task/send-email").param("fromEmail", RapplzConfig.getInstance().getSenderEmailAddress())
-					    										.param("fromName", "Rapplz")
-					    										.param("toEmail", toUser.getEmail())
-					    										.param("toName", toUser.getFirstName())
-					    										.param("subject", "Rapplz app recommendation from " + fromUser.getFirstName())
-					    										.param("content", "Your friend " + fromUser.getFirstName() + " from Rapplz has just recommeded you an app: " + name + "\nClick the link below to check it out:\n\nhttp://" + request.getLocalAddr() + ":" + request.getServerPort() + "/app/" + name.replaceAll(" ", "-")));
+						if(toUserId != null && !toUserId.trim().equals(""))
+						{
+							User toUser = userService.getUser(Long.valueOf(toUserId));
+							Queue queue = QueueFactory.getQueue("send-email");
+						    queue.add(withUrl("/task/send-email").param("fromEmail", RapplzConfig.getInstance().getSenderEmailAddress())
+						    										.param("fromName", "Rapplz")
+						    										.param("toEmail", toUser.getEmail())
+						    										.param("toName", toUser.getFirstName())
+						    										.param("subject", "Rapplz app recommendation from " + fromUser.getFirstName())
+						    										.param("content", "Your friend " + fromUser.getFirstName() + " from Rapplz has just recommeded you an app: " + name + "\nClick the link below to check it out:\n\nhttp://" + request.getLocalAddr() + ":" + request.getServerPort() + "/app/" + name.replaceAll(" ", "-")));
+						}
 					}
 				}
 			}

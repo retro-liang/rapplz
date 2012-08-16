@@ -72,7 +72,7 @@ public class RapplzController
     public @ResponseBody String recommendHandler(HttpServletRequest request,
     												@RequestParam("os") String os,
     												@RequestParam("fromToken") String fromToken,
-    												@RequestParam("toTokens") String[] toTokens,
+    												@RequestParam("toTokens") String toTokens,
     												@RequestParam("rawId") String rawId,
     												@RequestParam("name") String name,
     												@RequestParam("icon") String icon,
@@ -81,17 +81,17 @@ public class RapplzController
 	{
 		logger.info("recommend request: " + request.getRemoteAddr());
 		Long fromUserId = Long.valueOf(EncryptAES.decrypt(fromToken, RapplzConfig.getInstance().getSecurityKey()));
-		logger.info("totokens: " + toTokens + "-" + toTokens.length);
+		logger.info("totokens: " + toTokens);
 		String toUserIds = "";
-		if(toTokens != null && toTokens.length > 0)
+		if(toTokens != null && !toTokens.trim().equals(""))
 		{
-			Long[] ids = new Long[toTokens.length];
-			for(int i = 0; i < toTokens.length; i++)
+			String[] ids = toTokens.split(",");
+			for(int i = 0; i < ids.length; i++)
 			{
-				if(toTokens[i] != null && !toTokens[i].trim().equals(""))
+				if(ids[i] != null && !ids[i].trim().equals(""))
 				{
-					ids[i] = Long.valueOf(EncryptAES.decrypt(toTokens[i], RapplzConfig.getInstance().getSecurityKey()));
-				}			
+					ids[i] = EncryptAES.decrypt(ids[i], RapplzConfig.getInstance().getSecurityKey());
+				}
 			}
 			toUserIds = ids.toString();
 		}
