@@ -77,53 +77,58 @@
 		</div>
 		
 		<div style="display: none;width:0px;height:0px;">
-			<div id="sign-in-box" style="padding: 10px;width: 320px;">
+			<div id="sign-in-box" style="padding: 10px;width: 640px;">
 				<div class="sign-in-box-header" style="width: 100%;height: 30px;padding: 2px 5px;">
 					<h3>Sign In</h3>
 				</div>
 				<div class="sign-in-box-body" style="padding: 1px 5px;font-size: 14px;width: 100%;">
-					<div id="federal-sign-in-box">
+					<div id="federal-sign-in-box" style="width: 40%;float: left;">
 						<p>
 							<a href="javascript:void(0);" onclick="googleSignIn();" id="google-sign-in" style="color: #000000;">
-								<span class="logo"><img src="/img/g1.png" border="0" height="25px" /></span>
-								<span style="padding: 0 0 3px 0">Sign in with Google</span>
+								<img src="/img/g1.png" border="0" />
 							</a>
 						</p>
 						<p>
-							<a href="javascript:void(0);" onclick="googleSignIn();" id="google-sign-in" style="color: #000000;">
-								<span class="logo"><img src="/img/f1.png" border="0" height="25px" /></span>
-								<span style="padding: 0 0 3px 0">Sign in with Facebook</span>
+							<a href="javascript:void(0);" onclick="googleSignIn();" id="facebook-sign-in" style="color: #000000;">
+								<img src="/img/f1.png" border="0" />
+							</a>
+						</p>
+						<p>
+							<a href="javascript:void(0);" onclick="googleSignIn();" id="twitter-sign-in" style="color: #000000;">
+								<img src="/img/t1.png" border="0" />
 							</a>
 						</p>
 					</div>
-					<div class="horizontal-divider"></div>
-					<form id="sign-in-form" action="/j_spring_security_check" method="POST" style="margin: 20px 0 0 0;">
-						<table style="font-size: 14px;width: 100%;">
-							<tr>
-								<td>Email Address:</td>
-								<td><input type="email" id="j_username" name="j_username" tabindex="0" value="" class="input-box" /></td>
-							</tr>
-							<tr>
-								<td>Password:</td>
-								<td><input type="password" id="j_password" name="j_password" tabindex="0" class="input-box" /></td>
-							</tr>
-							<tr>
-								<td>&nbsp;</td>
-								<td>&nbsp;</td>
-							</tr>
-							<tr>
-								<td colspan="2"><label style="float: left;">Remember Me</label><input id="_spring_security_remember_me" name="_spring_security_remember_me" type="checkbox" tabindex="0" style="float: left;margin: 0 0 0 5px;" /></td>
-							</tr>
-							<tr>
-								<td colspan="2"><a id="sign-in-submit" href="javascript:void(0);" class="button blue" style="float: right;">Sign In</a></td>
-							</tr>
-						</table>
-					</form>
-					<div class="error_message" id="login_error_message" style="height: 10px;font-weight: bold;color: #ff0000;"></div>
+					<div class="horizontal-divider" style="width: 10%;float: left;"></div>
+					<div style="width: 50%;float: left;">
+						<form id="sign-in-form" action="/j_spring_security_check" method="POST" style="margin: 20px 0 0 0;">
+							<table style="font-size: 14px;width: 100%;">
+								<tr>
+									<td>Email Address:</td>
+									<td><input type="email" id="j_username" name="j_username" tabindex="0" value="" class="input-box" /></td>
+								</tr>
+								<tr>
+									<td>Password:</td>
+									<td><input type="password" id="j_password" name="j_password" tabindex="0" class="input-box" /></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td colspan="2"><label style="float: left;">Remember Me</label><input id="_spring_security_remember_me" name="_spring_security_remember_me" type="checkbox" tabindex="0" style="float: left;margin: 0 0 0 5px;" /></td>
+								</tr>
+								<tr>
+									<td colspan="2"><a id="sign-in-submit" href="javascript:void(0);" class="button blue" style="float: right;">Sign In</a></td>
+								</tr>
+							</table>
+						</form>
+						<div class="error_message" id="login_error_message" style="height: 10px;font-weight: bold;color: #ff0000;"></div>
+					</div>
 				</div>
-				<div class="horizontal-divider"></div>
+				<div class="horizontal-divider" style="border-top: 1px solid #DFDFDF;width: 100%;"></div>
 				<div class="modal_footer" style="width: 100%;height: 30px;padding: 5px;margin: 15px 0 0 0;">
-					<p style="color: #000000;font-size: 12px;padding: 2px;float: left;'">Don't have an account?</p><a id="sign-in-sign-up-button" href="/access/sign-up.html" class="button yellow" style="color: #ffffff;font-size: 12px;float: right;">Sign up now!</a>
+					<p style="color: #000000;font-size: 12px;padding: 2px;float: right;'">Don't have an account?</p><a id="sign-in-sign-up-button" href="/access/sign-up.html" class="button yellow" style="color: #ffffff;font-size: 12px;float: right;">Sign up now!</a>
 				</div>
 			</div>
 		</div>
