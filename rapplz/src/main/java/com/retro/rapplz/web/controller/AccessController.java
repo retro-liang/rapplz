@@ -89,7 +89,7 @@ public class AccessController extends MultiActionController
 			if(user == null)
 			{
 				logger.info("Creating new user...");
-				user = userService.createUser(AccountRole.DEFAULT, type, AccountStatus.DEFAULT, email, "", firstName, lastName, id, avatar);
+				user = userService.createUser(AccountRole.DEFAULT, type, AccountStatus.ACTIVE, email, "", firstName, lastName, id, avatar);
 			}
 			UserInfo userInfo = userInfoAssembler.buildUserInfoFromUser(user);
 			modelMap.addAttribute(userInfo);

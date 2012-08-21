@@ -30,6 +30,7 @@ import com.retro.rapplz.db.entity.OS;
 import com.retro.rapplz.db.entity.Recommendation;
 import com.retro.rapplz.db.entity.User;
 import com.retro.rapplz.service.exception.ApplicationServiceException;
+import com.retro.rapplz.web.dto.UserDetail;
 import com.retro.rapplz.web.dto.UserInfo;
 
 @Service("userService")
@@ -198,126 +199,156 @@ public class UserServiceImpl implements UserService, UserDetailsService
 	@Transactional
 	public void have(String osName, Long userId, String rawId, String appName, String icon, String[] deviceNames, String categoryName) throws ApplicationServiceException
 	{
-		OS os = osDao.getOSByName(osName);
-		if(os != null)
+		if(osName != null && !osName.trim().equals("") && userId != null && rawId != null && !rawId.trim().equals(""))
 		{
-			User user = userDao.getUser(userId);
-			if(user != null)
+			App app = appDao.getAppByRawId(rawId);
+			if(app != null)
 			{
-				App app = appDao.getAppByRawId(rawId);
-				if(app == null)
+				if(userDao.alreadyHave(Long.valueOf(userId), app.getId()))
 				{
-					app = new App();
-					app.setOs(os);
-					app.setRawId(rawId);
-					app.setName(appName);
-					app.setIconUrl(icon);
+					return ;
 				}
-				
-				if(deviceNames != null && deviceNames.length > 0)
+			}
+
+			OS os = osDao.getOSByName(osName);
+			if(os != null)
+			{
+				User user = userDao.getUser(userId);
+				if(user != null)
 				{
-					for(String deviceName : deviceNames)
+					if(app == null)
 					{
-						Device device = deviceDao.getDeviceByName(deviceName);
-						if(device == null)
-						{
-							device = new Device();
-							device.setName(deviceName);
-							deviceDao.save(device);
-						}
-						app.getDevices().add(device);
+						app = new App();
+						app.setOs(os);
+						app.setRawId(rawId);
+						app.setName(appName);
+						app.setIconUrl(icon);
 					}
+					
+					if(deviceNames != null && deviceNames.length > 0)
+					{
+						for(String deviceName : deviceNames)
+						{
+							Device device = deviceDao.getDeviceByName(deviceName);
+							if(device == null)
+							{
+								device = new Device();
+								device.setName(deviceName);
+								deviceDao.save(device);
+							}
+							app.getDevices().add(device);
+						}
+					}
+					
+					Category category = categoryDao.getCategoryByName(categoryName);
+					if(category == null)
+					{
+						category = new Category();
+						category.setName(categoryName);
+						categoryDao.save(category);
+					}
+					app.getCategories().add(category);
+					
+					appDao.save(app);
+					logger.info("app: " + app);
+					user.getApps().add(app);
+					userDao.save(user);
 				}
-				
-				Category category = categoryDao.getCategoryByName(categoryName);
-				if(category == null)
-				{
-					category = new Category();
-					category.setName(categoryName);
-					categoryDao.save(category);
-				}
-				app.getCategories().add(category);
-				
-				appDao.save(app);
-				logger.info("app: " + app);
-				user.getApps().add(app);
-				userDao.save(user);
 			}
 		}
+		
 	}
 	
 	@Override
 	@Transactional
 	public void recommend(String osName, Long fromUserId, String[] toUserIds, String rawId, String appName, String icon, String[] deviceNames, String categoryName) throws ApplicationServiceException
 	{
-		OS os = osDao.getOSByName(osName);
-		if(os != null)
+		if(osName != null && !osName.trim().equals("") && fromUserId != null && rawId != null && !rawId.trim().equals(""))
 		{
-			User user = userDao.getUser(fromUserId);
-			if(user != null)
+			App app = appDao.getAppByRawId(rawId);
+			if(app != null)
 			{
-				App app = appDao.getAppByRawId(rawId);
-				if(app == null)
+				if(userDao.alreadyRecommend(Long.valueOf(fromUserId), app.getId()))
 				{
-					app = new App();
-					app.setOs(os);
-					app.setRawId(rawId);
-					app.setName(appName);
-					app.setIconUrl(icon);
+					return ;
 				}
-				
-				if(deviceNames != null && deviceNames.length > 0)
+			}
+			
+			OS os = osDao.getOSByName(osName);
+			if(os != null)
+			{
+				User user = userDao.getUser(fromUserId);
+				if(user != null)
 				{
-					for(String deviceName : deviceNames)
+					if(app == null)
 					{
-						Device device = deviceDao.getDeviceByName(deviceName);
-						if(device == null)
-						{
-							device = new Device();
-							device.setName(deviceName);
-							deviceDao.save(device);
-						}
-						app.getDevices().add(device);
+						app = new App();
+						app.setOs(os);
+						app.setRawId(rawId);
+						app.setName(appName);
+						app.setIconUrl(icon);
 					}
-				}
-				
-				Category category = categoryDao.getCategoryByName(categoryName);
-				if(category == null)
-				{
-					category = new Category();
-					category.setName(categoryName);
-					categoryDao.save(category);
-				}
-				app.getCategories().add(category);
-				
-				appDao.save(app);
-				
-				if(toUserIds == null || toUserIds.length == 0)	//recommend to all
-				{
-					Recommendation recommendation = new Recommendation();
-					recommendation.setApp(app);
-					recommendation.setFromUser(user);
-					recommendationDao.save(recommendation);
-					user.getSentRecommendations().add(recommendation);
-				}
-				else	//recommend to a subset of friends
-				{
-					for(String toUserId : toUserIds)
+					
+					if(deviceNames != null && deviceNames.length > 0)
 					{
-						User toUser = userDao.getUser(Long.valueOf(toUserId));
-						if(toUser != null)
+						for(String deviceName : deviceNames)
 						{
-							Recommendation recommendation = new Recommendation();
-							recommendation.setApp(app);
-							recommendation.setFromUser(user);
-							recommendation.setToUser(toUser);
-							recommendationDao.save(recommendation);
-							user.getSentRecommendations().add(recommendation);
+							Device device = deviceDao.getDeviceByName(deviceName);
+							if(device == null)
+							{
+								device = new Device();
+								device.setName(deviceName);
+								deviceDao.save(device);
+							}
+							app.getDevices().add(device);
 						}
 					}
-				}				
-				userDao.save(user);
+					
+					Category category = categoryDao.getCategoryByName(categoryName);
+					if(category == null)
+					{
+						category = new Category();
+						category.setName(categoryName);
+						categoryDao.save(category);
+					}
+					app.getCategories().add(category);
+					
+					appDao.save(app);
+					
+					if(toUserIds == null || toUserIds.length == 0)	//recommend to all
+					{
+						Recommendation recommendation = new Recommendation();
+						recommendation.setApp(app);
+						recommendation.setFromUser(user);
+						recommendationDao.save(recommendation);
+						user.getSentRecommendations().add(recommendation);
+					}
+					else	//recommend to a subset of friends
+					{
+						for(String toUserId : toUserIds)
+						{
+							User toUser = userDao.getUser(Long.valueOf(toUserId));
+							if(toUser != null)
+							{
+								Recommendation recommendation = new Recommendation();
+								recommendation.setApp(app);
+								recommendation.setFromUser(user);
+								recommendation.setToUser(toUser);
+								recommendationDao.save(recommendation);
+								user.getSentRecommendations().add(recommendation);
+							}
+						}
+					}				
+					userDao.save(user);
+				}
 			}
 		}
+	}
+	
+	@Override
+	public UserDetail getUserDetail(Long id) throws ApplicationServiceException
+	{
+		UserDetail userDetail = new UserDetail();
+		return userDetail;
 	}
 }

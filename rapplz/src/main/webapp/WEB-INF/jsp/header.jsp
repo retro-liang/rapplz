@@ -76,39 +76,40 @@
 			</div>
 		</div>
 		
-		<div style="display: none;width:0px;height:0px;">
+		<div style="display: none;">
 			<div id="sign-in-box" style="padding: 10px;width: 640px;">
 				<div class="sign-in-box-header" style="width: 100%;height: 30px;padding: 2px 5px;">
 					<h3>Sign In</h3>
 				</div>
+				<div class="horizontal-divider" style="border-top: 1px solid #DFDFDF;width: 100%;float: left;"></div>
 				<div class="sign-in-box-body" style="padding: 1px 5px;font-size: 14px;width: 100%;">
-					<div id="federal-sign-in-box" style="width: 40%;float: left;">
-						<p>
+					<div id="federal-sign-in-box" style="width: 40%;float: left;margin: 15px 0 15px 15px;">
+						<p style="margin:5px 30px;">
 							<a href="javascript:void(0);" onclick="googleSignIn();" id="google-sign-in" style="color: #000000;">
 								<img src="/img/g1.png" border="0" />
 							</a>
 						</p>
-						<p>
+						<p style="margin:5px 30px;;">
 							<a href="javascript:void(0);" onclick="googleSignIn();" id="facebook-sign-in" style="color: #000000;">
 								<img src="/img/f1.png" border="0" />
 							</a>
 						</p>
-						<p>
+						<p style="margin:5px 30px;;">
 							<a href="javascript:void(0);" onclick="googleSignIn();" id="twitter-sign-in" style="color: #000000;">
 								<img src="/img/t1.png" border="0" />
 							</a>
 						</p>
 					</div>
-					<div class="horizontal-divider" style="width: 10%;float: left;"></div>
+					<div class="vertical-divider" style="border-right: 1px solid #DFDFDF;float: left;height: 140px;margin: 10px;"></div>
 					<div style="width: 50%;float: left;">
 						<form id="sign-in-form" action="/j_spring_security_check" method="POST" style="margin: 20px 0 0 0;">
 							<table style="font-size: 14px;width: 100%;">
 								<tr>
-									<td>Email Address:</td>
+									<td><label style="float: left;">Email Address:</label></td>
 									<td><input type="email" id="j_username" name="j_username" tabindex="0" value="" class="input-box" /></td>
 								</tr>
 								<tr>
-									<td>Password:</td>
+									<td><label style="float: left;">Password:</label></td>
 									<td><input type="password" id="j_password" name="j_password" tabindex="0" class="input-box" /></td>
 								</tr>
 								<tr>
@@ -116,86 +117,118 @@
 									<td>&nbsp;</td>
 								</tr>
 								<tr>
-									<td colspan="2"><label style="float: left;">Remember Me</label><input id="_spring_security_remember_me" name="_spring_security_remember_me" type="checkbox" tabindex="0" style="float: left;margin: 0 0 0 5px;" /></td>
+									<td><label style="float: left;">Remember Me</label></td>
+									<td><input id="_spring_security_remember_me" name="_spring_security_remember_me" type="checkbox" tabindex="0" style="float: left;margin: 0 0 0 5px;" /></td>
 								</tr>
 								<tr>
-									<td colspan="2"><a id="sign-in-submit" href="javascript:void(0);" class="button blue" style="float: right;">Sign In</a></td>
+									<td style="padding-top:15px;"><a id="forget-password-button" href="javascript:void(0);" style="float: left;font-size: 10px;color: #222222;text-decoration: underline;">Forget password?</a></td>
+									<td><a id="sign-in-submit" href="javascript:void(0);" class="button blue" style="float: right;">Sign In</a></td>
 								</tr>
 							</table>
 						</form>
 						<div class="error_message" id="login_error_message" style="height: 10px;font-weight: bold;color: #ff0000;"></div>
 					</div>
 				</div>
-				<div class="horizontal-divider" style="border-top: 1px solid #DFDFDF;width: 100%;"></div>
-				<div class="modal_footer" style="width: 100%;height: 30px;padding: 5px;margin: 15px 0 0 0;">
-					<p style="color: #000000;font-size: 12px;padding: 2px;float: right;'">Don't have an account?</p><a id="sign-in-sign-up-button" href="/access/sign-up.html" class="button yellow" style="color: #ffffff;font-size: 12px;float: right;">Sign up now!</a>
+				<div class="horizontal-divider" style="border-top: 1px solid #DFDFDF;width: 100%;float: left;"></div>
+				<div class="modal_footer" style="width: 100%;height: 30px;padding: 5px;margin: 15px 0 0 0;float: left;">
+					<a id="sign-in-sign-up-button" href="/access/sign-up.html" class="button yellow" style="font-size: 12px;float: right;">Sign up now!</a>
+					<p style="color: #000000;font-size: 12px;padding: 2px;float: right;'">Don't have an account?</p>
 				</div>
 			</div>
 		</div>
 		
-		<div style="display: none;width:0px;height:0px;">
-			<div id="forget-password-box">
-				<h3>Enter your email address</h3>
-				<form id="forget-password-form" action="/access/forget-password" method="POST">
-					<table>
-						<tr>
-							<td>Email:</td>
-							<td><input id="forget-password-email" name="forget-password-email" type="text" /></td>
-						</tr>
-						<tr>
-							<td colspan="2"><a id="forget-password-submit" href="javascript:void(0);">submit</a></td>
-						</tr>
-					</table>
-				</form>
+		<div style="display: none;">
+			<div id="forget-password-box" style="padding: 10px;width: 300px;">
+				<div class="pop-up-box-header" style="width: 100%;height: 30px;padding: 2px 5px;">
+					<h3>Forget password</h3>
+				</div>
+				<div class="horizontal-divider" style="border-top: 1px solid #DFDFDF;width: 100%;float: left;"></div>
+				<div class="pop-up-box-body" style="padding: 20px 5px;font-size: 14px;width: 100%;">
+					<p>Please enter your email address</p>
+					<form id="forget-password-form" action="/access/forget-password" method="POST">
+						<table style="width: 100%;">
+							<tr>
+								<td>Email:</td>
+								<td><input id="forget-password-email" name="forget-password-email" type="text" class="input-box" /></td>
+								<td><a id="forget-password-submit" href="javascript:void(0);" class="button yellow" style="margin-left: 5px;float:left;">submit</a></td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<div class="pop-up-box-footer" style="width: 100%;">
+				</div>
 			</div>
 		</div>
 		
-		<div style="display: none;width:0px;height:0px;">
-			<div id="forget-password-success-box">
-				<h3>An email containing reset password information will be sent to you shortly.</h3>
+		<div style="display: none;">
+			<div id="forget-password-success-box" style="padding: 10px;width: 300px;">
+				<div class="pop-up-box-header" style="width: 100%;height: 30px;padding: 2px 5px;">
+					<h3>Forget password</h3>
+				</div>
+				<div class="horizontal-divider" style="border-top: 1px solid #DFDFDF;width: 100%;float: left;"></div>
+				<div class="pop-up-box-body" style="padding: 20px 5px;font-size: 14px;width: 100%;">
+					<p>An email containing reset password instruction will be sent to you shortly.</p>
+				</div>
+				<div class="pop-up-box-footer" style="width: 100%;">
+				</div>
 			</div>
 		</div>
 		
-		<div style="display: none;width: 0px;height: 0px;">
+		<div style="display: none;">
 			<div id="sign-up-box" style="padding: 10px;width: 320px;">
-				<h3>Sign Up</h3>
-				<form id="sign-up-form" action="/access/sign-up" method="POST">
-					<table style="font-size: 14px;width: 100%;">
-						<tr>
-							<td>First Name:</td>
-							<td><input id="sign-up-first-name" name="sign-up-first-name" type="text" class="input-box" /></td>
-						</tr>
-						<tr>
-							<td>Last Name:</td>
-							<td><input id="sign-up-last-name" name="sign-up-last-name" type="text" class="input-box" /></td>
-						</tr>
-						<tr>
-							<td>Email Address:</td>
-							<td><input id="sign-up-email" name="sign-up-email" type="text" class="input-box" /></td>
-						</tr>
-						<tr>
-							<td>Password:</td>
-							<td><input id="sign-up-password" name="sign-up-password" type="text" class="input-box" /></td>
-						</tr>
-						<tr>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>							
-						</tr>
-						<tr>
-							<td colspan="2"><label style="float: left;">Receive news letters?</label><input id="sign-up-news-letter" name="sign-up-news-letter" type="checkbox" style="float: left;margin: 0 0 0 5px;" /></td>
-						</tr>
-						<tr>
-							<td colspan="2"><a id="sign-up-submit" href="javascript:void(0);" class="button yellow" style="float: right;">Sign Up</a></td>
-						</tr>
-					</table>
-				</form>
+				<div class="sign-up-box-header" style="width: 100%;height: 30px;padding: 2px 5px;">
+					<h3>Sign Up</h3>
+				</div>
+				<div class="horizontal-divider" style="border-top: 1px solid #DFDFDF;width: 100%;float: left;"></div>
+				<div class="sign-up-box-body" style="padding: 1px 5px;font-size: 14px;width: 100%;">
+					<form id="sign-up-form" action="/access/sign-up" method="POST">
+						<table style="font-size: 14px;width: 100%;">
+							<tr>
+								<td>First Name:</td>
+								<td><input id="sign-up-first-name" name="sign-up-first-name" type="text" class="input-box" /></td>
+							</tr>
+							<tr>
+								<td>Last Name:</td>
+								<td><input id="sign-up-last-name" name="sign-up-last-name" type="text" class="input-box" /></td>
+							</tr>
+							<tr>
+								<td>Email Address:</td>
+								<td><input id="sign-up-email" name="sign-up-email" type="text" class="input-box" /></td>
+							</tr>
+							<tr>
+								<td>Password:</td>
+								<td><input id="sign-up-password" name="sign-up-password" type="text" class="input-box" /></td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>							
+							</tr>
+							<tr>
+								<td colspan="2"><label style="float: left;">Receive news letters?</label><input id="sign-up-news-letter" name="sign-up-news-letter" type="checkbox" style="float: left;margin: 0 0 0 5px;" /></td>
+							</tr>
+							<tr>
+								<td colspan="2"><a id="sign-up-submit" href="javascript:void(0);" class="button yellow" style="float: right;">Sign Up</a></td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<div class="pop-up-box-footer" style="width: 100%;">
+				</div>
 			</div>
 		</div>
 		
-		<div style="display: none;width:0px;height:0px;">
-			<div id="sign-up-success-box">
-				<h3>Thank you</h3>
-				<p>An activation email will be sent to you shortly.</p>
+		<div style="display: none;">
+			<div id="sign-up-success-box" style="padding: 10px;width: 300px;">
+				<div class="pop-up-box-header" style="width: 100%;height: 30px;padding: 2px 5px;">
+					<h3>Sign up success</h3>
+				</div>
+				<div class="horizontal-divider" style="border-top: 1px solid #DFDFDF;width: 100%;float: left;"></div>
+				<div class="pop-up-box-body" style="padding: 20px 5px;font-size: 14px;width: 100%;">
+					<p>Congratulations!</p>
+					<p>An activation email will be sent to you shortly.</p>
+				</div>
+				<div class="pop-up-box-footer" style="width: 100%;">
+				</div>
 			</div>
 		</div>
             

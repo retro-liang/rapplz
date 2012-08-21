@@ -9,13 +9,7 @@
 				Resets defualt browser settings
 				reset.css
 			*/
-			html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td { margin:0; padding:0; border:0; outline:0; font-weight:inherit; font-style:inherit; font-size:100%; font-family:inherit; vertical-align:baseline; }
-			:focus { outline:0; }
-			a:active { outline:none; }
-			body { line-height:1; color:black; background:white; }
 			ol,ul { list-style:none; }
-			table { border-collapse:separate; border-spacing:0; }
-			caption,th,td { text-align:left; font-weight:normal; }
 			blockquote:before,blockquote:after,q:before,q:after { content:""; }
 			blockquote,q { quotes:"" ""; }
 			
@@ -24,9 +18,7 @@
 			*/
 			
 			body { 
-				letter-spacing:0;
-				text-shadow:0 1px 0 rgba(255,255,255,.8);
-				-webkit-font-smoothing: subpixel-antialiased;
+				
 			}
 			
 			#example {
@@ -129,7 +121,7 @@
 				width:12px;
 				height:0;
 				padding-top:12px;
-				background-image:url(../img/pagination.png);
+				background-image:url(/img/pagination.png);
 				background-position:0 0;
 				float:left;
 				overflow:hidden;

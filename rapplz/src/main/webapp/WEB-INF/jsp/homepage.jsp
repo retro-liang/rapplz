@@ -15,7 +15,7 @@
 					<p></p>
 				</div>
 				<div id="left-column">
-					<div style="height: 350px;position: relative;width: 600px;">
+					<div style="height: 350px;position: relative;width: 600px;margin-left:15px;">
 						<img src="/img/new-ribbon.png" width="112" height="112" alt="New Ribbon" id="ribbon" style="left: -15px;position: absolute;top: -3px;z-index: 500;" />
 						<div id="slides" style="left: 4px;position: absolute;top: 15px;z-index: 100;">
 							<div class="slides_container">
@@ -100,9 +100,9 @@
 															'</div>' +
 															'<div class="app-box-footer" style="width: 100%;height: 30px;background-color: #ffffff;">' +
 																'<ul style="height: 100%;width: 100%;float: left;">' +
-																	'<li><a href="javascript:void(0);" onclick="have(\'' + item.rawId + '\',\'' + item.name + '\',\'' + item.icon + '\',\'\')" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Have</a></li>' +
+																	'<li><a href="javascript:void(0);" onclick="have(\'' + item.rawId + '\',\'' + item.name + '\',\'' + item.icon + '\',\'\',\'\')" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Have</a></li>' +
 																	'<li><a href="javascript:void(0);" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Comment</a></li>' +
-																	'<li><a href="javascript:void(0);" onclick="have(\'' + item.rawId + '\',\'' + item.name + '\',\'' + item.icon + '\',\'\')" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Recommend</a></li>' +
+																	'<li><a href="javascript:void(0);" onclick="recommend(\'' + item.rawId + '\',\'' + item.name + '\',\'' + item.icon + '\',\'\',\'\')" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Recommend</a></li>' +
 																'</ul>' +
 															'</div>' +
 														'</div>');

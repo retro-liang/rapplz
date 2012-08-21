@@ -27,4 +27,6 @@ public interface UserDao
 	public void resetPassword(String email, String password);
 	public String activateUser(Long id);
 	public String inactivateUser(Long id);
+	public boolean alreadyHave(Long userId, Long appId);
+	public boolean alreadyRecommend(Long userId, Long appId);
 }

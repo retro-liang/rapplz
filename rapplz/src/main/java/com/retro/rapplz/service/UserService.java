@@ -2,6 +2,7 @@ package com.retro.rapplz.service;
 
 import com.retro.rapplz.db.entity.User;
 import com.retro.rapplz.service.exception.ApplicationServiceException;
+import com.retro.rapplz.web.dto.UserDetail;
 import com.retro.rapplz.web.dto.UserInfo;
 
 public interface UserService
@@ -19,4 +20,5 @@ public interface UserService
 	public UserInfo loadUserInfo(UserInfo userInfo) throws ApplicationServiceException;
 	public void have(String osName, Long userId, String rawId, String appName, String icon, String[] deviceNames, String categoryName) throws ApplicationServiceException;
 	public void recommend(String osName, Long fromUserId, String[] toUserIds, String rawId, String appName, String icon, String[] deviceNames, String categoryName) throws ApplicationServiceException;
+	public UserDetail getUserDetail(Long id) throws ApplicationServiceException;
 }

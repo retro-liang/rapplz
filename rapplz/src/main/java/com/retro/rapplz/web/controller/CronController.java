@@ -32,10 +32,8 @@ public class CronController
 		{
 			long start = System.currentTimeMillis();
 			List<AppInfo> appInfo = appService.loadAppInfos();
-			logger.info("test category1: " + appInfo.get(0).getCategoryNames());
 			MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
 			syncCache.put("apps", appInfo);
-			logger.info("test category2: " + appInfo.get(0).getCategoryNames());
 			logger.info("Retrieved [" + appInfo.size() + "] apps in " + (System.currentTimeMillis() - start) + " milliseconds.");
 		}
 		catch(Exception e)

@@ -186,4 +186,24 @@ public class UserDaoImpl implements UserDao
 		q.setParameter(0, id);
 		return ((BigInteger)q.uniqueResult()).intValue();
 	}
+	
+	@Override
+	public boolean alreadyHave(Long userId, Long appId)
+	{
+		String sqlQuery = "select count(id) from user_app where user_id = ? and app_id = ?";
+		SQLQuery q = sessionFactory.getCurrentSession().createSQLQuery(sqlQuery);
+		q.setParameter(0, userId);
+		q.setParameter(1, appId);
+		return ((BigInteger)q.uniqueResult()).intValue() > 0;
+	}
+	
+	@Override
+	public boolean alreadyRecommend(Long userId, Long appId)
+	{
+		String sqlQuery = "select count(id) from recommendation where from_user_id = ? and app_id = ?";
+		SQLQuery q = sessionFactory.getCurrentSession().createSQLQuery(sqlQuery);
+		q.setParameter(0, userId);
+		q.setParameter(1, appId);
+		return ((BigInteger)q.uniqueResult()).intValue() > 0;
+	}
 }

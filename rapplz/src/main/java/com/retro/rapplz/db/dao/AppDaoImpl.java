@@ -63,7 +63,7 @@ public class AppDaoImpl implements AppDao
 	
 	public int getAppRecommendationCount(Long id)
 	{
-		String sqlQuery = "select count(id) from recommendation where from_user_id = ?";
+		String sqlQuery = "select count(id) from recommendation where app_id = ?";
 		SQLQuery q = sessionFactory.getCurrentSession().createSQLQuery(sqlQuery);
 		q.setParameter(0, id);
 		return ((BigInteger)q.uniqueResult()).intValue();
