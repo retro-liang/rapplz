@@ -1,5 +1,6 @@
 package com.retro.rapplz.service;
 
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import com.retro.rapplz.db.entity.OS;
 import com.retro.rapplz.db.entity.Recommendation;
 import com.retro.rapplz.db.entity.User;
 import com.retro.rapplz.service.exception.ApplicationServiceException;
+import com.retro.rapplz.web.dto.AppInfo;
 import com.retro.rapplz.web.dto.UserDetail;
 import com.retro.rapplz.web.dto.UserInfo;
 
@@ -197,7 +199,7 @@ public class UserServiceImpl implements UserService, UserDetailsService
 	
 	@Override
 	@Transactional
-	public void have(String osName, Long userId, String rawId, String appName, String icon, String[] deviceNames, String categoryName) throws ApplicationServiceException
+	public AppInfo have(String osName, Long userId, String rawId, String appName, String icon, String[] deviceNames, String categoryName) throws ApplicationServiceException
 	{
 		if(osName != null && !osName.trim().equals("") && userId != null && rawId != null && !rawId.trim().equals(""))
 		{
@@ -206,7 +208,7 @@ public class UserServiceImpl implements UserService, UserDetailsService
 			{
 				if(userDao.alreadyHave(Long.valueOf(userId), app.getId()))
 				{
-					return ;
+					return null;
 				}
 			}
 
@@ -253,15 +255,26 @@ public class UserServiceImpl implements UserService, UserDetailsService
 					logger.info("app: " + app);
 					user.getApps().add(app);
 					userDao.save(user);
+					
+					AppInfo appInfo = new AppInfo();
+					appInfo.setId(app.getId().toString());
+					appInfo.setRawId(app.getRawId());
+					appInfo.setName(app.getName());
+					appInfo.setIcon(app.getIconUrl());
+					appInfo.setCategoryNames(new String[]{categoryName});
+					appInfo.setHaveCount(appDao.getAppHaveCount(app.getId()));
+					appInfo.setRecommendationCount(appDao.getAppRecommendationCount(app.getId()));
+					
+					return appInfo;
 				}
 			}
 		}
-		
+		return null;
 	}
 	
 	@Override
 	@Transactional
-	public void recommend(String osName, Long fromUserId, String[] toUserIds, String rawId, String appName, String icon, String[] deviceNames, String categoryName) throws ApplicationServiceException
+	public AppInfo recommend(String osName, Long fromUserId, String[] toUserIds, String rawId, String appName, String icon, String[] deviceNames, String categoryName) throws ApplicationServiceException
 	{
 		if(osName != null && !osName.trim().equals("") && fromUserId != null && rawId != null && !rawId.trim().equals(""))
 		{
@@ -270,7 +283,7 @@ public class UserServiceImpl implements UserService, UserDetailsService
 			{
 				if(userDao.alreadyRecommend(Long.valueOf(fromUserId), app.getId()))
 				{
-					return ;
+					return null;
 				}
 			}
 			
@@ -340,9 +353,21 @@ public class UserServiceImpl implements UserService, UserDetailsService
 						}
 					}				
 					userDao.save(user);
+					
+					AppInfo appInfo = new AppInfo();
+					appInfo.setId(app.getId().toString());
+					appInfo.setRawId(app.getRawId());
+					appInfo.setName(app.getName());
+					appInfo.setIcon(app.getIconUrl());
+					appInfo.setCategoryNames(new String[]{categoryName});
+					appInfo.setHaveCount(appDao.getAppHaveCount(app.getId()));
+					appInfo.setRecommendationCount(appDao.getAppRecommendationCount(app.getId()));
+					
+					return appInfo;
 				}
 			}
 		}
+		return null;
 	}
 	
 	@Override

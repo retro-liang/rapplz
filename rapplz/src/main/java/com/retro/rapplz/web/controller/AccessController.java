@@ -121,7 +121,7 @@ public class AccessController extends MultiActionController
 		else
 		{
 			Queue queue = QueueFactory.getQueue("create-user");
-		    queue.add(withUrl("/task/create-user").param("accountType", "ROLE_USER").param("email", user.getEmail()).param("password", user.getPassword()).param("firstName", user.getFirstName()).param("lastName", user.getLastName()));
+		    queue.add(withUrl("/task/create-user").param("accountType", "USER").param("email", user.getEmail()).param("password", user.getPassword()).param("firstName", user.getFirstName()).param("lastName", user.getLastName()));
 			return "ok";
 		}
     }

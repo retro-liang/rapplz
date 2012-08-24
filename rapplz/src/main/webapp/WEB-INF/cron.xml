@@ -7,9 +7,9 @@
 		<schedule>every 24 hours</schedule>
 		 -->
 		 
-		<url>/rest/cronService/loadApps</url>
-		<description>Load apps every 30 minutes</description>
-		<schedule>every 30 minutes</schedule>
+		<url>/cron/load-apps</url>
+		<description>Load apps every 12 hours</description>
+		<schedule>every 12 hours</schedule>
 		
 	</cron>	
 </cronentries>

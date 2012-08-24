@@ -76,7 +76,7 @@
 				
 				$.ajax
 				({
-					url: "/load-apps",
+					url: "/app-action/load-apps",
 					dataType: "json",
 					type: "GET",
 					success: function(data)
@@ -123,67 +123,70 @@
 				event.stopPropagation();
 				var keyword = $("#app-search-box").val();
 				
-				$.ajax
-				({
-					url: iosAppSearchUrl,
-					dataType: 'jsonp',
-					data: 
-					{
-						country: "us",
-						entity: "software",
-						limit: "20",
-						term: keyword
-					},
-					success: function(data)
-					{
-						var result = "";
-						$.each(data.results, function(index, item)
+				if(keyword != "")
+				{
+					$.ajax
+					({
+						url: iosAppSearchUrl,
+						dataType: 'jsonp',
+						data: 
 						{
-						    result += '<li style="padding: 30px;">' +
-											'<a style="clear:left;float: left;margin: 10px;height: 60px;width: 60px;" target="_blank" href="' + item.artistViewUrl + '">' +
-												'<img src="' + item.artworkUrl60 + '" >' +
-											'</a>' +
-											'<div style="float: left;height: 60px;width: 500px;">' +
-												'<h3 style="margin: 15px 3px 5px 0;font-size: 15px;width: auto;clear: right;"><a style="color:#222222;" target="_blank" id="' + item.trackId + '_url" href="' + item.artistViewUrl + '"><span id="' + item.trackId + '_name">' + item.trackName + '</span></a></h3>' +
-												'<div style="float: left;margin: 5px 0 0 0;width: auto;clear: right;">' +
-													'<p style="font-size: 12px;float: left;">App store rating: ' + item.averageUserRating + ' (' + item.userRatingCount + ' ratings)</p>' +
-												'</div>' +
-												'<div style="float: right;margin: 5px;width: auto;clear: right;">' +
-													'<p style="font-size: 12px;float: left;">' +
-														'<a class="link-button" style="margin-right:10px;" id="' + item.trackId + '_have" href="javascript:void(0);" onclick="have(\'' + item.trackId + '\',\'' + item.trackName + '\',\'' + item.artworkUrl60 + '\',\'' + item.supportedDevices + '\',\'' + item.primaryGenreName + '\')">I Have</a>' +
-														'<a class="link-button" id="' + item.trackId + '_recommend" href="javascript:void(0);" onclick="recommend(\'' + item.trackId + '\',\'' + item.trackName + '\',\'' + item.artworkUrl60 + '\',\'' + item.supportedDevices + '\',\'' + item.primaryGenreName + '\')">I Recommend</a>' +
-													'</p>' +
-												'</div>' +
-											'</div>' +
-										'</li>';
-						});
-						$("#search-result").html(result);
-						$("div.holder").jPages
-						({
-				            containerID : "search-result",
-				            previous : "←",
-				            next : "→",
-				            perPage : 5,
-				            delay : 0
-				        });
-						$.colorbox
-						({
-							inline: true,
-							href: "#search-result-box",
-							width: "680px",
-							height: "500px",
-							onCleanup: function()
+							country: "us",
+							entity: "software",
+							limit: "20",
+							term: keyword
+						},
+						success: function(data)
+						{
+							var result = "";
+							$.each(data.results, function(index, item)
 							{
-								$("#search-result").html("");
-								$(".holder").html("");
-							}
-						});
-					},
-					error: function(jqXHR, textStatus, errorThrown)
-					{
-						alert("error: " + errorThrown);
-					}
-				});
+							    result += '<li style="padding: 30px;">' +
+												'<a style="clear:left;float: left;margin: 10px;height: 60px;width: 60px;" target="_blank" href="' + item.artistViewUrl + '">' +
+													'<img src="' + item.artworkUrl60 + '" >' +
+												'</a>' +
+												'<div style="float: left;height: 60px;width: 500px;">' +
+													'<h3 style="margin: 15px 3px 5px 0;font-size: 15px;width: auto;clear: right;"><a style="color:#222222;" target="_blank" id="' + item.trackId + '_url" href="' + item.artistViewUrl + '"><span id="' + item.trackId + '_name">' + item.trackName + '</span></a></h3>' +
+													'<div style="float: left;margin: 5px 0 0 0;width: auto;clear: right;">' +
+														'<p style="font-size: 12px;float: left;">App store rating: ' + item.averageUserRating + ' (' + item.userRatingCount + ' ratings)</p>' +
+													'</div>' +
+													'<div style="float: right;margin: 5px;width: auto;clear: right;">' +
+														'<p style="font-size: 12px;float: left;">' +
+															'<a class="link-button" style="margin-right:10px;" id="' + item.trackId + '_have" href="javascript:void(0);" onclick="have(\'' + item.trackId + '\',\'' + item.trackName + '\',\'' + item.artworkUrl60 + '\',\'' + item.supportedDevices + '\',\'' + item.primaryGenreName + '\')">I Have</a>' +
+															'<a class="link-button" id="' + item.trackId + '_recommend" href="javascript:void(0);" onclick="recommend(\'' + item.trackId + '\',\'' + item.trackName + '\',\'' + item.artworkUrl60 + '\',\'' + item.supportedDevices + '\',\'' + item.primaryGenreName + '\')">I Recommend</a>' +
+														'</p>' +
+													'</div>' +
+												'</div>' +
+											'</li>';
+							});
+							$("#search-result").html(result);
+							$("div.holder").jPages
+							({
+					            containerID : "search-result",
+					            previous : "←",
+					            next : "→",
+					            perPage : 5,
+					            delay : 0
+					        });
+							$.colorbox
+							({
+								inline: true,
+								href: "#search-result-box",
+								width: "680px",
+								height: "500px",
+								onCleanup: function()
+								{
+									$("#search-result").html("");
+									$(".holder").html("");
+								}
+							});
+						},
+						error: function(jqXHR, textStatus, errorThrown)
+						{
+							alert("error: " + errorThrown);
+						}
+					});
+				}
 			});
 			
 			$("#sign-in-button").click(function(event)
@@ -240,13 +243,14 @@
 			function signInSuccessHandler(data)
 			{
 				$("#token").val(data.token);
+				$("#avatar").attr("src", data.avatar);
 				$("#user-link").html(data.firstName);
 				$("#user-link").attr("href", ("user/" + data.firstName + "-" + data.lastName + ".html?token=" + data.token));
 				$("#user-app-count").html(data.appCount);
 				$("#user-recommendation-count").html(data.recommendationCount);
 				$("#user-follower-count").html(data.followerCount);
 				$("#user-following-count").html(data.followingCount);
-				$("#user-details").attr("href", ("user/" + data.firstName + "-" + data.lastName + ".html?token=" + data.token));
+				$("#user-details").attr("href", ("/user/" + data.firstName + "-" + data.lastName + ".html?token=" + data.token));
 				$("#user-info").removeClass("hidden");
 				$("#access-container-not-signed-in").addClass("hidden");
 				$("#access-container-signed-in").removeClass("hidden");
@@ -370,7 +374,7 @@
 				{
 					$.ajax
 					({
-						url: "/have",
+						url: "/app-action/have",
 						data: 
 						{
 							os: os,
@@ -408,7 +412,7 @@
 				{
 					$.ajax
 					({
-						url: "/recommend",
+						url: "/app-action/recommend",
 						data: 
 						{
 							os: os,
@@ -509,6 +513,13 @@
 					}
 				});
 			}
+			
+			$("#gravatar-button").click(function(event)
+			{
+				event.preventDefault();
+				event.stopPropagation();
+				var hash = md5( strtolower( trim( "MyEmailAddress@example.com " ) ) );
+			});
 		</script>
 
 		<script type="text/javascript">

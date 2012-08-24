@@ -3,22 +3,22 @@
 			<table>
 				<tr>
 					<td>User Apps:</td>
-					<td id="user-app-count"></td>
+					<td id="user-app-count">${userInfo.appCount}</td>
 				</tr>
 				<tr>
 					<td>User Recommendations:</td>
-					<td id="user-recommendation-count"></td>
+					<td id="user-recommendation-count">${userInfo.recommendationCount}</td>
 				</tr>
 				<tr>
 					<td>User Followers:</td>
-					<td id="user-follower-count"></td>
+					<td id="user-follower-count">${userInfo.followerCount}</td>
 				</tr>
 				<tr>
 					<td>User Followings:</td>
-					<td id="user-following-count"></td>
+					<td id="user-following-count">${userInfo.followingCount}</td>
 				</tr>
 				<tr>
-					<td colspan="2"><a id="user-details">User Details</a></td>					
+					<td colspan="2"><a id="user-details" href="/user/${userInfo.firstName}-${userInfo.lastName}.html?token=${userInfo.token}">User Details</a></td>					
 				</tr>
 			</table>
 		</div>

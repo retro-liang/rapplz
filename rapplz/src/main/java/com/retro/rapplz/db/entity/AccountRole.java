@@ -29,9 +29,9 @@ public class AccountRole extends BaseEntity implements Serializable
 {
 	private static final long serialVersionUID = -5934155326162492033L;
 
-	public static final String DEFAULT = "ROLE_USER";
-	public static final String USER = "ROLE_USER";
-	public static final String ADMIN = "ROLE_ADMIN";
+	public static final String DEFAULT = "USER";
+	public static final String USER = "USER";
+	public static final String ADMIN = "ADMIN";
 	
 	private String name = DEFAULT;
 	

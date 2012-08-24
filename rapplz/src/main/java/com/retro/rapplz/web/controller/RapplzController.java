@@ -42,7 +42,7 @@ public class RapplzController
 		return "homepage";
     }
 	
-	@RequestMapping("/load-apps")
+	@RequestMapping("/app-action/load-apps")
 	@ResponseBody
 	public List<AppInfo> loadAppsHandler()
 	{
@@ -51,7 +51,7 @@ public class RapplzController
 		return (List<AppInfo>)syncCache.get("apps");
 	}
 	
-	@RequestMapping("/have")
+	@RequestMapping("/app-action/have")
 	public @ResponseBody String haveHandler(HttpServletRequest request, 
     												@RequestParam("os") String os,
     												@RequestParam("token") String token,
@@ -63,12 +63,12 @@ public class RapplzController
 	{
 		logger.info("have request: " + request.getRemoteAddr());
 		Long userId = Long.valueOf(EncryptAES.decrypt(token, RapplzConfig.getInstance().getSecurityKey()));
-		Queue queue = QueueFactory.getQueue("have-app");
+		Queue queue = QueueFactory.getQueue("app-action");
 		queue.add(withUrl("/task/have-app").param("os", os).param("userId", userId.toString()).param("rawId", rawId).param("name", name).param("icon", icon).param("device", device).param("category", category));
 		return "ok";
     }
 	
-	@RequestMapping("/recommend")
+	@RequestMapping("/app-action/recommend")
     public @ResponseBody String recommendHandler(HttpServletRequest request,
     												@RequestParam("os") String os,
     												@RequestParam("fromToken") String fromToken,
@@ -95,7 +95,7 @@ public class RapplzController
 			}
 			toUserIds = ids.toString();
 		}
-		Queue queue = QueueFactory.getQueue("recommend-app");
+		Queue queue = QueueFactory.getQueue("app-action");
 		queue.add(withUrl("/task/recommend-app").param("os", os).param("fromUserId", fromUserId.toString()).param("toUserIds", toUserIds).param("rawId", rawId).param("name", name).param("icon", icon).param("device", device).param("category", category));
 		return "ok";
     }

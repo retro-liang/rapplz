@@ -12,17 +12,7 @@
 		</retry-parameters>
 	</queue>
 	<queue>
-		<name>have-app</name>
-		<rate>20/s</rate>
-		<bucket-size>40</bucket-size>
-		<max-concurrent-requests>10</max-concurrent-requests>
-		<retry-parameters>
-			<task-retry-limit>3</task-retry-limit>
-			<task-age-limit>1d</task-age-limit>
-		</retry-parameters>
-	</queue>
-	<queue>
-		<name>recommend-app</name>
+		<name>app-action</name>
 		<rate>20/s</rate>
 		<bucket-size>40</bucket-size>
 		<max-concurrent-requests>10</max-concurrent-requests>

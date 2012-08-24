@@ -17,9 +17,16 @@
 	<http pattern="/access/*.html*" security="none"/>
 
     <http auto-config="true" use-expressions="true">
-        <intercept-url pattern="/secure/extreme/**" access="hasRole('supervisor')"/>
+        <intercept-url pattern="/cron/**" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/task/**" access="permitAll"/>
         <intercept-url pattern="/secure/**" access="isAuthenticated()" />
-        <intercept-url pattern="/**" access="permitAll" />
+        <intercept-url pattern="/app-action/load-apps" access="permitAll" />
+        <intercept-url pattern="/app-action/**" access="isAuthenticated()" />
+        <intercept-url pattern="/access/**" access="permitAll" />
+        <intercept-url pattern="/app/**" access="permitAll" />
+        <intercept-url pattern="/user/**" access="permitAll" />
+        <intercept-url pattern="/" access="permitAll" />
+        <intercept-url pattern="/index.html" access="permitAll" />
         <form-login login-page="/access/sign-in.html" default-target-url="/access/sign-in-success" authentication-failure-url="/access/sign-in-fail" />
         <logout logout-success-url="/access/sign-out-success.html" delete-cookies="JSESSIONID"/>
         <remember-me />

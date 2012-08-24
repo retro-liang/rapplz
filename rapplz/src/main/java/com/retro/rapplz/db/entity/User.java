@@ -72,7 +72,7 @@ public class User extends BaseEntity implements UserDetails, Serializable
 	private String lastName;
 
 	@Column(name = "avatar")
-	private String avatar;
+	private String avatar = "/img/default-avatar.png";
 
 	@ManyToOne
 	@JoinColumn(name = "account_type_id")
@@ -133,7 +133,10 @@ public class User extends BaseEntity implements UserDetails, Serializable
 	public Collection<? extends GrantedAuthority> getAuthorities()
 	{
 		Collection<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
-		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+		for(AccountRole accountRole : accountRoles)
+		{
+			authorities.add(new SimpleGrantedAuthority(accountRole.getName()));
+		}
 		return authorities;
 	}
 

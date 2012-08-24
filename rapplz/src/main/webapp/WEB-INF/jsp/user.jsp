@@ -15,8 +15,8 @@
 					<p></p>
 				</div>
 				<div id="left-column">
-					
-					<h3>${userInfo.firstName}</h3>
+					<img src="${userInfo.avatar}" border="0" />
+					<h3>${userInfo.firstName} ${userInfo.lastName}</h3>
 			
 					
 					

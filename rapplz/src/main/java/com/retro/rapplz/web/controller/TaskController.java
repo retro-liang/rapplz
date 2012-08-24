@@ -2,6 +2,7 @@ package com.retro.rapplz.web.controller;
 
 import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.retro.rapplz.config.RapplzConfig;
@@ -22,6 +25,7 @@ import com.retro.rapplz.db.entity.User;
 import com.retro.rapplz.security.EncryptAES;
 import com.retro.rapplz.service.EmailService;
 import com.retro.rapplz.service.UserService;
+import com.retro.rapplz.web.dto.AppInfo;
 
 @Controller
 @RequestMapping("/task")
@@ -46,7 +50,7 @@ public class TaskController
 		logger.info("createUserTask: " + email);
 		try
 		{
-			User user = userService.createUser(AccountRole.DEFAULT, AccountType.DEFAULT, AccountStatus.DEFAULT, email, password, firstName, lastName, "", "");
+			User user = userService.createUser(AccountRole.DEFAULT, AccountType.DEFAULT, AccountStatus.DEFAULT, email, password, firstName, lastName, "", "/img/default-avatar.png");
 			String token = EncryptAES.encrypt(user.getId().toString(), RapplzConfig.getInstance().getSecurityKey());
 			Queue queue = QueueFactory.getQueue("send-email");
 		    queue.add(withUrl("/task/send-email").param("fromEmail", RapplzConfig.getInstance().getSenderEmailAddress())
@@ -95,8 +99,17 @@ public class TaskController
 	{
 		try
 		{
-			userService.have(os, userId, rawId, name, icon, device.split(","), category);
+			AppInfo appInfo = userService.have(os, userId, rawId, name, icon, device.split(","), category);
 			response.getWriter().println("Added app [" + name + "] to user [" + userId + "] app list successfully.");
+			
+			if(appInfo != null)
+			{
+				MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+				List<AppInfo> appInfos = (List<AppInfo>)syncCache.get("apps");
+				appInfos.add(appInfo);
+				syncCache.put("apps", appInfos);
+				logger.info("Cached app list updated: app size: " + appInfos.size());
+			}
 		}
 		catch(Exception e)
 		{
@@ -117,13 +130,14 @@ public class TaskController
 	{
 		try
 		{
+			AppInfo appInfo = null;
 			if(toUserIds == null || toUserIds.trim().equals(""))
 			{
-				userService.recommend(os, fromUserId, null, rawId, name, icon, device.split(","), category);
+				appInfo = userService.recommend(os, fromUserId, null, rawId, name, icon, device.split(","), category);
 			}
 			else
 			{
-				userService.recommend(os, fromUserId, toUserIds.trim().split(","), rawId, name, icon, device.split(","), category);
+				appInfo = userService.recommend(os, fromUserId, toUserIds.trim().split(","), rawId, name, icon, device.split(","), category);
 				User fromUser = userService.getUser(fromUserId);
 				if(fromUser != null)
 				{
@@ -144,6 +158,15 @@ public class TaskController
 				}
 			}
 			response.getWriter().println("Added app [" + name + "] to user [" + fromUserId + "] recommendation list successfully.");
+			
+			if(appInfo != null)
+			{
+				MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+				List<AppInfo> appInfos = (List<AppInfo>)syncCache.get("apps");
+				appInfos.add(appInfo);
+				syncCache.put("apps", appInfos);
+				logger.info("Cached app list updated: app size: " + appInfos.size());
+			}
 		}
 		catch(Exception e)
 		{

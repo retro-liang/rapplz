@@ -28,8 +28,8 @@ INSERT INTO account_type(name) VALUES('GOOGLE');
 INSERT INTO account_type(name) VALUES('FACEBOOK');
 INSERT INTO account_type(name) VALUES('TWITTER');
 
-INSERT INTO account_role(name) VALUES('ROLE_USER');
-INSERT INTO account_role(name) VALUES('ROLE_ADMIN');
+INSERT INTO account_role(name) VALUES('USER');
+INSERT INTO account_role(name) VALUES('ADMIN');
 
 INSERT INTO account_status(name) VALUES('ACTIVE');
 INSERT INTO account_status(name) VALUES('INACTIVE');

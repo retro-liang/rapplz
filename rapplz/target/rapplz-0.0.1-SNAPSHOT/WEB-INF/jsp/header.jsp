@@ -22,7 +22,7 @@
 					<li id="sign-up-container"><a id="sign-up-button" href="<spring:url value="/access/sign-up.html" htmlEscape="true" />" class="link-button">Sign Up</a></li>
 				</ul>
 				<ul id="access-container-signed-in">
-					<li id="welcome-container"><a id="user-link" class="link-button">${userInfo.firstName}</a></li>
+					<li id="welcome-container"><span style="margin-right: 10px;"><img id="avatar" src="${userInfo.avatar}" width="25" height="25" border="0" /></span><a id="user-link" class="link-button" href="/user/${userInfo.firstName}-${userInfo.lastName}.html?token=${userInfo.token}"><span>${userInfo.firstName}</span></a></li>
 					<li id="sign-out-container"><a id="sign-out-link" href="<c:url value="/j_spring_security_logout" />" class="link-button">Sign Out</a></li>
 				</ul>
 				<input id="token" type="hidden" value="${userInfo.token}" />
