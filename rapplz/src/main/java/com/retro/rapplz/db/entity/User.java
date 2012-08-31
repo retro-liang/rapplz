@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,6 +23,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.LazyCollection;
@@ -44,6 +47,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 	@NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
 	@NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password")
 })
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Data
 @EqualsAndHashCode(callSuper=true, exclude={"password", "avatar", "accountType", "accountRoles", "accountStatus", "apps", "activities", "appComments", "reviews", "reviewComments", "followers", "followings", "sentRecommendations", "receivedRecommendations", "tags"})
 @ToString(callSuper=true, includeFieldNames=true, exclude={"password", "lastName", "avatar", "apps", "activities", "appComments", "reviews", "reviewComments", "followers", "followings", "sentRecommendations", "receivedRecommendations", "tags"})
@@ -76,6 +81,7 @@ public class User extends BaseEntity implements UserDetails, Serializable
 
 	@ManyToOne
 	@JoinColumn(name = "account_type_id")
+	@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	private AccountType accountType;
 
 	@ManyToMany(fetch = FetchType.EAGER)

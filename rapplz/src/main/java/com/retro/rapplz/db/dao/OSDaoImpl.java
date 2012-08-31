@@ -17,13 +17,13 @@ public class OSDaoImpl implements OSDao
 	@Override
 	public OS getOS(Long id)
 	{
-		return (OS)sessionFactory.getCurrentSession().get(OS.class, id);
+		return (OS)sessionFactory.getCurrentSession().load(OS.class, id);
 	}
 	
 	@Override
 	public OS getOSByName(String name)
 	{
-		return (OS)sessionFactory.getCurrentSession().createQuery("select o from OS o where o.name like '" + name + "'").uniqueResult();
+		return (OS)sessionFactory.getCurrentSession().createQuery("select o from OS o where o.name like '" + name + "'").setCacheable(true).uniqueResult();
 	}
 
 	@Override

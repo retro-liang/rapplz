@@ -17,7 +17,7 @@ public class RecommendationDaoImpl implements RecommendationDao
 	@Override
 	public Recommendation getRecommendation(Long id)
 	{
-		return (Recommendation)sessionFactory.getCurrentSession().get(Recommendation.class, id);
+		return (Recommendation)sessionFactory.getCurrentSession().load(Recommendation.class, id);
 	}
 	
 	@Override

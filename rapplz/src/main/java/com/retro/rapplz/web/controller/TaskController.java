@@ -3,6 +3,7 @@ package com.retro.rapplz.web.controller;
 import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
 
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -105,7 +106,7 @@ public class TaskController
 			if(appInfo != null)
 			{
 				MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-				List<AppInfo> appInfos = (List<AppInfo>)syncCache.get("apps");
+				Set<AppInfo> appInfos = (Set<AppInfo>)syncCache.get("apps");
 				appInfos.add(appInfo);
 				syncCache.put("apps", appInfos);
 				logger.info("Cached app list updated: app size: " + appInfos.size());
@@ -162,7 +163,7 @@ public class TaskController
 			if(appInfo != null)
 			{
 				MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-				List<AppInfo> appInfos = (List<AppInfo>)syncCache.get("apps");
+				Set<AppInfo> appInfos = (Set<AppInfo>)syncCache.get("apps");
 				appInfos.add(appInfo);
 				syncCache.put("apps", appInfos);
 				logger.info("Cached app list updated: app size: " + appInfos.size());

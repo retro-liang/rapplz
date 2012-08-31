@@ -3,6 +3,7 @@ package com.retro.rapplz.db.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,12 +18,16 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 @SuppressWarnings("serial")
 @Entity
 @Table(name="app")
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Data
 @EqualsAndHashCode(callSuper=true, exclude={"os", "devices", "categories", "iconUrl", "recommendations", "appComments", "reviews", "tags", "users"})
 @ToString(callSuper=true, includeFieldNames=true, exclude={"os", "devices", "categories", "iconUrl", "recommendations", "appComments", "reviews", "tags", "users"})
@@ -40,11 +45,13 @@ public class App extends BaseEntity
 	@ManyToMany
 	@Cascade({CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(name = "app_device", joinColumns = {@JoinColumn(name = "app_id")}, inverseJoinColumns = {@JoinColumn(name = "device_id")})
+	@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	private Set<Device> devices = new HashSet<Device>();
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@Cascade({CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(name = "app_category", joinColumns = {@JoinColumn(name = "app_id")}, inverseJoinColumns = {@JoinColumn(name = "category_id")})
+	@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 	private Set<Category> categories = new HashSet<Category>();
 	
 	@Column(name = "icon_url")

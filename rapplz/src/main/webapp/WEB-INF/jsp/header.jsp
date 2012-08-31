@@ -55,20 +55,6 @@
 			</div>
 		</div>
 		
-		<div id="top-ad-box" style="width: auto;margin: 5px auto 10px auto;padding-left: 100px;">
-			<script type="text/javascript"><!--
-			google_ad_client = "ca-pub-3748265501907091";
-			/* rapplz-top */
-			google_ad_slot = "3699626490";
-			google_ad_width = 728;
-			google_ad_height = 90;
-			//-->
-			</script>
-			<script type="text/javascript"
-			src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-			</script>
-		</div>
-		
 		<div style="visibility:hidden;width:0px;height:0px;">
 			<div id="search-result-box" style="margin: 0px;">
 				<ul id="search-result" style="list-style-type: none;width: auto;min-height: 100px;"></ul>

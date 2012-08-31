@@ -26,35 +26,35 @@ public class UserDaoImpl implements UserDao
 	public User getUserByEmail(String email)
 	{
 		logger.info("findByEmail email: " + email);
-		return (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "'").uniqueResult();
+		return (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "'").setCacheable(true).uniqueResult();
 	}
 	
 	@Override
 	public User getRapplzUserByEmail(String email)
 	{
 		logger.info("getRapplzUserByEmail email: " + email);
-		return (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "' and u.accountType = 1").uniqueResult();
+		return (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "' and u.accountType = 1").setCacheable(true).uniqueResult();
 	}
 	
 	@Override
 	public User getGoogleUserByEmail(String email)
 	{
 		logger.info("getGoogleUserByEmail email: " + email);
-		return (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "' and u.accountType = 2").uniqueResult();
+		return (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "' and u.accountType = 2").setCacheable(true).uniqueResult();
 	}
 	
 	@Override
 	public User getFacebookUserByEmail(String email)
 	{
 		logger.info("getFacebookUserByEmail email: " + email);
-		return (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "' and u.accountType = 3").uniqueResult();
+		return (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "' and u.accountType = 3").setCacheable(true).uniqueResult();
 	}
 	
 	@Override
 	public User getTwitterUserByEmail(String email)
 	{
 		logger.info("getTwitterUserByEmail email: " + email);
-		return (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "' and u.accountType = 4").uniqueResult();
+		return (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "' and u.accountType = 4").setCacheable(true).uniqueResult();
 	}
 	
 	
@@ -62,7 +62,7 @@ public class UserDaoImpl implements UserDao
 	public User getUserByEmailAccountType(String email, String accountType)
 	{
 		logger.info("getUserByEmailAccountType email: " + email);
-		User user = (User)sessionFactory.getCurrentSession().createQuery("select u from User u left join AccountType at on u.accountType = at.id where u.email = '" + email + "' and at.name='" + accountType + "'").uniqueResult();
+		User user = (User)sessionFactory.getCurrentSession().createQuery("select u from User u left join AccountType at on u.accountType = at.id where u.email = '" + email + "' and at.name='" + accountType + "'").setCacheable(true).uniqueResult();
 		return user;
 	}
 
@@ -70,13 +70,13 @@ public class UserDaoImpl implements UserDao
 	public User getUser(Long id)
 	{
 
-		return (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.id = '" + id + "'").uniqueResult();
+		return (User)sessionFactory.getCurrentSession().load(User.class, id);
 	}
 	
 	@Override
 	public User getUserByFederalId(String id)
 	{
-		return (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.federalId = '" + id + "'").uniqueResult();
+		return (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.federalId = '" + id + "'").setCacheable(true).uniqueResult();
 	}
 	
 	@Override
@@ -139,7 +139,7 @@ public class UserDaoImpl implements UserDao
 	@Override
 	public Set<AccountRole> getAccountRolesByEmail(String email)
 	{
-		User user = (User) sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "'").uniqueResult();
+		User user = (User) sessionFactory.getCurrentSession().createQuery("select u from User u where u.email = '" + email + "'").setCacheable(true).uniqueResult();
 		if (user!= null)
 		{
 			Set<AccountRole> roles = (Set<AccountRole>)user.getAccountRoles();
@@ -192,6 +192,7 @@ public class UserDaoImpl implements UserDao
 	{
 		String sqlQuery = "select count(id) from user_app where user_id = ? and app_id = ?";
 		SQLQuery q = sessionFactory.getCurrentSession().createSQLQuery(sqlQuery);
+		q.setCacheable(true);
 		q.setParameter(0, userId);
 		q.setParameter(1, appId);
 		return ((BigInteger)q.uniqueResult()).intValue() > 0;
@@ -202,6 +203,7 @@ public class UserDaoImpl implements UserDao
 	{
 		String sqlQuery = "select count(id) from recommendation where from_user_id = ? and app_id = ?";
 		SQLQuery q = sessionFactory.getCurrentSession().createSQLQuery(sqlQuery);
+		q.setCacheable(true);
 		q.setParameter(0, userId);
 		q.setParameter(1, appId);
 		return ((BigInteger)q.uniqueResult()).intValue() > 0;

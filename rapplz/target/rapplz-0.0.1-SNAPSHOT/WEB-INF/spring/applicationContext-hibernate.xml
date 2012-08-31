@@ -11,8 +11,8 @@
 
     <!-- import the dataSource definition -->
     <import resource="applicationContext-dataSource.xml"/>
-
-	<!-- Configurer that replaces ${...} placeholders with values from a properties file -->
+    
+    <!-- Configurer that replaces ${...} placeholders with values from a properties file -->
 	<!-- (in this case, Hibernate-related settings for the sessionFactory definition below) -->
 	<context:property-placeholder location="classpath:db/jdbc.properties"/>
 	
@@ -24,6 +24,10 @@
 				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
 				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
 				<prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
+				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.ehcache.EhCacheProvider</prop>
+				<prop key="hibernate.cache.use_query_cache">true</prop>
+				<prop key="hibernate.cache.use_second_level_cache">true</prop>
 			</props>
 		</property>
 		<!-- 

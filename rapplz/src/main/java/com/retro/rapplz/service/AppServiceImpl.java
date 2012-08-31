@@ -1,7 +1,6 @@
 package com.retro.rapplz.service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -27,16 +26,16 @@ public class AppServiceImpl implements AppService
 	
 	@Override
 	@Transactional(readOnly = true)
-	public List<App> loadApps() throws ApplicationServiceException
+	public Set<App> loadApps() throws ApplicationServiceException
 	{
-		return appDao.getApps();
+		return new HashSet<App>(appDao.getApps());
 	}
 	
 	@Override
 	@Transactional(readOnly = true)
-	public List<AppInfo> loadAppInfos() throws ApplicationServiceException
+	public Set<AppInfo> loadAppInfos() throws ApplicationServiceException
 	{
-		List<AppInfo> appInfos = new ArrayList<AppInfo>();
+		Set<AppInfo> appInfos = new HashSet<AppInfo>();
 		List<App> apps = appDao.getApps();
 		for(App app : apps)
 		{

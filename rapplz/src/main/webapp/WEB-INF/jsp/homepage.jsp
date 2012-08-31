@@ -14,29 +14,31 @@
 				<div id="info-box">
 					<p></p>
 				</div>
-				<div id="left-column">
-					<div style="height: 350px;position: relative;width: 600px;margin-left:15px;">
-						<img src="/img/new-ribbon.png" width="112" height="112" alt="New Ribbon" id="ribbon" style="left: -15px;position: absolute;top: -3px;z-index: 500;" />
-						<div id="slides" style="left: 4px;position: absolute;top: 15px;z-index: 100;">
-							<div class="slides_container">
-								<a href="http://www.flickr.com/photos/jliba/4665625073/" title="145.365 - Happy Bokeh Thursday! | Flickr - Photo Sharing!" target="_blank"><img src="http://slidesjs.com/examples/standard/img/slide-1.jpg" width="570" height="270" alt="Slide 1"></a>
-								<a href="http://www.flickr.com/photos/stephangeyer/3020487807/" title="Taxi | Flickr - Photo Sharing!" target="_blank"><img src="http://slidesjs.com/examples/standard/img/slide-2.jpg" width="570" height="270" alt="Slide 2"></a>
-								<a href="http://www.flickr.com/photos/childofwar/2984345060/" title="Happy Bokeh raining Day | Flickr - Photo Sharing!" target="_blank"><img src="http://slidesjs.com/examples/standard/img/slide-3.jpg" width="570" height="270" alt="Slide 3"></a>
-								<a href="http://www.flickr.com/photos/b-tal/117037943/" title="We Eat Light | Flickr - Photo Sharing!" target="_blank"><img src="http://slidesjs.com/examples/standard/img/slide-4.jpg" width="570" height="270" alt="Slide 4"></a>
-								<a href="http://www.flickr.com/photos/bu7amd/3447416780/" title="“I must go down to the sea again, to the lonely sea and the sky; and all I ask is a tall ship and a star to steer her by.” | Flickr - Photo Sharing!" target="_blank"><img src="http://slidesjs.com/examples/standard/img/slide-5.jpg" width="570" height="270" alt="Slide 5"></a>
-								<a href="http://www.flickr.com/photos/streetpreacher/2078765853/" title="twelve.inch | Flickr - Photo Sharing!" target="_blank"><img src="http://slidesjs.com/examples/standard/img/slide-6.jpg" width="570" height="270" alt="Slide 6"></a>
-								<a href="http://www.flickr.com/photos/aftab/3152515428/" title="Save my love for loneliness | Flickr - Photo Sharing!" target="_blank"><img src="http://slidesjs.com/examples/standard/img/slide-7.jpg" width="570" height="270" alt="Slide 7"></a>
-							</div>
-							<a href="#" class="prev"><img src="/img/arrow-prev.png" width="24" height="43" alt="Arrow Prev" /></a>
-							<a href="#" class="next"><img src="/img/arrow-next.png" width="24" height="43" alt="Arrow Next" /></a>
+				<div style="height: 330px;width: 100%;margin: 10px 0 10px 0;padding-bottom: 20px;">
+					<img src="/img/new-ribbon.png" width="112" height="112" alt="New Ribbon" id="ribbon" />
+					<div id="slides">
+						<div class="slides_container">
+							<a href="http://www.flickr.com/photos/michaelsilberstein/4294842946/" title="" target="_blank"><img src="/img/photo-1.jpg" width="815" height="300" alt="" /></a>
+							<a href="http://www.flickr.com/photos/bigberto/2857852001/" title="" target="_blank"><img src="/img/photo-2.jpg" width="815" height="300" alt="" /></a>
+							<a href="http://www.flickr.com/photos/yourdon/4133227641/" title="" target="_blank"><img src="/img/photo-3.jpg" width="815" height="300" alt="" /></a>
+							<a href="http://www.flickr.com/photos/typicalnaloboy/4151014982/" title="" target="_blank"><img src="/img/photo-4.jpg" width="815" height="300" alt="" /></a>
 						</div>
-						<img src="/img/example-frame.png" width="739" height="341" alt="Example Frame" id="frame">
+						<a href="#" class="prev"><img src="/img/arrow-prev.png" width="24" height="43" alt="Arrow Prev" /></a>
+						<a href="#" class="next"><img src="/img/arrow-next.png" width="24" height="43" alt="Arrow Next" /></a>
 					</div>
-        			
-					<div id="popular-apps-box" style="width: 650px;float: left;">
+					<img src="/img/frame.png" width="960" height="340" id="frame">
+				</div>
+				<div id="left-column">
+					<div id="recent-apps-box" style="width: 650px;float: left;">
+						<u>Recent added apps:</u>
 					</div>
 					
-					<div id="must-have-apps-box">
+					<div id="game-apps-box">
+						<u>Most recommended game apps:</u>
+					</div>
+					
+					<div id="entertainment-apps-box">
+						<u>Most recommended entertainment apps:</u></b>
 					</div>
 					
 					<input id="os" value="IOS" type="hidden" />
@@ -83,7 +85,7 @@
 					{
 						$.each(data, function(index, item)
 						{
-							$("#popular-apps-box").append('<div class="app-box" style="float: left;background-color: #444444;width: 300px;height: 150px;border-top-left-radius: 5px;border-top-right-radius: 5px;padding:0 5px;margin-right:10px;margin-bottom:10px;">' +
+							$("#recent-apps-box").append('<div class="app-box" style="float: left;background-color: #444444;width: 300px;height: 150px;border-top-left-radius: 5px;border-top-right-radius: 5px;padding:0 5px;margin-right:10px;margin-bottom:10px;">' +
 																'<div class="app-box-header" style="width: 100%;height: 30px;padding: 2px 5px;">' +
 																'<div class="app-name" style="float: left;font-size: 13px;font-weight: bold;color: #ffffff;width: auto;margin-top:5px;">' + item.name + '</div>' +
 																'<div class="app-category" style="float: right;font-size: 12px;font-weigth: bold;color: #ffffff;width: auto;text-align:right;padding-right:15px;margin-top:5px;">' + item.categoryNames + '</div>' +
@@ -106,6 +108,54 @@
 																'</ul>' +
 															'</div>' +
 														'</div>');
+							
+							$("#game-apps-box").append('<div class="app-box" style="float: left;background-color: #444444;width: 300px;height: 150px;border-top-left-radius: 5px;border-top-right-radius: 5px;padding:0 5px;margin-right:10px;margin-bottom:10px;">' +
+															'<div class="app-box-header" style="width: 100%;height: 30px;padding: 2px 5px;">' +
+															'<div class="app-name" style="float: left;font-size: 13px;font-weight: bold;color: #ffffff;width: auto;margin-top:5px;">' + item.name + '</div>' +
+															'<div class="app-category" style="float: right;font-size: 12px;font-weigth: bold;color: #ffffff;width: auto;text-align:right;padding-right:15px;margin-top:5px;">' + item.categoryNames + '</div>' +
+														'</div>' +
+														'<div class="app-box-middle" style="background-color: #FFFFFF;width: auto;height: 80px;padding: 1px 5px;">' +
+															'<div class="app-icon" style="float: left;width: 60px;height: 60px;padding: 15px 1px;">' +
+																'<img src="' + item.icon + '" />' +
+															'</div>' +
+															'<div class="app-info" style="float: right;width: 200px;height: 90px;">' +
+																'<div style="width: 100%;padding: 5px;font-size: 12px;">' + item.haveCount + ' users have it</div>' +
+																'<div style="width: 100%;padding: 5px;font-size: 12px;">' + item.recommendationCount + ' users recommend it</div>' +
+																'<div style="width: 100%;padding: 5px;font-size: 12px;color: #000000"><a href="/app/' + item.name.replace(/ /g,'-') + '">App Detail</a></div>' +
+															'</div>' +
+														'</div>' +
+														'<div class="app-box-footer" style="width: 100%;height: 30px;background-color: #ffffff;">' +
+															'<ul style="height: 100%;width: 100%;float: left;">' +
+																'<li><a href="javascript:void(0);" onclick="have(\'' + item.rawId + '\',\'' + item.name + '\',\'' + item.icon + '\',\'\',\'\')" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Have</a></li>' +
+																'<li><a href="javascript:void(0);" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Comment</a></li>' +
+																'<li><a href="javascript:void(0);" onclick="recommend(\'' + item.rawId + '\',\'' + item.name + '\',\'' + item.icon + '\',\'\',\'\')" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Recommend</a></li>' +
+															'</ul>' +
+														'</div>' +
+													'</div>');
+							
+							$("#entertainment-apps-box").append('<div class="app-box" style="float: left;background-color: #444444;width: 300px;height: 150px;border-top-left-radius: 5px;border-top-right-radius: 5px;padding:0 5px;margin-right:10px;margin-bottom:10px;">' +
+														'<div class="app-box-header" style="width: 100%;height: 30px;padding: 2px 5px;">' +
+														'<div class="app-name" style="float: left;font-size: 13px;font-weight: bold;color: #ffffff;width: auto;margin-top:5px;">' + item.name + '</div>' +
+														'<div class="app-category" style="float: right;font-size: 12px;font-weigth: bold;color: #ffffff;width: auto;text-align:right;padding-right:15px;margin-top:5px;">' + item.categoryNames + '</div>' +
+													'</div>' +
+													'<div class="app-box-middle" style="background-color: #FFFFFF;width: auto;height: 80px;padding: 1px 5px;">' +
+														'<div class="app-icon" style="float: left;width: 60px;height: 60px;padding: 15px 1px;">' +
+															'<img src="' + item.icon + '" />' +
+														'</div>' +
+														'<div class="app-info" style="float: right;width: 200px;height: 90px;">' +
+															'<div style="width: 100%;padding: 5px;font-size: 12px;">' + item.haveCount + ' users have it</div>' +
+															'<div style="width: 100%;padding: 5px;font-size: 12px;">' + item.recommendationCount + ' users recommend it</div>' +
+															'<div style="width: 100%;padding: 5px;font-size: 12px;color: #000000"><a href="/app/' + item.name.replace(/ /g,'-') + '">App Detail</a></div>' +
+														'</div>' +
+													'</div>' +
+													'<div class="app-box-footer" style="width: 100%;height: 30px;background-color: #ffffff;">' +
+														'<ul style="height: 100%;width: 100%;float: left;">' +
+															'<li><a href="javascript:void(0);" onclick="have(\'' + item.rawId + '\',\'' + item.name + '\',\'' + item.icon + '\',\'\',\'\')" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Have</a></li>' +
+															'<li><a href="javascript:void(0);" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Comment</a></li>' +
+															'<li><a href="javascript:void(0);" onclick="recommend(\'' + item.rawId + '\',\'' + item.name + '\',\'' + item.icon + '\',\'\',\'\')" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Recommend</a></li>' +
+														'</ul>' +
+													'</div>' +
+												'</div>');
 						});
 					},
 					error: function(jqXHR, textStatus, errorThrown)

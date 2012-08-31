@@ -1,0 +1,21 @@
+<ehcache>
+	<!-- <diskStore path="java.io.tmpdir"/> -->
+
+	<defaultCache maxElementsInMemory="500" eternal="true" timeToIdleSeconds="12000" timeToLiveSeconds="12000" overflowToDisk="false" diskPersistent="false" diskExpiryThreadIntervalSeconds="120" memoryStoreEvictionPolicy="LRU" />
+
+	<cache name="com.retro.rapplz.db.entity.AccountRole" maxElementsInMemory="10" eternal="true" overflowToDisk="false" />
+	<cache name="com.retro.rapplz.db.entity.AccountStatus" maxElementsInMemory="10" eternal="true" overflowToDisk="false" />
+	<cache name="com.retro.rapplz.db.entity.AccountType" maxElementsInMemory="10" eternal="true" overflowToDisk="false" />
+	<cache name="com.retro.rapplz.db.entity.App" maxElementsInMemory="5000" eternal="true" overflowToDisk="false" />
+	<cache name="com.retro.rapplz.db.entity.AppComment" maxElementsInMemory="5000" eternal="true" overflowToDisk="false" />
+	<cache name="com.retro.rapplz.db.entity.Category" maxElementsInMemory="500" eternal="true" overflowToDisk="false" />
+	<cache name="com.retro.rapplz.db.entity.Device" maxElementsInMemory="500" eternal="true" overflowToDisk="false" />
+	<cache name="com.retro.rapplz.db.entity.Follow" maxElementsInMemory="5000" eternal="true" overflowToDisk="false" />
+	<cache name="com.retro.rapplz.db.entity.OS" maxElementsInMemory="50" eternal="true" overflowToDisk="false" />
+	<cache name="com.retro.rapplz.db.entity.Recommendation" maxElementsInMemory="5000" eternal="true" overflowToDisk="false" />
+	<cache name="com.retro.rapplz.db.entity.Review" maxElementsInMemory="1000" eternal="true" overflowToDisk="false" />
+	<cache name="com.retro.rapplz.db.entity.ReviewComment" maxElementsInMemory="5000" eternal="true" overflowToDisk="false" />
+	<cache name="com.retro.rapplz.db.entity.Tag" maxElementsInMemory="5000" eternal="true" overflowToDisk="false" />
+	<cache name="com.retro.rapplz.db.entity.TagName" maxElementsInMemory="5000" eternal="true" overflowToDisk="false" />
+	<cache name="com.retro.rapplz.db.entity.User" maxElementsInMemory="5000" eternal="true" overflowToDisk="false" />
+</ehcache>

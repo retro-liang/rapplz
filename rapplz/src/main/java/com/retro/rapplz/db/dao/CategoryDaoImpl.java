@@ -17,13 +17,13 @@ public class CategoryDaoImpl implements CategoryDao
 	@Override
 	public Category getCategory(Long id)
 	{
-		return (Category)sessionFactory.getCurrentSession().get(Category.class, id);
+		return (Category)sessionFactory.getCurrentSession().load(Category.class, id);
 	}
 	
 	@Override
 	public Category getCategoryByName(String name)
 	{
-		return (Category)sessionFactory.getCurrentSession().createQuery("select c from Category c where c.name like '" + name + "'").uniqueResult();
+		return (Category)sessionFactory.getCurrentSession().createQuery("select c from Category c where c.name like '" + name + "'").setCacheable(true).uniqueResult();
 	}
 
 	@Override

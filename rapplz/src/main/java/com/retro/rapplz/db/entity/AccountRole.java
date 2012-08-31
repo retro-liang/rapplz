@@ -4,11 +4,15 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,6 +26,8 @@ import lombok.ToString;
 	@NamedQuery(name = "AccountRole.findById", query = "SELECT s FROM AccountRole s WHERE s.id = :id"),
 	@NamedQuery(name = "AccountRole.findByName", query = "SELECT s FROM AccountRole s WHERE s.name = :name")
 })
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Data
 @EqualsAndHashCode(callSuper=true, exclude={"users"})
 @ToString(callSuper=true, includeFieldNames=true, exclude={"users"})

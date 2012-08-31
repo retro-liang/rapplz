@@ -19,18 +19,18 @@ public class AppDaoImpl implements AppDao
 	@Override
 	public App getApp(Long id)
 	{
-		return (App)sessionFactory.getCurrentSession().get(App.class, id);
+		return (App)sessionFactory.getCurrentSession().load(App.class, id);
 	}
 
 	public App getAppByName(String name)
 	{
-		return (App)sessionFactory.getCurrentSession().createQuery("select a from App a where a.name like '%" + name + "%'").uniqueResult();
+		return (App)sessionFactory.getCurrentSession().createQuery("select a from App a where a.name like '" + name + "'").setCacheable(true).uniqueResult();
 	}
 	
 	@Override
 	public App getAppByRawId(String rawId)
 	{
-		return (App)sessionFactory.getCurrentSession().createQuery("select a from App a where a.rawId like '" + rawId + "'").uniqueResult();
+		return (App)sessionFactory.getCurrentSession().createQuery("select a from App a where a.rawId like '" + rawId + "'").setCacheable(true).uniqueResult();
 	}
 	
 	@Override

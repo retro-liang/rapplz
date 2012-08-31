@@ -2,7 +2,7 @@ package com.retro.rapplz.web.controller;
 
 import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
 
-import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,11 +44,11 @@ public class RapplzController
 	
 	@RequestMapping("/app-action/load-apps")
 	@ResponseBody
-	public List<AppInfo> loadAppsHandler()
+	public Set<AppInfo> loadAppsHandler()
 	{
 		logger.info("Loading apps from memcache...");
 		MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-		return (List<AppInfo>)syncCache.get("apps");
+		return (Set<AppInfo>)syncCache.get("apps");
 	}
 	
 	@RequestMapping("/app-action/have")

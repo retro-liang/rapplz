@@ -17,13 +17,13 @@ public class DeviceDaoImpl implements DeviceDao
 	@Override
 	public Device getDevice(Long id)
 	{
-		return (Device)sessionFactory.getCurrentSession().get(Device.class, id);
+		return (Device)sessionFactory.getCurrentSession().load(Device.class, id);
 	}
 	
 	@Override
 	public Device getDeviceByName(String name)
 	{
-		return (Device)sessionFactory.getCurrentSession().createQuery("select d from Device d where d.name like '" + name + "'").uniqueResult();
+		return (Device)sessionFactory.getCurrentSession().createQuery("select d from Device d where d.name like '" + name + "'").setCacheable(true).uniqueResult();
 	}
 
 	@Override

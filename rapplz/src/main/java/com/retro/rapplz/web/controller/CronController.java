@@ -1,6 +1,6 @@
 package com.retro.rapplz.web.controller;
 
-import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +31,7 @@ public class CronController
 		try
 		{
 			long start = System.currentTimeMillis();
-			List<AppInfo> appInfo = appService.loadAppInfos();
+			Set<AppInfo> appInfo = appService.loadAppInfos();
 			MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
 			syncCache.put("apps", appInfo);
 			logger.info("Retrieved [" + appInfo.size() + "] apps in " + (System.currentTimeMillis() - start) + " milliseconds.");
