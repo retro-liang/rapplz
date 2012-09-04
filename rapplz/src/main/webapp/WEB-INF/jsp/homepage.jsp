@@ -18,27 +18,27 @@
 					<img src="/img/new-ribbon.png" width="112" height="112" alt="New Ribbon" id="ribbon" />
 					<div id="slides">
 						<div class="slides_container">
-							<a href="http://www.flickr.com/photos/michaelsilberstein/4294842946/" title="" target="_blank"><img src="/img/photo-1.jpg" width="815" height="300" alt="" /></a>
-							<a href="http://www.flickr.com/photos/bigberto/2857852001/" title="" target="_blank"><img src="/img/photo-2.jpg" width="815" height="300" alt="" /></a>
-							<a href="http://www.flickr.com/photos/yourdon/4133227641/" title="" target="_blank"><img src="/img/photo-3.jpg" width="815" height="300" alt="" /></a>
-							<a href="http://www.flickr.com/photos/typicalnaloboy/4151014982/" title="" target="_blank"><img src="/img/photo-4.jpg" width="815" height="300" alt="" /></a>
+							<a href="http://www.flickr.com/photos/michaelsilberstein/4294842946/" title="" target="_blank"><img src="/img/photo-1.jpg" width="835" height="300" alt="" /></a>
+							<a href="http://www.flickr.com/photos/bigberto/2857852001/" title="" target="_blank"><img src="/img/photo-2.jpg" width="835" height="300" alt="" /></a>
+							<a href="http://www.flickr.com/photos/yourdon/4133227641/" title="" target="_blank"><img src="/img/photo-3.jpg" width="835" height="300" alt="" /></a>
+							<a href="http://www.flickr.com/photos/typicalnaloboy/4151014982/" title="" target="_blank"><img src="/img/photo-4.jpg" width="835" height="300" alt="" /></a>
 						</div>
 						<a href="#" class="prev"><img src="/img/arrow-prev.png" width="24" height="43" alt="Arrow Prev" /></a>
 						<a href="#" class="next"><img src="/img/arrow-next.png" width="24" height="43" alt="Arrow Next" /></a>
 					</div>
-					<img src="/img/frame.png" width="960" height="340" id="frame">
+					<img src="/img/frame.png" width="980" height="340" id="frame">
 				</div>
 				<div id="left-column">
-					<div id="recent-apps-box" style="width: 650px;float: left;">
-						<u>Recent added apps:</u>
+					<div id="recent-apps-box" style="width: 650px;float: left;border-bottom: 1px dotted #CECECE;padding-bottom: 15px;">
+						<h1>Recent added apps:</h1>
 					</div>
 					
-					<div id="game-apps-box">
-						<u>Most recommended game apps:</u>
+					<div id="game-apps-box" style="width: 650px;float: left;border-bottom: 1px dotted #CECECE;padding: 10px 0 15px 0;">
+						<h1>Most recommended game apps:</h1>
 					</div>
 					
-					<div id="entertainment-apps-box">
-						<u>Most recommended entertainment apps:</u></b>
+					<div id="entertainment-apps-box" style="width: 650px;float: left;border-bottom: 1px dotted #CECECE;padding: 10px 0 15px 0;">
+						<h1>Most recommended entertainment apps:</h1>
 					</div>
 					
 					<input id="os" value="IOS" type="hidden" />
@@ -78,84 +78,84 @@
 				
 				$.ajax
 				({
-					url: "/app-action/load-apps",
+					url: "/app/load-apps",
 					dataType: "json",
 					type: "GET",
 					success: function(data)
 					{
 						$.each(data, function(index, item)
 						{
-							$("#recent-apps-box").append('<div class="app-box" style="float: left;background-color: #444444;width: 300px;height: 150px;border-top-left-radius: 5px;border-top-right-radius: 5px;padding:0 5px;margin-right:10px;margin-bottom:10px;">' +
-																'<div class="app-box-header" style="width: 100%;height: 30px;padding: 2px 5px;">' +
-																'<div class="app-name" style="float: left;font-size: 13px;font-weight: bold;color: #ffffff;width: auto;margin-top:5px;">' + item.name + '</div>' +
-																'<div class="app-category" style="float: right;font-size: 12px;font-weigth: bold;color: #ffffff;width: auto;text-align:right;padding-right:15px;margin-top:5px;">' + item.categoryNames + '</div>' +
+							$("#recent-apps-box").append('<div class="app-box">' +
+																'<div class="app-box-header">' +
+																'<div class="app-name">' + item.name + '</div>' +
+																'<div class="app-category">' + item.categoryNames + '</div>' +
 															'</div>' +
-															'<div class="app-box-middle" style="background-color: #FFFFFF;width: auto;height: 80px;padding: 1px 5px;">' +
-																'<div class="app-icon" style="float: left;width: 60px;height: 60px;padding: 15px 1px;">' +
+															'<div class="app-box-middle">' +
+																'<div class="app-icon">' +
 																	'<img src="' + item.icon + '" />' +
 																'</div>' +
-																'<div class="app-info" style="float: right;width: 200px;height: 90px;">' +
-																	'<div style="width: 100%;padding: 5px;font-size: 12px;">' + item.haveCount + ' users have it</div>' +
-																	'<div style="width: 100%;padding: 5px;font-size: 12px;">' + item.recommendationCount + ' users recommend it</div>' +
-																	'<div style="width: 100%;padding: 5px;font-size: 12px;color: #000000"><a href="/app/' + item.name.replace(/ /g,'-') + '">App Detail</a></div>' +
+																'<div class="app-info">' +
+																	'<div class="have-info">' + item.haveCount + ' users have it</div>' +
+																	'<div class="recommendation-info">' + item.recommendationCount + ' users recommend it</div>' +
+																	'<div class="detail-link"><a href="/app/' + item.name.replace(/ /g,'-') + '">App Detail</a></div>' +
 																'</div>' +
 															'</div>' +
-															'<div class="app-box-footer" style="width: 100%;height: 30px;background-color: #ffffff;">' +
-																'<ul style="height: 100%;width: 100%;float: left;">' +
-																	'<li><a href="javascript:void(0);" onclick="have(\'' + item.rawId + '\',\'' + item.name + '\',\'' + item.icon + '\',\'\',\'\')" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Have</a></li>' +
-																	'<li><a href="javascript:void(0);" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Comment</a></li>' +
-																	'<li><a href="javascript:void(0);" onclick="recommend(\'' + item.rawId + '\',\'' + item.name + '\',\'' + item.icon + '\',\'\',\'\')" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Recommend</a></li>' +
+															'<div class="app-box-footer">' +
+																'<ul>' +
+																	'<li><a href="javascript:void(0);" onclick="have(\'' + item.rawId + '\',\'' + item.name + '\',\'' + item.icon + '\',\'\',\'\')" class="link-button">Have</a></li>' +
+																	'<li><a href="javascript:void(0);" class="link-button">Comment</a></li>' +
+																	'<li><a href="javascript:void(0);" onclick="recommend(\'' + item.rawId + '\',\'' + item.name + '\',\'' + item.icon + '\',\'\',\'\')" class="link-button">Recommend</a></li>' +
 																'</ul>' +
 															'</div>' +
 														'</div>');
 							
-							$("#game-apps-box").append('<div class="app-box" style="float: left;background-color: #444444;width: 300px;height: 150px;border-top-left-radius: 5px;border-top-right-radius: 5px;padding:0 5px;margin-right:10px;margin-bottom:10px;">' +
-															'<div class="app-box-header" style="width: 100%;height: 30px;padding: 2px 5px;">' +
-															'<div class="app-name" style="float: left;font-size: 13px;font-weight: bold;color: #ffffff;width: auto;margin-top:5px;">' + item.name + '</div>' +
-															'<div class="app-category" style="float: right;font-size: 12px;font-weigth: bold;color: #ffffff;width: auto;text-align:right;padding-right:15px;margin-top:5px;">' + item.categoryNames + '</div>' +
-														'</div>' +
-														'<div class="app-box-middle" style="background-color: #FFFFFF;width: auto;height: 80px;padding: 1px 5px;">' +
-															'<div class="app-icon" style="float: left;width: 60px;height: 60px;padding: 15px 1px;">' +
-																'<img src="' + item.icon + '" />' +
+							$("#game-apps-box").append('<div class="app-box">' +
+																'<div class="app-box-header">' +
+																'<div class="app-name">' + item.name + '</div>' +
+																'<div class="app-category">' + item.categoryNames + '</div>' +
 															'</div>' +
-															'<div class="app-info" style="float: right;width: 200px;height: 90px;">' +
-																'<div style="width: 100%;padding: 5px;font-size: 12px;">' + item.haveCount + ' users have it</div>' +
-																'<div style="width: 100%;padding: 5px;font-size: 12px;">' + item.recommendationCount + ' users recommend it</div>' +
-																'<div style="width: 100%;padding: 5px;font-size: 12px;color: #000000"><a href="/app/' + item.name.replace(/ /g,'-') + '">App Detail</a></div>' +
+															'<div class="app-box-middle">' +
+																'<div class="app-icon">' +
+																	'<img src="' + item.icon + '" />' +
+																'</div>' +
+																'<div class="app-info">' +
+																	'<div class="have-info">' + item.haveCount + ' users have it</div>' +
+																	'<div class="recommendation-info">' + item.recommendationCount + ' users recommend it</div>' +
+																	'<div class="detail-link"><a href="/app/' + item.name.replace(/ /g,'-') + '">App Detail</a></div>' +
+																'</div>' +
 															'</div>' +
-														'</div>' +
-														'<div class="app-box-footer" style="width: 100%;height: 30px;background-color: #ffffff;">' +
-															'<ul style="height: 100%;width: 100%;float: left;">' +
-																'<li><a href="javascript:void(0);" onclick="have(\'' + item.rawId + '\',\'' + item.name + '\',\'' + item.icon + '\',\'\',\'\')" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Have</a></li>' +
-																'<li><a href="javascript:void(0);" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Comment</a></li>' +
-																'<li><a href="javascript:void(0);" onclick="recommend(\'' + item.rawId + '\',\'' + item.name + '\',\'' + item.icon + '\',\'\',\'\')" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Recommend</a></li>' +
-															'</ul>' +
-														'</div>' +
-													'</div>');
+															'<div class="app-box-footer">' +
+																'<ul>' +
+																	'<li><a href="javascript:void(0);" onclick="have(\'' + item.rawId + '\',\'' + item.name + '\',\'' + item.icon + '\',\'\',\'\')" class="link-button">Have</a></li>' +
+																	'<li><a href="javascript:void(0);" class="link-button">Comment</a></li>' +
+																	'<li><a href="javascript:void(0);" onclick="recommend(\'' + item.rawId + '\',\'' + item.name + '\',\'' + item.icon + '\',\'\',\'\')" class="link-button">Recommend</a></li>' +
+																'</ul>' +
+															'</div>' +
+														'</div>');
 							
-							$("#entertainment-apps-box").append('<div class="app-box" style="float: left;background-color: #444444;width: 300px;height: 150px;border-top-left-radius: 5px;border-top-right-radius: 5px;padding:0 5px;margin-right:10px;margin-bottom:10px;">' +
-														'<div class="app-box-header" style="width: 100%;height: 30px;padding: 2px 5px;">' +
-														'<div class="app-name" style="float: left;font-size: 13px;font-weight: bold;color: #ffffff;width: auto;margin-top:5px;">' + item.name + '</div>' +
-														'<div class="app-category" style="float: right;font-size: 12px;font-weigth: bold;color: #ffffff;width: auto;text-align:right;padding-right:15px;margin-top:5px;">' + item.categoryNames + '</div>' +
-													'</div>' +
-													'<div class="app-box-middle" style="background-color: #FFFFFF;width: auto;height: 80px;padding: 1px 5px;">' +
-														'<div class="app-icon" style="float: left;width: 60px;height: 60px;padding: 15px 1px;">' +
-															'<img src="' + item.icon + '" />' +
-														'</div>' +
-														'<div class="app-info" style="float: right;width: 200px;height: 90px;">' +
-															'<div style="width: 100%;padding: 5px;font-size: 12px;">' + item.haveCount + ' users have it</div>' +
-															'<div style="width: 100%;padding: 5px;font-size: 12px;">' + item.recommendationCount + ' users recommend it</div>' +
-															'<div style="width: 100%;padding: 5px;font-size: 12px;color: #000000"><a href="/app/' + item.name.replace(/ /g,'-') + '">App Detail</a></div>' +
-														'</div>' +
-													'</div>' +
-													'<div class="app-box-footer" style="width: 100%;height: 30px;background-color: #ffffff;">' +
-														'<ul style="height: 100%;width: 100%;float: left;">' +
-															'<li><a href="javascript:void(0);" onclick="have(\'' + item.rawId + '\',\'' + item.name + '\',\'' + item.icon + '\',\'\',\'\')" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Have</a></li>' +
-															'<li><a href="javascript:void(0);" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Comment</a></li>' +
-															'<li><a href="javascript:void(0);" onclick="recommend(\'' + item.rawId + '\',\'' + item.name + '\',\'' + item.icon + '\',\'\',\'\')" class="link-button" style="float: left;font-size: 12px;margin: 2px;">Recommend</a></li>' +
-														'</ul>' +
-													'</div>' +
-												'</div>');
+							$("#entertainment-apps-box").append('<div class="app-box">' +
+																		'<div class="app-box-header">' +
+																		'<div class="app-name">' + item.name + '</div>' +
+																		'<div class="app-category">' + item.categoryNames + '</div>' +
+																	'</div>' +
+																	'<div class="app-box-middle">' +
+																		'<div class="app-icon">' +
+																			'<img src="' + item.icon + '" />' +
+																		'</div>' +
+																		'<div class="app-info">' +
+																			'<div class="have-info">' + item.haveCount + ' users have it</div>' +
+																			'<div class="recommendation-info">' + item.recommendationCount + ' users recommend it</div>' +
+																			'<div class="detail-link"><a href="/app/' + item.name.replace(/ /g,'-') + '">App Detail</a></div>' +
+																		'</div>' +
+																	'</div>' +
+																	'<div class="app-box-footer">' +
+																		'<ul>' +
+																			'<li><a href="javascript:void(0);" onclick="have(\'' + item.rawId + '\',\'' + item.name + '\',\'' + item.icon + '\',\'\',\'\')" class="link-button">Have</a></li>' +
+																			'<li><a href="javascript:void(0);" class="link-button">Comment</a></li>' +
+																			'<li><a href="javascript:void(0);" onclick="recommend(\'' + item.rawId + '\',\'' + item.name + '\',\'' + item.icon + '\',\'\',\'\')" class="link-button">Recommend</a></li>' +
+																		'</ul>' +
+																	'</div>' +
+																'</div>');
 						});
 					},
 					error: function(jqXHR, textStatus, errorThrown)
@@ -301,7 +301,7 @@
 				$("#user-follower-count").html(data.followerCount);
 				$("#user-following-count").html(data.followingCount);
 				$("#user-details").attr("href", ("/user/" + data.firstName + "-" + data.lastName + ".html?token=" + data.token));
-				$("#user-info").removeClass("hidden");
+				$("#user-info-box").removeClass("hidden");
 				$("#access-container-not-signed-in").addClass("hidden");
 				$("#access-container-signed-in").removeClass("hidden");
 				$("#cboxClose").click();
@@ -424,7 +424,7 @@
 				{
 					$.ajax
 					({
-						url: "/app-action/have",
+						url: "/user/have",
 						data: 
 						{
 							os: os,
@@ -462,7 +462,7 @@
 				{
 					$.ajax
 					({
-						url: "/app-action/recommend",
+						url: "/user/recommend",
 						data: 
 						{
 							os: os,

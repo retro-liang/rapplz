@@ -1,5 +1,6 @@
 package com.retro.rapplz.db.entity;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,13 +13,18 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Immutable;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-@SuppressWarnings("serial")
 @Entity
+@Immutable
+@DynamicInsert
+@DynamicUpdate
 @Table(name="account_type")
 @NamedQueries
 ({
@@ -31,8 +37,10 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper=true, exclude={"users"})
 @ToString(callSuper=true, includeFieldNames=true, exclude={"users"})
-public class AccountType extends BaseEntity
+public class AccountType extends BaseEntity implements Serializable
 {
+	private static final long serialVersionUID = 6088666218993896719L;
+	
 	public static final String DEFAULT = "RAPPLZ";
 	public static final String RAPPLZ = "RAPPLZ";
 	public static final String GOOGLE = "GOOGLE";

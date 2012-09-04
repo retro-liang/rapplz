@@ -4,6 +4,10 @@
 		<link rel="stylesheet" type="text/css" href="/css/rapplz.css" />
 		
 		<style>
+			h1 {
+				font-size: 20px;
+			}
+		
 			/* Slides Show */
             /* 
 				Resets defualt browser settings
@@ -53,7 +57,7 @@
 			*/
 			
 			.slides_container {
-				width: 815px;
+				width: 835px;
 				height:300px;
 				overflow:hidden;
 				position:relative;
@@ -69,7 +73,7 @@
 			*/
 			
 			.slides_container a {
-				width:810px;
+				width:830px;
 				height:300px;
 				display:block;
 			}
@@ -89,7 +93,7 @@
 			}
 			
 			#slides .next {
-				left:836px;
+				left:856px;
 			}
 			
 			/*
@@ -256,5 +260,125 @@
 			    text-shadow: -1px -1px 0 #30BBE9;
 			}
 			/* End of Sign In Buttons */
+			
+			.app-box {
+				float: left;
+				background-color: #444444;
+				width: 300px;
+				height: 150px;
+				border-top-left-radius: 5px;
+				border-top-right-radius: 5px;
+				padding: 0 5px;
+				margin-right: 10px;
+				margin-bottom: 10px;
+			}
+			
+			.app-box .app-box-header {
+				width: 100%;
+				height: 30px;
+				padding: 2px 5px;
+				overflow: hidden;
+			}
+			
+			.app-box .app-box-header .app-name {
+				float: left;
+				font-size: 13px;
+				font-weight: bold;
+				color: #ffffff;
+				width: auto;
+				margin-top:5px;
+			}
+			
+			.app-box .app-box-header .app-category {
+				float: right;
+				font-size: 12px;
+				color: rgb(255, 255, 255);
+				width: auto;
+				text-align: right;
+				padding-right: 15px;
+				margin-top: 5px;
+				overflow: hidden;
+			}
+			
+			.app-box .app-box-middle {
+				background-color: #FFFFFF;
+				width: auto;
+				height: 80px;
+				padding: 1px 5px;
+			}
+			
+			.app-box .app-box-middle .app-icon {
+				float: left;
+				width: 60px;
+				height: 60px;
+				padding: 15px 1px;
+			}
+			
+			.app-box .app-box-middle .app-info {
+				float: right;
+				width: 200px;
+				height: 90px;
+			}
+			
+			.app-box .app-box-middle .app-info .have-info {
+				width: 100%;
+				padding: 5px;
+				font-size: 12px;
+			}
+			
+			.app-box .app-box-middle .app-info .recommendation-info {
+				width: 100%;
+				padding: 5px;
+				font-size: 12px;
+			}
+			
+			.app-box .app-box-middle .app-info .detail-link{
+				width: 100%;
+				padding: 5px;
+				font-size: 12px;
+				color: #000000
+			}
+			
+			.app-box .app-box-footer {
+				width: 100%;
+				height: 30px;
+				background-color: #ffffff;
+			}
+			
+			.app-box .app-box-footer ul{
+				height: 100%;
+				width: 100%;
+				float: left;
+			}
+			
+			.app-box .app-box-footer ul li a{
+				float: left !important;
+				font-size: 12px !important;
+				margin: 2px !important;
+			}
+			
+			#user-info-box {
+				width: 80%;
+				font-size: 13px;
+				background: none repeat scroll 0 0 #F9F9F9;
+    			border: 1px solid #E1E1E1;
+    			padding: 15px;
+			    position: relative;
+			}
+			
+			#user-info-box ul {
+				width: 100%;
+				height: 100px;
+			}
+			
+			#user-info-box ul li {
+				width: 100%;
+				float: left;
+				padding-bottom: 5px;
+			}
+			
+			#user-info-box ul li span {
+				margin-left: 5px;
+			}
 		</style>
 	</head>

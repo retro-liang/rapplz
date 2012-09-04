@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@SuppressWarnings("serial")
 @MappedSuperclass
 @ToString(callSuper=true, exclude={"jdoDetachedState"})
 @EqualsAndHashCode(callSuper=true, exclude={"jdoDetachedState", "content"})

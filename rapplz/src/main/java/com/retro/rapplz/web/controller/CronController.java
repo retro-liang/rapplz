@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.retro.rapplz.db.entity.Category;
 import com.retro.rapplz.service.AppService;
+import com.retro.rapplz.service.CategoryService;
 import com.retro.rapplz.web.dto.AppInfo;
 
 @Controller
@@ -23,6 +25,9 @@ public class CronController
 	
 	@Autowired
 	private AppService appService;
+	
+	@Autowired
+	private CategoryService categoryService;
 	
 	@RequestMapping("load-apps")
     public void loadAppsHandler(HttpServletRequest request, HttpServletResponse response)
@@ -39,6 +44,24 @@ public class CronController
 		catch(Exception e)
 		{
 			logger.severe("Load apps cron job failed: " + e);
+		}
+    }
+	
+	@RequestMapping("load-categories")
+    public void loadCategoriesHandler(HttpServletRequest request, HttpServletResponse response)
+	{
+		logger.info("Cron job request from : " + request.getRemoteAddr());
+		try
+		{
+			long start = System.currentTimeMillis();
+			Set<Category> categories = categoryService.getCategories();
+			MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+			syncCache.put("categories", categories);
+			logger.info("Retrieved [" + categories.size() + "] categories in " + (System.currentTimeMillis() - start) + " milliseconds.");
+		}
+		catch(Exception e)
+		{
+			logger.severe("Load categories cron job failed: " + e);
 		}
     }
 }

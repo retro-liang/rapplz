@@ -1,6 +1,5 @@
 package com.retro.rapplz.db.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -16,11 +15,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-@SuppressWarnings("serial")
 @MappedSuperclass
 @ToString(exclude={"jdoDetachedState", "createdDate"})
 @EqualsAndHashCode(exclude={"jdoDetachedState", "createdDate"})
-public abstract class BaseEntity implements Serializable 
+public abstract class BaseEntity 
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

@@ -23,10 +23,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.validator.constraints.Email;
@@ -37,6 +40,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "user")
 @NamedQueries
 ({
@@ -96,43 +101,53 @@ public class User extends BaseEntity implements UserDetails, Serializable
 	@ManyToMany
 	@JoinTable(name = "user_app", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "app_id")})
 	@LazyCollection(LazyCollectionOption.EXTRA)
+	@BatchSize(size = 10)
 	private Set<App> apps = new HashSet<App>();
 
 	@OneToMany(mappedBy = "user")
+	@BatchSize(size = 10)
 	private Set<Activity> activities = new HashSet<Activity>();
 
 	@OneToMany(mappedBy = "author")
 	@LazyCollection(LazyCollectionOption.EXTRA)
+	@BatchSize(size = 10)
 	private Set<AppComment> appComments = new HashSet<AppComment>();
 
 	@OneToMany(mappedBy = "author")
 	@LazyCollection(LazyCollectionOption.EXTRA)
+	@BatchSize(size = 10)
 	private Set<Review> reviews = new HashSet<Review>();
 
 	@OneToMany(mappedBy = "author")
 	@LazyCollection(LazyCollectionOption.EXTRA)
+	@BatchSize(size = 10)
 	private Set<ReviewComment> reviewComments = new HashSet<ReviewComment>();
 
 	@ManyToMany
 	@JoinTable(name = "follower_following", joinColumns = { @JoinColumn(name = "follower_user_id") }, inverseJoinColumns = { @JoinColumn(name = "following_user_id") })
 	@Cascade(CascadeType.ALL)
 	@LazyCollection(LazyCollectionOption.EXTRA)
+	@BatchSize(size = 10)
 	private Set<User> followers = new HashSet<User>();
 
 	@ManyToMany(mappedBy = "followers")
 	@LazyCollection(LazyCollectionOption.EXTRA)
+	@BatchSize(size = 10)
 	private Set<User> followings = new HashSet<User>();
 
 	@OneToMany(mappedBy = "fromUser")
 	@LazyCollection(LazyCollectionOption.EXTRA)
+	@BatchSize(size = 10)
 	private Set<Recommendation> sentRecommendations = new HashSet<Recommendation>();
 
 	@OneToMany(mappedBy = "toUser")
 	@LazyCollection(LazyCollectionOption.EXTRA)
+	@BatchSize(size = 10)
 	private Set<Recommendation> receivedRecommendations = new HashSet<Recommendation>();
 
 	@OneToMany(mappedBy = "author")
 	@LazyCollection(LazyCollectionOption.EXTRA)
+	@BatchSize(size = 10)
 	private Set<Tag> tags = new HashSet<Tag>();
 
 	@Override

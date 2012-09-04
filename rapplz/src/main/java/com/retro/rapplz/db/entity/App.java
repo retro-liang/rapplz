@@ -1,5 +1,6 @@
 package com.retro.rapplz.db.entity;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,21 +19,29 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Immutable;
 
-@SuppressWarnings("serial")
 @Entity
+@Immutable
+@DynamicInsert
+@DynamicUpdate
 @Table(name="app")
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Data
 @EqualsAndHashCode(callSuper=true, exclude={"os", "devices", "categories", "iconUrl", "recommendations", "appComments", "reviews", "tags", "users"})
 @ToString(callSuper=true, includeFieldNames=true, exclude={"os", "devices", "categories", "iconUrl", "recommendations", "appComments", "reviews", "tags", "users"})
-public class App extends BaseEntity
+public class App extends BaseEntity implements Serializable
 {
+	private static final long serialVersionUID = -3240048296215090416L;
+
 	@Column(name="raw_id")
 	private String rawId;
 	
@@ -58,18 +67,23 @@ public class App extends BaseEntity
 	private String iconUrl;
 	
 	@OneToMany(mappedBy="app")
+	@BatchSize(size = 10)
 	private Set<Recommendation> recommendations = new HashSet<Recommendation>();
 	
 	@OneToMany(mappedBy="app")
+	@BatchSize(size = 10)
 	private Set<AppComment> appComments = new HashSet<AppComment>();
 	
 	@OneToMany(mappedBy="app")
+	@BatchSize(size = 10)
 	private Set<Review> reviews = new HashSet<Review>();
 	
 	@OneToMany(mappedBy="app")
+	@BatchSize(size = 10)
 	private Set<Tag> tags = new HashSet<Tag>();
 	
-	@ManyToMany(mappedBy="apps")	
+	@ManyToMany(mappedBy="apps")
+	@BatchSize(size = 10)
     private Set<User> users = new HashSet<User>();
 	
 	/*

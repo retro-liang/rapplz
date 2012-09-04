@@ -1,6 +1,5 @@
 package com.retro.rapplz.service;
 
-import java.util.List;
 import java.util.Set;
 
 import com.retro.rapplz.db.entity.App;
