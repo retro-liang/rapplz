@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -34,5 +35,6 @@ public class AppComment extends BaseMessage implements Serializable
 
 	@ManyToOne
 	@JoinColumn(name="app_id")
+	@XmlTransient
 	private App app;
 }

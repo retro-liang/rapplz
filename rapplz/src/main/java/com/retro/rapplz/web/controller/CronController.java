@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
-import com.retro.rapplz.db.entity.Category;
 import com.retro.rapplz.service.AppService;
 import com.retro.rapplz.service.CategoryService;
 import com.retro.rapplz.web.dto.AppInfo;
+import com.retro.rapplz.web.dto.CategoryInfo;
 
 @Controller
 @RequestMapping("/cron")
@@ -36,7 +36,7 @@ public class CronController
 		try
 		{
 			long start = System.currentTimeMillis();
-			Set<AppInfo> appInfo = appService.loadAppInfos();
+			Set<AppInfo> appInfo = appService.getAppInfos();
 			MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
 			syncCache.put("apps", appInfo);
 			logger.info("Retrieved [" + appInfo.size() + "] apps in " + (System.currentTimeMillis() - start) + " milliseconds.");
@@ -54,10 +54,10 @@ public class CronController
 		try
 		{
 			long start = System.currentTimeMillis();
-			Set<Category> categories = categoryService.getCategories();
+			Set<CategoryInfo> categoryInfo = categoryService.getCategoryInfos();
 			MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-			syncCache.put("categories", categories);
-			logger.info("Retrieved [" + categories.size() + "] categories in " + (System.currentTimeMillis() - start) + " milliseconds.");
+			syncCache.put("categories", categoryInfo);
+			logger.info("Retrieved [" + categoryInfo.size() + "] categories in " + (System.currentTimeMillis() - start) + " milliseconds.");
 		}
 		catch(Exception e)
 		{

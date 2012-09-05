@@ -10,6 +10,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -50,5 +51,6 @@ public class AccountType extends BaseEntity implements Serializable
 	private String name = DEFAULT;
 	
 	@OneToMany(mappedBy="accountType")
+	@XmlTransient
     private Set<User> users = new HashSet<User>();
 }

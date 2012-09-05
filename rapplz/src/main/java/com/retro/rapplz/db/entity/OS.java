@@ -8,6 +8,7 @@ import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -36,5 +37,6 @@ public class OS extends BaseEntity implements Serializable
 	private String name;
 	
 	@OneToMany(mappedBy="os")
+	@XmlTransient
 	private Set<App> apps = new HashSet<App>();
 }

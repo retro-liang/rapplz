@@ -8,6 +8,7 @@ import com.retro.rapplz.web.dto.AppInfo;
 
 public interface AppService
 {
-	public Set<App> loadApps() throws ApplicationServiceException;
-	public Set<AppInfo> loadAppInfos() throws ApplicationServiceException;
+	public Set<App> getApps() throws ApplicationServiceException;
+	public Set<AppInfo> getAppInfos() throws ApplicationServiceException;
+	public Set<AppInfo> getAppInfosByCategory(Long categoryId) throws ApplicationServiceException;
 }

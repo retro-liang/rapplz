@@ -8,8 +8,12 @@
 		 -->
 		 
 		<url>/cron/load-apps</url>
-		<description>Load apps every 12 hours</description>
-		<schedule>every 12 hours</schedule>
+		<description>Load apps every 24 hours</description>
+		<schedule>every 24 hours</schedule>
+		
+		<url>/cron/load-categories</url>
+		<description>Load categories every 24 hours</description>
+		<schedule>every 24 hours</schedule>
 		
 	</cron>	
 </cronentries>

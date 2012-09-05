@@ -380,5 +380,14 @@
 			#user-info-box ul li span {
 				margin-left: 5px;
 			}
+			
+			#category-box li {
+				float: left;
+    			width: 100%;
+			}
+			
+			#category-box li a{
+				color: #DED9CD;
+			}
 		</style>
 	</head>

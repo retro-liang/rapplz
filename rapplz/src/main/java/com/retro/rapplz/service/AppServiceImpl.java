@@ -14,6 +14,7 @@ import com.retro.rapplz.db.entity.App;
 import com.retro.rapplz.db.entity.Category;
 import com.retro.rapplz.service.exception.ApplicationServiceException;
 import com.retro.rapplz.web.dto.AppInfo;
+import com.retro.rapplz.web.util.AppInfoAssembler;
 
 @Service("appService")
 @Transactional
@@ -24,37 +25,39 @@ public class AppServiceImpl implements AppService
 	@Autowired
 	private AppDao appDao;
 	
+	@Autowired
+	private AppInfoAssembler appInfoAssembler;
+	
 	@Override
 	@Transactional(readOnly = true)
-	public Set<App> loadApps() throws ApplicationServiceException
+	public Set<App> getApps() throws ApplicationServiceException
 	{
 		return new HashSet<App>(appDao.getApps());
 	}
 	
 	@Override
 	@Transactional(readOnly = true)
-	public Set<AppInfo> loadAppInfos() throws ApplicationServiceException
+	public Set<AppInfo> getAppInfos() throws ApplicationServiceException
 	{
 		Set<AppInfo> appInfos = new HashSet<AppInfo>();
 		List<App> apps = appDao.getApps();
 		for(App app : apps)
 		{
-			AppInfo appInfo = new AppInfo();
-			appInfo.setId(app.getId().toString());
-			appInfo.setRawId(app.getRawId());
-			appInfo.setName(app.getName());
-			appInfo.setIcon(app.getIconUrl());
-			Set<Category> categories = app.getCategories();
-			String[] categoryNames = new String[categories.size()];
-			int i = 0;
-			for(Category category : categories)
-			{
-				categoryNames[i] = category.getName();
-				i++;
-			}
-			appInfo.setCategoryNames(categoryNames);
-			appInfo.setHaveCount(appDao.getAppHaveCount(app.getId()));
-			appInfo.setRecommendationCount(appDao.getAppRecommendationCount(app.getId()));
+			AppInfo appInfo = appInfoAssembler.buildAppInfoFromApp(app);
+			appInfos.add(appInfo);
+		}
+		return appInfos;
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Set<AppInfo> getAppInfosByCategory(Long categoryId) throws ApplicationServiceException
+	{
+		Set<AppInfo> appInfos = new HashSet<AppInfo>();
+		List<App> apps = appDao.getAppsByCategory(categoryId);		
+		for(App app : apps)
+		{
+			AppInfo appInfo = appInfoAssembler.buildAppInfoFromApp(app);
 			appInfos.add(appInfo);
 		}
 		return appInfos;

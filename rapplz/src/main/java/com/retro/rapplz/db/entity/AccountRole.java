@@ -10,6 +10,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlTransient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,5 +49,6 @@ public class AccountRole extends BaseEntity implements Serializable
 	private String name = DEFAULT;
 	
 	@ManyToMany(mappedBy="accountRoles")
+	@XmlTransient
     private Set<User> users = new HashSet<User>();
 }

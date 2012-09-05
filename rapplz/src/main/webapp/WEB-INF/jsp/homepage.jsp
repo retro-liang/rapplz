@@ -163,6 +163,26 @@
 						alert("error: " + errorThrown);
 					}
 				});
+				
+				$.ajax
+				({
+					url: "/app/load-categories",
+					dataType: "json",
+					type: "GET",
+					success: function(data)
+					{
+						$.each(data, function(index, item)
+						{
+							$("#category-box").append('<li>' +
+																'<a href="/app/category/' + item.name.replace(/ /g,'-') + '/index.html?c=' + item.id + '>' + item.name + '</a>' +
+														'</li>');							
+						});
+					},
+					error: function(jqXHR, textStatus, errorThrown)
+					{
+						alert("error: " + errorThrown);
+					}
+				});
 			});
 		
 			var iosAppSearchUrl = "http://itunes.apple.com/search";

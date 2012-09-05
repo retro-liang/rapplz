@@ -6,7 +6,7 @@ import com.retro.rapplz.db.entity.Category;
 
 public interface CategoryDao
 {
-	public Category getCategory(Long id);
+	public Category getCategoryById(Long id);
 	
 	public Category getCategoryByName(String name);
 

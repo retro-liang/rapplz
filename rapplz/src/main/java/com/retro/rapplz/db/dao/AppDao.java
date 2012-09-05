@@ -11,6 +11,8 @@ public interface AppDao
 	public App getAppByName(String name);
 	
 	public App getAppByRawId(String rawId);
+	
+	public List<App> getAppsByCategory(Long categoryId);
 
 	public List<App> getApps();
 	
