@@ -4,22 +4,12 @@ import java.util.List;
 
 import com.retro.rapplz.db.entity.App;
 
-public interface AppDao
+public interface AppDao extends BaseDao
 {
-	public App getApp(Long id);
-	
-	public App getAppByName(String name);
-	
-	public App getAppByRawId(String rawId);
+	public App loadAppByRawId(String rawId);
 	
 	public List<App> getAppsByCategory(Long categoryId);
 
-	public List<App> getApps();
-	
-	public void save(App app);
-	
-	public void remove(Long id);
-	
 	public int getAppHaveCount(Long id);
 	
 	public int getAppRecommendationCount(Long id);

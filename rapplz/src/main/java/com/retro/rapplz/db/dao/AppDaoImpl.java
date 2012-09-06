@@ -12,26 +12,15 @@ import org.springframework.stereotype.Repository;
 import com.retro.rapplz.db.entity.App;
 
 @Repository("appDao")
-public class AppDaoImpl implements AppDao
+public class AppDaoImpl extends BaseDaoImpl implements AppDao
 {
 	@Autowired
 	private SessionFactory sessionFactory;
 	
 	@Override
-	public App getApp(Long id)
+	public App loadAppByRawId(String rawId)
 	{
-		return (App)sessionFactory.getCurrentSession().load(App.class, id);
-	}
-
-	public App getAppByName(String name)
-	{
-		return (App)sessionFactory.getCurrentSession().createQuery("select a from App a where a.name like '" + name + "'").setCacheable(true).uniqueResult();
-	}
-	
-	@Override
-	public App getAppByRawId(String rawId)
-	{
-		return (App)sessionFactory.getCurrentSession().createQuery("select a from App a where a.rawId like '" + rawId + "'").setCacheable(true).uniqueResult();
+		return (App)sessionFactory.getCurrentSession().createQuery("from App where rawId like '" + rawId + "'").setCacheable(true).uniqueResult();
 	}
 	
 	@Override
@@ -41,25 +30,6 @@ public class AppDaoImpl implements AppDao
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setParameter("categoryId", categoryId);
 		return query.list();
-	}
-	
-	@Override
-	@SuppressWarnings("unchecked")
-	public List<App> getApps()
-	{
-		return sessionFactory.getCurrentSession().createQuery("from App app order by app.name").list();
-	}
-
-	@Override
-	public void save(App app)
-	{
-		sessionFactory.getCurrentSession().save(app);
-	}
-
-	@Override
-	public void remove(Long id)
-	{
-		sessionFactory.getCurrentSession().delete(id);
 	}
 	
 	@Override

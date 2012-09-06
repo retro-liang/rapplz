@@ -3,6 +3,8 @@ package com.retro.rapplz.web.controller;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import javax.ws.rs.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -59,16 +61,15 @@ public class AppController extends MultiActionController
 	}
 	
 	@RequestMapping("category/{category}/index.html")
-	public String categorizedAppsPage(@RequestParam("c") String categoryId, ModelMap model)
+	public String categorizedAppsPage(@PathParam("category") String categoryName, @RequestParam("c") String categoryId, ModelMap model)
 	{
 		logger.info("Loading apps by category [" + categoryId + "] from memcache...");
 		
 		try
 		{
-			Category category = categoryService.getCategoryById(Long.valueOf(categoryId));
-			model.addAttribute("categoryName", category.getName());
+			model.addAttribute("categoryName", categoryName.replaceAll("-", " "));
 			Set<AppInfo> appInfos = appService.getAppInfosByCategory(Long.valueOf(categoryId));
-			logger.info("loaded [" + appInfos.size() + "] apps with category [" + category.getName() + "]");
+			logger.info("loaded [" + appInfos.size() + "] apps with category [" + categoryName + "]");
 			model.addAttribute("categorizedApps", appInfos);
 		}
 		catch (ApplicationServiceException e)

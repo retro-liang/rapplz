@@ -43,7 +43,7 @@ public class TestController
 	public String appHandler(HttpServletRequest request)
 	{
 		logger.info("app request: " + request.getAttributeNames());
-		List<App> apps = appDao.getApps();
+		List<App> apps = appDao.list(App.class);
 		logger.info("apps: " + apps);
 		return "welcome";
     }

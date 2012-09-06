@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.retro.rapplz.db.dao.AppDao;
@@ -14,6 +13,7 @@ import com.retro.rapplz.db.entity.Category;
 import com.retro.rapplz.web.dto.AppInfo;
 
 @Service("appInfoAssembler")
+@Transactional(readOnly = true)
 public class AppInfoAssembler
 {
 	private static final Logger logger = Logger.getLogger(AppInfoAssembler.class.getName());
@@ -21,8 +21,10 @@ public class AppInfoAssembler
 	@Autowired
 	private AppDao appDao;
 	
+	@Transactional(readOnly = true)
 	public AppInfo buildAppInfoFromApp(App app)
 	{
+		logger.info("Assembling appinfo...");
 		AppInfo appInfo = new AppInfo();
 		appInfo.setId(app.getId().toString());
 		appInfo.setRawId(app.getRawId());

@@ -10,36 +10,37 @@ import com.retro.rapplz.db.dao.AccountRoleDao;
 import com.retro.rapplz.db.entity.AccountRole;
 
 @Service("accountRoleService")
+@Transactional
 public class AccountRoleServiceImpl implements AccountRoleService
 {
 	@Autowired
 	private AccountRoleDao accountRoleDao;
+	
+	@Override
+	@Transactional(readOnly = true)
+	public AccountRole getAccountRoleById(Long id)
+	{
+		return (AccountRole)accountRoleDao.loadById(AccountRole.class, id);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<AccountRole> listAccountRoles()
+	{
+		return accountRoleDao.list(AccountRole.class);
+	}
 
 	@Override
 	@Transactional
 	public void addAccountRole(AccountRole accountRole)
 	{
-		accountRoleDao.addAccountRole(accountRole);
-	}
-
-	@Override
-	@Transactional
-	public List<AccountRole> listAccountRoles()
-	{
-		return accountRoleDao.listAccountRoles();
+		accountRoleDao.save(accountRole);
 	}
 
 	@Override
 	@Transactional
 	public void removeAccountRole(Long id)
 	{
-		accountRoleDao.removeAccountRole(id);
-	}
-
-	@Override
-	@Transactional
-	public AccountRole getAccountRoleById(Long id)
-	{
-		return accountRoleDao.getAccountRoleById(id);
+		accountRoleDao.removeById(AccountRole.class, id);
 	}
 }

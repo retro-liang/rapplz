@@ -32,7 +32,7 @@ public class AppServiceImpl implements AppService
 	@Transactional(readOnly = true)
 	public Set<App> getApps() throws ApplicationServiceException
 	{
-		return new HashSet<App>(appDao.getApps());
+		return new HashSet<App>(appDao.list(App.class));
 	}
 	
 	@Override
@@ -40,7 +40,7 @@ public class AppServiceImpl implements AppService
 	public Set<AppInfo> getAppInfos() throws ApplicationServiceException
 	{
 		Set<AppInfo> appInfos = new HashSet<AppInfo>();
-		List<App> apps = appDao.getApps();
+		List<App> apps = appDao.list(App.class);
 		for(App app : apps)
 		{
 			AppInfo appInfo = appInfoAssembler.buildAppInfoFromApp(app);
@@ -54,6 +54,7 @@ public class AppServiceImpl implements AppService
 	public Set<AppInfo> getAppInfosByCategory(Long categoryId) throws ApplicationServiceException
 	{
 		Set<AppInfo> appInfos = new HashSet<AppInfo>();
+		logger.info("Loading apps by cateogry");
 		List<App> apps = appDao.getAppsByCategory(categoryId);		
 		for(App app : apps)
 		{

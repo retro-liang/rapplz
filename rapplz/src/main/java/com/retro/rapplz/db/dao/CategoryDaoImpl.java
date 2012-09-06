@@ -17,7 +17,7 @@ public class CategoryDaoImpl implements CategoryDao
 	@Override
 	public Category getCategoryById(Long id)
 	{
-		return (Category)sessionFactory.getCurrentSession().get(Category.class, id);
+		return (Category)sessionFactory.getCurrentSession().load(Category.class, id);
 	}
 	
 	@Override

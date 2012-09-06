@@ -117,9 +117,9 @@ public class UserServiceImpl implements UserService, UserDetailsService
 		{
 			user.setPassword(passwordEncoder.encodePassword(password, saltSource.getSalt(user)));
 		}
-		AccountRole accountRole = accountRoleDao.getAccountRoleByName(accountRoleName);
-		AccountType accountType = accountTypeDao.getAccountTypeByName(accountTypeName);
-		AccountStatus accountStatus = accountStatusDao.getAccountStatusByName(accountStatusName);
+		AccountRole accountRole = (AccountRole) accountRoleDao.loadByName(AccountRole.class, accountRoleName);
+		AccountType accountType = (AccountType) accountTypeDao.loadByName(AccountType.class, accountTypeName);
+		AccountStatus accountStatus = (AccountStatus) accountStatusDao.loadByName(AccountStatus.class, accountStatusName);
 		user.getAccountRoles().add(accountRole);
 		user.setAccountType(accountType);
 		user.setAccountStatus(accountStatus);
@@ -203,7 +203,7 @@ public class UserServiceImpl implements UserService, UserDetailsService
 	{
 		if(osName != null && !osName.trim().equals("") && userId != null && rawId != null && !rawId.trim().equals(""))
 		{
-			App app = appDao.getAppByRawId(rawId);
+			App app = appDao.loadAppByRawId(rawId);
 			if(app != null)
 			{
 				if(userDao.alreadyHave(Long.valueOf(userId), app.getId()))
@@ -278,7 +278,7 @@ public class UserServiceImpl implements UserService, UserDetailsService
 	{
 		if(osName != null && !osName.trim().equals("") && fromUserId != null && rawId != null && !rawId.trim().equals(""))
 		{
-			App app = appDao.getAppByRawId(rawId);
+			App app = appDao.loadAppByRawId(rawId);
 			if(app != null)
 			{
 				if(userDao.alreadyRecommend(Long.valueOf(fromUserId), app.getId()))
