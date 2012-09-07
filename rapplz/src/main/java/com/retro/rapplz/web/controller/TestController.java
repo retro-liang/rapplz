@@ -52,7 +52,7 @@ public class TestController
 	public String osHandler(HttpServletRequest request)
 	{
 		logger.info("os request: " + request.getAttributeNames());
-		List<OS> oss = osDao.getOSs();
+		List<OS> oss = osDao.list(OS.class);
 		logger.info("oss: " + oss);
 		return "welcome";
     }
@@ -61,7 +61,7 @@ public class TestController
 	public String userHandler(HttpServletRequest request)
 	{
 		logger.info("user request: " + request.getAttributeNames());
-		List<User> users = userDao.getUsers();
+		List<User> users = userDao.list(User.class);
 		logger.info("user: " + users);
 		return "welcome";
     }

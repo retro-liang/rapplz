@@ -42,7 +42,7 @@
 			
 		</div>
 		
-		<div id="sub-header" style="width: auto;background-color: #333333;border-bottom: 1px solid #444444;border-top: 1px solid #383838;box-shadow: 0 2px 0 0 #262626, 0 -1px 0 0 #171717;display: block;height: 38px;margin: 55px auto 5px auto;">
+		<div id="sub-header" style="width: auto;background-color: #333333;border-bottom: 1px solid #444444;border-top: 1px solid #383838;box-shadow: 0 2px 0 0 #262626, 0 -1px 0 0 #171717;display: block;height: 38px;margin: 55px auto 1px auto;">
 			<ul style="width: 500px;float: left;padding-left: 50px;padding-top: 12px;">
 				<li><a href="/app.html" style="float: left;font-size: 12px;font-weight: bold;text-shadow: 0 0 0 transparent, 0 1px rgba(29, 29, 29, 0.2);border-radius: 2px 2px 2px 2px;color: #C5C5C5;display: block;border-left: medium none;border-top: medium none;margin: 0 0;padding: 0 0.65em;text-decoration: none;">App</a></li>
 				<li><a href="/people.html" style="float: left;font-size: 12px;font-weight: bold;text-shadow: 0 0 0 transparent, 0 1px rgba(29, 29, 29, 0.2);border-radius: 2px 2px 2px 2px;color: #C5C5C5;display: block;border-left: medium none;border-top: medium none;margin: 0 0;padding: 0 0.65em;text-decoration: none;">People</a></li>

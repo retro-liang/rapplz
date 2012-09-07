@@ -11,30 +11,32 @@
 	</script>
 	<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
 </div>
-<div id="subfooter-container" style="width: 980px;height: 150px;clear: both;display: block;background-color: #333333;border-bottom: 1px solid #444444;border-top: 1px solid #383838;box-shadow: 0 2px 0 0 #262626, 0 -1px 0 0 #171717;color: #8F887C;font-size: 12px/22px;">
-	<div style="float: left; padding: 0px 0;height: 150px;width: 250px;">
-		<div style="font-size: 12px;font-weight: bold;padding: 20px 10px;">
-			<p>App Categories:</p>
-			<ul id="category-box"></ul>
+<div id="subfooter-container" style="min-width: 980px;height: 150px;clear: both;display: block;background-color: #333333;border-bottom: 1px solid #444444;border-top: 1px solid #383838;box-shadow: 0 2px 0 0 #262626, 0 -1px 0 0 #171717;color: #8F887C;font-size: 12px/22px;">
+	<div style="width: 980px; margin: 0px auto;">
+		<div style="float: left; padding: 0px 0;height: 150px;width: 250px;">
+			<div style="font-size: 12px;font-weight: bold;padding: 20px 10px;">
+				<p>App Categories:</p>
+				<ul id="category-box"></ul>
+			</div>
 		</div>
-	</div>
-	<div style="float: left;height: 150px;padding: 0px 0 0 50px;width: 400px;">
-		<div style="font-size: 12px;font-weight: bold;padding: 50px 10px;">
-			<p>Subscribe our newsletter and stay tuned</p>
-			Email address: <input class="input-box" />
-			<a class="button yellow" style="margin-top: 3px;">Subscribe</a>
+		<div style="float: left;height: 150px;padding: 0px 0 0 50px;width: 400px;">
+			<div style="font-size: 12px;font-weight: bold;padding: 50px 10px;">
+				<p>Subscribe our newsletter and stay tuned</p>
+				Email address: <input class="input-box" />
+				<a class="button yellow" style="margin-top: 3px;">Subscribe</a>
+			</div>
 		</div>
-	</div>
-	<div style="float: left;height: 150px;padding: 0px 0 0 50px; width: auto;">
-		<div style="font-size: 12px;font-weight: bold;padding: 10px 10px;">
-			Total apps:
-			<p style="color: #DED9CD;font-size: 12px;font-weight: normal;margin-bottom: 15px;">1,834,960</p>
-			
-			Total users:
-			<p style="color: #DED9CD;font-size: 12px;font-weight: normal;margin-bottom: 15px;">1,834,960</p>
-
-			Total recommedation:
-			<p style="color: #DED9CD;font-size: 12px;font-weight: normal;margin-bottom: 15px;">1,922,096</p>
+		<div style="float: left;height: 150px;padding: 0px 0 0 50px; width: auto;">
+			<div style="font-size: 12px;font-weight: bold;padding: 10px 10px;">
+				Total apps:
+				<p style="color: #DED9CD;font-size: 12px;font-weight: normal;margin-bottom: 15px;">1,834,960</p>
+				
+				Total users:
+				<p style="color: #DED9CD;font-size: 12px;font-weight: normal;margin-bottom: 15px;">1,834,960</p>
+	
+				Total recommedation:
+				<p style="color: #DED9CD;font-size: 12px;font-weight: normal;margin-bottom: 15px;">1,922,096</p>
+			</div>
 		</div>
 	</div>
 </div>

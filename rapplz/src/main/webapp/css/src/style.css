@@ -123,7 +123,7 @@ li {
 }
 
 #container {
-	width: 980px;
+	min-width: 980px;
 	margin: 0 auto 0 auto;
 	background-color:#FFF;
 	position:relative;
@@ -135,7 +135,8 @@ li {
 	background-color: #232323;
 	color: #E5E5E6;
 	height: 50px;
-	width: 980px;
+	width: 100%;
+	min-width: 980px;
 	padding-top: 5px;
 	text-align: center;
 	border-top: 1px solid #4C4C4C;
@@ -194,7 +195,7 @@ li {
 #left-column {
 	float: left;
 	margin: 20px 16px 10px 17px;
-    width: 630px;
+	max-width: 1300px;
 }
 
 #right-column {
@@ -204,7 +205,7 @@ li {
 }
 
 #footer-container {
-    width: 980px;
+    min-width: 980px;
     background-color: #272727;
     clear: both;
     display: block;

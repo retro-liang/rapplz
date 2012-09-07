@@ -2,7 +2,7 @@ package com.retro.rapplz.db.dao;
 
 import org.springframework.stereotype.Repository;
 
-@Repository("AccountTypeDao")
+@Repository("accountTypeDao")
 public class AccountTypeDaoImpl extends BaseDaoImpl implements AccountTypeDao
 {
 	

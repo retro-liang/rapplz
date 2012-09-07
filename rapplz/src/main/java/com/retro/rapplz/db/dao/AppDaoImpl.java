@@ -23,6 +23,7 @@ public class AppDaoImpl extends BaseDaoImpl implements AppDao
 		return (App)sessionFactory.getCurrentSession().createQuery("from App where rawId like '" + rawId + "'").setCacheable(true).uniqueResult();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<App> getAppsByCategory(Long categoryId)
 	{

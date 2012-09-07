@@ -26,14 +26,14 @@ public class CategoryServiceImpl implements CategoryService
 	@Transactional(readOnly = true)
 	public Category getCategoryById(Long id) throws ApplicationServiceException
 	{
-		return categoryDao.getCategoryById(id);
+		return (Category) categoryDao.loadById(Category.class, id);
 	}
 	
 	@Override
 	@Transactional(readOnly = true)
 	public Set<Category> getCategories() throws ApplicationServiceException
 	{
-		return new HashSet<Category>(categoryDao.getCategories());
+		return new HashSet<Category>(categoryDao.list(Category.class));
 	}
 	
 	@Override
@@ -41,11 +41,11 @@ public class CategoryServiceImpl implements CategoryService
 	public Set<CategoryInfo> getCategoryInfos() throws ApplicationServiceException
 	{
 		Set<CategoryInfo> categoryInfos = new HashSet<CategoryInfo>();
-		for(Category category : categoryDao.getCategories())
+		for(Object category : categoryDao.list(Category.class))
 		{
 			CategoryInfo categoryInfo = new CategoryInfo();
-			categoryInfo.setId(category.getId().toString());
-			categoryInfo.setName(category.getName());
+			categoryInfo.setId(((Category)category).getId().toString());
+			categoryInfo.setName(((Category)category).getName());
 			categoryInfos.add(categoryInfo);
 		}
 		return categoryInfos;

@@ -3,8 +3,6 @@ package com.retro.rapplz.web.controller;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import javax.ws.rs.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,7 +14,6 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
-import com.retro.rapplz.db.entity.Category;
 import com.retro.rapplz.service.AppService;
 import com.retro.rapplz.service.CategoryService;
 import com.retro.rapplz.service.exception.ApplicationServiceException;
@@ -61,9 +58,9 @@ public class AppController extends MultiActionController
 	}
 	
 	@RequestMapping("category/{category}/index.html")
-	public String categorizedAppsPage(@PathParam("category") String categoryName, @RequestParam("c") String categoryId, ModelMap model)
+	public String categorizedAppsPage(@PathVariable("category") String categoryName, @RequestParam("c") String categoryId, ModelMap model)
 	{
-		logger.info("Loading apps by category [" + categoryId + "] from memcache...");
+		logger.info("Loading apps by category [" + categoryName + "]...");
 		
 		try
 		{

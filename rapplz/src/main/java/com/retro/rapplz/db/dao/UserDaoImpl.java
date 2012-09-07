@@ -1,7 +1,6 @@
 package com.retro.rapplz.db.dao;
 
 import java.math.BigInteger;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -13,9 +12,8 @@ import org.springframework.stereotype.Repository;
 import com.retro.rapplz.db.entity.AccountRole;
 import com.retro.rapplz.db.entity.User;
 
-@SuppressWarnings("unchecked")
 @Repository("userDao")
-public class UserDaoImpl implements UserDao
+public class UserDaoImpl extends BaseDaoImpl implements UserDao
 {
 	private static final Logger logger = Logger.getLogger(UserDaoImpl.class.getName());
 	
@@ -67,13 +65,6 @@ public class UserDaoImpl implements UserDao
 	}
 
 	@Override
-	public User getUser(Long id)
-	{
-
-		return (User)sessionFactory.getCurrentSession().load(User.class, id);
-	}
-	
-	@Override
 	public User getUserByFederalId(String id)
 	{
 		return (User)sessionFactory.getCurrentSession().createQuery("select u from User u where u.federalId = '" + id + "'").setCacheable(true).uniqueResult();
@@ -110,30 +101,6 @@ public class UserDaoImpl implements UserDao
 		int rowCount = query.executeUpdate();
 		System.out.println("Rows affected: " + rowCount);
 		return "";
-	}
-
-	@Override
-	public void save(User user)
-	{
-		sessionFactory.getCurrentSession().save(user);
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public List<User> getUsers()
-	{
-		return (List<User>)sessionFactory.getCurrentSession().createQuery("from User").list();
-	}
-
-	@Override
-	public void remove(Long id)
-	{
-		User user = (User) sessionFactory.getCurrentSession().load(
-		User.class, id);
-		if (null != user)
-		{
-			sessionFactory.getCurrentSession().delete(user);
-		}
 	}
 
 	@Override

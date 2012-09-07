@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService, UserDetailsService
 	@Transactional(readOnly = true)
 	public User getUser(Long id) throws ApplicationServiceException
 	{
-		return userDao.getUser(id);
+		return (User) userDao.loadById(User.class, id);
 	}
 	
 	@Override
@@ -212,10 +212,10 @@ public class UserServiceImpl implements UserService, UserDetailsService
 				}
 			}
 
-			OS os = osDao.getOSByName(osName);
+			OS os = (OS) osDao.loadByName(OS.class, osName);
 			if(os != null)
 			{
-				User user = userDao.getUser(userId);
+				User user = (User) userDao.loadById(User.class, userId);
 				if(user != null)
 				{
 					if(app == null)
@@ -231,7 +231,7 @@ public class UserServiceImpl implements UserService, UserDetailsService
 					{
 						for(String deviceName : deviceNames)
 						{
-							Device device = deviceDao.getDeviceByName(deviceName);
+							Device device = (Device) deviceDao.loadByName(Device.class, deviceName);
 							if(device == null)
 							{
 								device = new Device();
@@ -242,7 +242,7 @@ public class UserServiceImpl implements UserService, UserDetailsService
 						}
 					}
 					
-					Category category = categoryDao.getCategoryByName(categoryName);
+					Category category = (Category) categoryDao.loadByName(Category.class, categoryName);
 					if(category == null)
 					{
 						category = new Category();
@@ -287,10 +287,10 @@ public class UserServiceImpl implements UserService, UserDetailsService
 				}
 			}
 			
-			OS os = osDao.getOSByName(osName);
+			OS os = (OS) osDao.loadByName(OS.class, osName);
 			if(os != null)
 			{
-				User user = userDao.getUser(fromUserId);
+				User user = (User) userDao.loadById(User.class, fromUserId);
 				if(user != null)
 				{
 					if(app == null)
@@ -306,7 +306,7 @@ public class UserServiceImpl implements UserService, UserDetailsService
 					{
 						for(String deviceName : deviceNames)
 						{
-							Device device = deviceDao.getDeviceByName(deviceName);
+							Device device = (Device) deviceDao.loadByName(Device.class, deviceName);
 							if(device == null)
 							{
 								device = new Device();
@@ -317,7 +317,7 @@ public class UserServiceImpl implements UserService, UserDetailsService
 						}
 					}
 					
-					Category category = categoryDao.getCategoryByName(categoryName);
+					Category category = (Category) categoryDao.loadByName(Category.class, categoryName);
 					if(category == null)
 					{
 						category = new Category();
@@ -340,7 +340,7 @@ public class UserServiceImpl implements UserService, UserDetailsService
 					{
 						for(String toUserId : toUserIds)
 						{
-							User toUser = userDao.getUser(Long.valueOf(toUserId));
+							User toUser = (User) userDao.loadById(User.class, Long.valueOf(toUserId));
 							if(toUser != null)
 							{
 								Recommendation recommendation = new Recommendation();

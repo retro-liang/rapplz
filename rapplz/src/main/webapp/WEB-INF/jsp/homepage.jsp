@@ -14,6 +14,7 @@
 				<div id="info-box">
 					<p></p>
 				</div>
+				<!-- 
 				<div style="height: 330px;width: 100%;margin: 10px 0 10px 0;padding-bottom: 20px;">
 					<img src="/img/new-ribbon.png" width="112" height="112" alt="New Ribbon" id="ribbon" />
 					<div id="slides">
@@ -28,16 +29,47 @@
 					</div>
 					<img src="/img/frame.png" width="980" height="340" id="frame">
 				</div>
+				 -->
+				<div style="width: 100%;height: 390px;display: block;background: -moz-radial-gradient(center top , ellipse farthest-corner, #3399DD 0%, #2288CC 100%) repeat scroll 0 0 transparent;">
+					<div class="content" style="margin: 0 auto;padding: 0;width: 980px;">
+						<div style="float: left;margin-top: 47px;">
+							<h1 style="color: #FFFFFF;display: block;font-family: Geogrotesque-semibold,Helvetica,Arial,sans-serif;font-size: 38px;font-weight: normal;margin: 0;padding: 0;">Top Picks</h1>
+							<div>
+								<p>Top</p>
+								<ul style="margin: 0 0 20px;">
+									<li style="padding: 2px 0 2px 20px;">app1</li>
+								</ul>
+							</div>
+						</div>
+						<div class="flexslider" style="float: right;margin-top: 40px;width: 700px;margin-right: 50px;">
+						  <ul class="slides">
+						    <li>
+						      <a href="http://www.flickr.com/photos/michaelsilberstein/4294842946/" title="" target="_blank"><img src="/img/photo-1.jpg" width="835" height="300" alt="" /></a>
+						    </li>
+						    <li>
+						      <a href="http://www.flickr.com/photos/bigberto/2857852001/" title="" target="_blank"><img src="/img/photo-2.jpg" width="835" height="300" alt="" /></a>
+						    </li>
+						    <li>
+						      <a href="http://www.flickr.com/photos/yourdon/4133227641/" title="" target="_blank"><img src="/img/photo-3.jpg" width="835" height="300" alt="" /></a>
+						    </li>
+						    <li>
+						    	<a href="http://www.flickr.com/photos/typicalnaloboy/4151014982/" title="" target="_blank"><img src="/img/photo-4.jpg" width="835" height="300" alt="" /></a>
+						    </li>
+						  </ul>
+						</div>
+					</div>
+				</div> 
+				
 				<div id="left-column">
-					<div id="recent-apps-box" style="width: 650px;float: left;border-bottom: 1px dotted #CECECE;padding-bottom: 15px;">
+					<div id="recent-apps-box" style="float: left;border-bottom: 1px dotted #CECECE;padding-bottom: 15px;">
 						<h1>Recent added apps:</h1>
 					</div>
 					
-					<div id="game-apps-box" style="width: 650px;float: left;border-bottom: 1px dotted #CECECE;padding: 10px 0 15px 0;">
+					<div id="game-apps-box" style="float: left;border-bottom: 1px dotted #CECECE;padding: 10px 0 15px 0;">
 						<h1>Most recommended game apps:</h1>
 					</div>
 					
-					<div id="entertainment-apps-box" style="width: 650px;float: left;border-bottom: 1px dotted #CECECE;padding: 10px 0 15px 0;">
+					<div id="entertainment-apps-box" style="float: left;border-bottom: 1px dotted #CECECE;padding: 10px 0 15px 0;">
 						<h1>Most recommended entertainment apps:</h1>
 					</div>
 					
@@ -55,16 +87,22 @@
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 		<script type="text/javascript" src="/js/rapplz.js"></script>
 		
+		<script type="text/javascript" charset="utf-8">
+		  $(window).load(function() {
+		    $('.flexslider').flexslider();
+		  });
+		</script>
+		
 		<script type="text/javascript">
-			$(function(){
-				$('#slides').slides({
-					preload: true,
-					preloadImage: '/img/loading.gif',
-					play: 5000,
-					pause: 2500,
-					hoverPause: true
-				});
-			});
+			//$(function(){
+				//$('#slides').slides({
+					//preload: true,
+					//preloadImage: '/img/loading.gif',
+					//play: 5000,
+					//pause: 2500,
+					//hoverPause: true
+				//});
+			//});
 			
 			$(document).ready(function()
 			{				
