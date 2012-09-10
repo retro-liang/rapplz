@@ -59,6 +59,7 @@
 				<value>com.retro.rapplz.db.entity.ReviewComment</value>
 				<value>com.retro.rapplz.db.entity.TagName</value>
 				<value>com.retro.rapplz.db.entity.Tag</value>
+				<value>com.retro.rapplz.db.entity.Newsletter</value>
 			</list>
 		</property>
 	</bean>
@@ -77,13 +78,6 @@
 	
 	
 	<!-- ========================= BUSINESS OBJECT DEFINITIONS ========================= -->
-	
-	<bean id="osDao" class="com.retro.rapplz.db.dao.OSDaoImpl" />
-	<bean id="appDao" class="com.retro.rapplz.db.dao.AppDaoImpl" />
-	<bean id="userDao" class="com.retro.rapplz.db.dao.UserDaoImpl" />
-	<bean id="accountRoleDao" class="com.retro.rapplz.db.dao.AccountRoleDaoImpl" />
-	<bean id="accountTypeDao" class="com.retro.rapplz.db.dao.AccountTypeDaoImpl" />
-	<bean id="accountStatusDao" class="com.retro.rapplz.db.dao.AccountStatusDaoImpl" />
 	
 	<!--
 		Activates various annotations to be detected in bean classes: Spring's @Required and @Autowired, as well as JSR 250's @Resource.

@@ -628,6 +628,29 @@
 				event.stopPropagation();
 				var hash = md5( strtolower( trim( "MyEmailAddress@example.com " ) ) );
 			});
+			
+			$("newsletter-subscribe").click(function(event)
+			{
+				event.preventDefault();
+				event.stopPropagation();
+				$.ajax
+				({
+					url: "/newsletter/subscribe",
+					data: 
+					{
+						email: email
+					},
+					success: function(data)
+					{
+						alert("Subscribed successfully!");
+						$("newsletter-subscribe").attr("disabled", "disabled");
+					},
+					error: function(jqXHR, textStatus, errorThrown)
+					{
+						alert("error: " + errorThrown);
+					}
+				});
+			});
 		</script>
 
 		<script type="text/javascript">

@@ -23,7 +23,7 @@
 			<div style="font-size: 12px;font-weight: bold;padding: 50px 10px;">
 				<p>Subscribe our newsletter and stay tuned</p>
 				Email address: <input class="input-box" />
-				<a class="button yellow" style="margin-top: 3px;">Subscribe</a>
+				<a class="button yellow" style="margin-top: 3px;" id="newsletter-subscribe">Subscribe</a>
 			</div>
 		</div>
 		<div style="float: left;height: 150px;padding: 0px 0 0 50px; width: auto;">
